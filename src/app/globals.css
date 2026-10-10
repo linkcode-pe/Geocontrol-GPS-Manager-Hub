@@ -34,3 +34,8 @@
  .account-menu{right:0;max-width:calc(100vw - 28px)}
 }
 @media(max-width:380px){.top-actions{gap:6px}.top-actions .account-control>.theme-button,.top-actions .theme-button[aria-label="Cambiar tema"]{width:35px;min-width:35px}}
+.add-task button:disabled{opacity:.55;cursor:not-allowed}
+.task-row input:disabled{cursor:wait;opacity:.55}
+[role="alert"]{color:#bd3535;font-weight:600}
+.dark [role="alert"]{color:#ff9e9e}
+@media(max-width:760px){.add-task{gap:8px}.add-task button{min-width:92px}}
