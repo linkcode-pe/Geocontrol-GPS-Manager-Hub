@@ -53,3 +53,17 @@
 .phase-actions button:disabled{opacity:.5;cursor:wait}
 .dark .phase-actions .phase-cancel{background:#34445a;color:#e1eaf5}
 @media(max-width:760px){.task-phase-editor{margin-left:30px;flex:1 1 calc(100% - 30px)}.task-phase-editor select{width:100%}}
+/* Task management actions */
+.task-row{flex-wrap:wrap;cursor:default}
+.task-gear{border:1px solid #dce5f0;background:#f7fafd;color:#50617a;border-radius:9px;min-width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center}
+.task-gear[aria-expanded="true"]{background:#e6f3ff;color:#1686d7}
+.task-options{order:4;flex:1 1 100%;display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 8px 28px;padding:12px;border-radius:9px;background:#f2f6fb}
+.task-options button{border:1px solid #d8e4f0;border-radius:7px;background:#fff;color:#33445d;padding:9px 11px;font-size:12px;font-weight:650}
+.task-options .danger{color:#b93232;border-color:#e9c7c7}
+.task-edit,.task-delete-confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;width:100%}
+.task-edit input{flex:1 1 170px;min-width:0;border:1px solid #d9e3ee;border-radius:8px;padding:10px;color:#33445d;background:white}
+.task-delete-confirm span{flex:1 1 100%;font-size:12px;color:#b93232}
+.dark .task-gear,.dark .task-options{background:#24364d;color:#e1eaf5;border-color:#405573}
+.dark .task-options button,.dark .task-edit input{background:#18283d;color:#e1eaf5;border-color:#405573}
+.dark .task-options .danger,.dark .task-delete-confirm span{color:#ff9e9e}
+@media(max-width:760px){.task-options{margin-left:0}.task-row .task-gear{margin-left:auto}.task-row .task-phase-editor{order:5;margin-left:30px}.task-options button{flex:1 1 auto}}
