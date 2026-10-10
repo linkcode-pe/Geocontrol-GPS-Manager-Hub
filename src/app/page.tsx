@@ -28,6 +28,8 @@ export default function Home() {
   const [selectedDoc,setSelectedDoc]=useState(0);
   const [dark,setDark]=useState(false);
   const [mobile,setMobile]=useState(false);
+  const [accountOpen,setAccountOpen]=useState(false);
+  async function signOut(){try{const response=await fetch("/api/auth/logout",{method:"POST"});if(!response.ok)throw new Error();router.replace("/login");router.refresh();}catch{setTaskError("No se pudo cerrar sesión.");}}
   useEffect(()=>{ fetch("/api/tasks").then(async r=>{if(!r.ok)throw new Error("No se pudieron cargar las tareas");return r.json();}).then(data=>setTasks(data.tasks.map((t:{id:number;title:string;status:string;phase_id:number|null})=>({id:t.id,title:t.title,phase:t.phase_id==null?-1:Math.max(0,Number(t.phase_id)-1),done:t.status==="done"})))).catch(()=>setTaskError("No se pudieron cargar las tareas de MySQL")); },[]);
   const complete=tasks.filter(t=>t.done).length;
   const progress=tasks.length ? Math.round(complete/tasks.length*100):0;
@@ -43,7 +45,7 @@ export default function Home() {
       <div className="side-bottom"><span className="status-dot"/> Entorno de planificación <small>Geocontrol · v0.1</small></div>
     </aside>
     <main className="main">
-      <header className="topbar"><div className="crumb"><button className="mobile-toggle" onClick={()=>setMobile(!mobile)}><Menu size={23}/></button>Workspace <span>/</span> <b>{section}</b></div><div className="top-actions"><span className="top-status"><i/> Proyecto activo</span><button className="theme-button" onClick={()=>setDark(!dark)} aria-label="Cambiar tema">{dark?<Sun size={19}/>:<Moon size={19}/>}</button><button className="theme-button" onClick={()=>{router.push("/change-password")}} aria-label="Cambiar contraseña"><UserRound size={17}/><span>Cuenta</span></button><span className="avatar">GC</span></div></header>
+      <header className="topbar"><div className="crumb"><button className="mobile-toggle" onClick={()=>setMobile(!mobile)}><Menu size={23}/></button>Workspace <span>/</span> <b>{section}</b></div><div className="top-actions"><span className="top-status"><i/> Proyecto activo</span><button className="theme-button" onClick={()=>setDark(!dark)} aria-label="Cambiar tema">{dark?<Sun size={19}/>:<Moon size={19}/>}</button><div className="account-control"><button className="theme-button" onClick={()=>setAccountOpen(!accountOpen)} aria-label="Opciones de cuenta" aria-expanded={accountOpen}><UserRound size={17}/><span>Cuenta</span></button>{accountOpen&&<div className="account-menu"><button onClick={()=>{setAccountOpen(false);router.push("/change-password")}}><KeyRound size={17}/> Cambiar contraseña</button><button onClick={signOut}><LogOut size={17}/> Cerrar sesión</button></div>}</div><span className="avatar">GC</span></div></header>
       <div className="content">
         <div className="heading"><div><div className="eyebrow">GEOCONTROL / PROJECT MANAGEMENT</div><h1>{section==="Dashboard"?"Centro de control":section}</h1><p>{section==="Dashboard"?"Una visión clara de cada decisión, fase y avance del proyecto.":"Gestión y seguimiento de Geocontrol GPS Manager."}</p></div><span className="date-label">● EN PLANIFICACIÓN</span></div>
         {section==="Dashboard"&&<><div className="metrics">
