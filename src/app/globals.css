@@ -39,3 +39,9 @@
 [role="alert"]{color:#bd3535;font-weight:600}
 .dark [role="alert"]{color:#ff9e9e}
 @media(max-width:760px){.add-task{gap:8px}.add-task button{min-width:92px}}
+/* Task phase selectors */
+.add-task select,.task-row select{max-width:210px;min-width:0;padding:10px 8px;border:1px solid #d9e3ee;border-radius:9px;background:#fff;color:#33445d;font-size:12px;cursor:pointer}
+.task-row select{margin-left:auto;max-width:185px;flex:0 1 185px}
+.add-task select:disabled,.task-row select:disabled{opacity:.6;cursor:wait}
+.dark .add-task select,.dark .task-row select{background:#24364d;color:#e7eef7;border-color:#435773}
+@media(max-width:760px){.add-task{flex-wrap:wrap}.add-task input{flex:1 1 100%;width:100%}.add-task select{flex:1 1 auto;max-width:none}.task-row{flex-wrap:wrap}.task-row span{flex:1 1 calc(100% - 42px)}.task-row select{margin-left:30px;flex:1 1 calc(100% - 30px);max-width:none}}
