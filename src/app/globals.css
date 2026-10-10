@@ -121,3 +121,4 @@
 .dark .task-list>.task-row .task-edit button:first-of-type{background:#168bda;border-color:#168bda;color:#fff}
 .dark .task-list>.task-row .task-edit button:last-of-type{background:transparent;border-color:transparent;color:#a9bdd3}
 @media(max-width:760px){.task-list>.task-row .task-edit{gap:7px}.task-list>.task-row .task-edit button{padding:8px 13px}}
+
