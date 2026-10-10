@@ -1,0 +1,71 @@
+/* Geocontrol Hub design system: shared tokens for every screen */
+:root{
+  --ui-bg:#f5f7fb;--ui-surface:#ffffff;--ui-surface-alt:#f2f6fb;
+  --ui-text:#1b2c43;--ui-muted:#60738a;--ui-subtle:#788ba1;
+  --ui-border:#dce5ef;--ui-accent:#168bda;--ui-accent-hover:#0876bd;
+  --ui-accent-soft:#eaf4ff;--ui-danger:#ba3939;--ui-focus:rgba(22,139,218,.19);
+  --ui-radius:12px;--ui-radius-sm:9px;--ui-shadow:0 3px 16px rgba(21,43,72,.05);
+  --ui-font:Arial,Helvetica,sans-serif;--ui-body:14px;--ui-small:12px;--ui-control:14px;
+}
+.dark{
+  color-scheme:dark;
+  --ui-bg:#071426;--ui-surface:#0e2036;--ui-surface-alt:#152b45;
+  --ui-text:#f0f6ff;--ui-muted:#bdcde0;--ui-subtle:#9fb4cb;
+  --ui-border:#29435e;--ui-accent:#3ba8f3;--ui-accent-hover:#62baff;
+  --ui-accent-soft:#173755;--ui-danger:#ff9c9c;--ui-focus:rgba(59,168,243,.24);
+  --ui-shadow:0 5px 24px rgba(0,5,16,.19);
+}
+.shell,.main,.content{background:var(--ui-bg);color:var(--ui-text)}
+.shell{font-family:var(--ui-font);font-size:var(--ui-body)}
+.topbar,.panel,.metric,.account-menu{background:var(--ui-surface);border-color:var(--ui-border);color:var(--ui-text)}
+.panel,.metric{border-radius:var(--ui-radius);box-shadow:var(--ui-shadow)}
+.panel:hover,.metric:hover{border-color:var(--ui-border)}
+.shell h1,.shell h2,.shell h3,.shell .crumb b,.shell .metric strong,.shell .project-line h3{color:var(--ui-text)}
+.shell p,.shell .crumb,.shell .metric-top,.shell .section-progress,.shell .metric small,.shell .project-line p,.shell footer,.shell .road-step small,.shell .phase-card small{color:var(--ui-muted)}
+.shell .eyebrow,.shell .text-link,.shell .section-progress b{color:var(--ui-accent)}
+.shell .info-grid>div,.shell .notice,.shell .task-list>.task-row>.task-options,.shell .task-list>.task-row>.task-phase-editor{background:var(--ui-surface-alt);border-color:var(--ui-border)}
+.shell .pill,.shell .step-num,.shell .task-list>.task-row>.task-phase-label{background:var(--ui-accent-soft);color:var(--ui-muted)}
+.shell .pill.blue,.shell .step-num.current{color:var(--ui-accent)}
+.shell .task-row{border-color:var(--ui-border);color:var(--ui-text)}
+.shell .task-list>.task-row>span:not(.task-phase-label){color:var(--ui-text);font-size:var(--ui-body)}
+.shell .task-list>.task-row>span.done:not(.task-phase-label){color:var(--ui-subtle)}
+.shell .task-list>.task-row>.task-phase-label{color:var(--ui-muted);font-size:var(--ui-small)}
+.shell .task-list>.task-row>.task-phase-editor:before{color:var(--ui-subtle);font-size:var(--ui-small)}
+.shell .task-list>.task-row>.task-gear{color:var(--ui-muted)}
+.shell .task-list>.task-row>.task-gear[aria-expanded=true]{background:var(--ui-accent-soft);color:var(--ui-accent)}
+.shell input:not([type=checkbox]),.shell select,.shell textarea,.shell .task-list>.task-row .task-edit input{background:var(--ui-surface);color:var(--ui-text);border:1px solid var(--ui-border);border-radius:var(--ui-radius-sm);font-family:var(--ui-font);font-size:var(--ui-control);outline:none}
+.shell input:not([type=checkbox]):focus,.shell select:focus,.shell textarea:focus,.shell .task-list>.task-row .task-edit input:focus{outline:none;border-color:var(--ui-accent);box-shadow:0 0 0 3px var(--ui-focus)}
+.shell input::placeholder,.shell textarea::placeholder{color:var(--ui-subtle)}
+.shell button,.shell .account-menu button{font-family:var(--ui-font)}
+.shell .add-task button,.shell .phase-actions button,.shell .task-list>.task-row .task-edit button:first-of-type{background:var(--ui-accent);color:#fff;border-color:var(--ui-accent);font-size:var(--ui-control)}
+.shell .add-task button:hover,.shell .phase-actions button:hover,.shell .task-list>.task-row .task-edit button:first-of-type:hover{background:var(--ui-accent-hover)}
+.shell .task-options button,.shell .task-list>.task-row .task-options button{background:var(--ui-surface);color:var(--ui-text);border-color:var(--ui-border);font-size:var(--ui-small)}
+.shell .task-options .danger,.shell .task-list>.task-row .task-options .danger{color:var(--ui-danger)}
+.shell .task-list>.task-row .task-edit button:last-of-type,.shell .phase-actions .phase-cancel{background:transparent;color:var(--ui-muted);border-color:transparent}
+.shell .theme-button{background:var(--ui-surface-alt);color:var(--ui-text);border-color:var(--ui-border)}
+.shell .theme-button:hover{background:var(--ui-accent-soft);color:var(--ui-text);border-color:var(--ui-accent)}
+.shell .account-menu button{color:var(--ui-text);font-size:var(--ui-body)}
+.shell .account-menu button:hover{background:var(--ui-accent-soft);color:var(--ui-accent)}
+.shell .progress{background:var(--ui-border)}
+.shell .progress span{background:linear-gradient(90deg,var(--ui-accent),#69c8ff)}
+.shell .task-options button,.shell .phase-actions button,.shell .text-link,.shell .doc-menu button,.shell .sidebar nav button{font-size:var(--ui-small)}
+.shell .panel h2{font-size:18px}
+.shell .panel-head p,.shell .metric small,.shell .road-step small,.shell .info-grid small,.shell .doc-menu button small,.shell .side-bottom{font-size:var(--ui-small)}
+.shell .road-step b,.shell .doc-menu button b,.shell .phase-card small,.shell .section-progress,.shell .metric-top,.shell .pill{font-size:var(--ui-small)}
+.shell .task-list>.task-row .task-edit input{font-size:var(--ui-control)}
+@media(max-width:760px){
+ :root{--ui-body:15px;--ui-small:13px;--ui-control:16px}
+ .shell h1{font-size:27px}
+ .shell .heading p,.shell p{font-size:var(--ui-body);line-height:1.6}
+ .shell .eyebrow{font-size:11px}
+ .shell .crumb{font-size:13px}
+ .shell .panel h2{font-size:19px}
+ .shell .task-list>.task-row>span:not(.task-phase-label){font-size:15px}
+ .shell .task-list>.task-row>.task-phase-label{font-size:13px}
+ .shell .task-list>.task-row .task-edit input{font-size:16px}
+ .shell .task-list>.task-row .task-options button,.shell .task-list>.task-row .task-edit button{font-size:14px;min-height:40px}
+ .shell .add-task button,.shell .phase-actions button{font-size:14px}
+ .shell .sidebar nav button{font-size:15px}
+ .shell .metric-top,.shell .metric small,.shell .section-progress,.shell .road-step b,.shell .road-step small{font-size:13px}
+ .shell .panel-head p,.shell .doc-menu button small,.shell .info-grid small{font-size:13px}
+}
