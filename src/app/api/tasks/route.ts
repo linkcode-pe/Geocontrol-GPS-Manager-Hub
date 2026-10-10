@@ -12,7 +12,8 @@ export async function POST(req:Request){
  const user=await currentUser();if(!user)return NextResponse.json({error:"No autorizado"},{status:401});
  if(!["owner","admin","editor"].includes(user.role))return NextResponse.json({error:"Sin permisos"},{status:403});
  if(!isAllowedOrigin(req))return NextResponse.json({error:"Origen no autorizado"},{status:403});
- const body=await req.json();const title=typeof body.title==="string"?body.title.trim():"";
+ let body;try{body=await req.json();}catch{return NextResponse.json({error:"JSON inválido"},{status:400});}
+ const title=typeof body?.title==="string"?body.title.trim():"";
  if(!title||title.length>255)return NextResponse.json({error:"Título inválido"},{status:400});
  const [projects]=await db().execute<RowDataPacket[]>("SELECT id FROM hub_projects ORDER BY id LIMIT 1");
  if(!projects.length)return NextResponse.json({error:"Proyecto no configurado"},{status:409});
