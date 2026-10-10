@@ -2,8 +2,8 @@
 :root{
   --ui-bg:#f5f7fb;--ui-surface:#ffffff;--ui-surface-alt:#f2f6fb;
   --ui-text:#1b2c43;--ui-muted:#60738a;--ui-subtle:#788ba1;
-  --ui-border:#dce5ef;--ui-accent:#168bda;--ui-accent-hover:#0876bd;
-  --ui-accent-soft:#eaf4ff;--ui-danger:#ba3939;--ui-focus:rgba(22,139,218,.19);
+  --ui-border:#dce5ef;--ui-accent:#173554;--ui-accent-hover:#244a70;
+  --ui-accent-soft:#e8edf3;--ui-danger:#ba3939;--ui-focus:rgba(23,53,84,.18);
   --ui-radius:12px;--ui-radius-sm:9px;--ui-shadow:0 3px 16px rgba(21,43,72,.05);
   --ui-font:Arial,Helvetica,sans-serif;--ui-body:14px;--ui-small:12px;--ui-control:14px;
 }
@@ -11,8 +11,8 @@
   color-scheme:dark;
   --ui-bg:#071426;--ui-surface:#0e2036;--ui-surface-alt:#152b45;
   --ui-text:#f0f6ff;--ui-muted:#bdcde0;--ui-subtle:#9fb4cb;
-  --ui-border:#29435e;--ui-accent:#3ba8f3;--ui-accent-hover:#62baff;
-  --ui-accent-soft:#173755;--ui-danger:#ff9c9c;--ui-focus:rgba(59,168,243,.24);
+  --ui-border:#29435e;--ui-accent:#345b83;--ui-accent-hover:#426d99;
+  --ui-accent-soft:#203952;--ui-danger:#ff9c9c;--ui-focus:rgba(88,137,183,.28);
   --ui-shadow:0 5px 24px rgba(0,5,16,.19);
 }
 .shell,.main,.content{background:var(--ui-bg);color:var(--ui-text)}
@@ -47,7 +47,7 @@
 .shell .account-menu button{color:var(--ui-text);font-size:var(--ui-body)}
 .shell .account-menu button:hover{background:var(--ui-accent-soft);color:var(--ui-accent)}
 .shell .progress{background:var(--ui-border)}
-.shell .progress span{background:linear-gradient(90deg,var(--ui-accent),#69c8ff)}
+.shell .progress span{background:var(--ui-accent)}
 .shell .task-options button,.shell .phase-actions button,.shell .text-link,.shell .doc-menu button,.shell .sidebar nav button{font-size:var(--ui-small)}
 .shell .panel h2{font-size:18px}
 .shell .panel-head p,.shell .metric small,.shell .road-step small,.shell .info-grid small,.shell .doc-menu button small,.shell .side-bottom{font-size:var(--ui-small)}
@@ -69,3 +69,17 @@
  .shell .metric-top,.shell .metric small,.shell .section-progress,.shell .road-step b,.shell .road-step small{font-size:13px}
  .shell .panel-head p,.shell .doc-menu button small,.shell .info-grid small{font-size:13px}
 }
+
+/* Navy brand controls and surfaces: consistent across sections */
+.shell .pill.blue,.shell .task-list>.task-row>.task-phase-label,.shell .step-num.current{background:var(--ui-accent-soft);color:var(--ui-text)}
+.shell .avatar{background:var(--ui-accent-soft);color:var(--ui-text)}
+.shell .mobile-toggle,.shell .nav-icon,.shell .metric-top span{color:var(--ui-accent)}
+.shell .doc-menu button.selected{background:var(--ui-accent-soft);color:var(--ui-text)}
+.shell .brand-icon,.shell .project-logo{background:var(--ui-accent)}
+.shell .task-row input[type=checkbox]{accent-color:var(--ui-accent)}
+.shell .task-list>.task-row .task-edit button:first-of-type,.shell .add-task button,.shell .phase-actions button{background:var(--ui-accent);border-color:var(--ui-accent);color:#fff}
+.shell .task-list>.task-row .task-edit button:first-of-type:hover,.shell .add-task button:hover,.shell .phase-actions button:hover{background:var(--ui-accent-hover)}
+.shell .task-list>.task-row>.task-gear[aria-expanded=true]{background:var(--ui-accent-soft);color:var(--ui-text)}
+.shell .task-list>.task-row .task-edit input:focus,.shell input:focus-visible,.shell select:focus-visible{border-color:var(--ui-accent);box-shadow:0 0 0 3px var(--ui-focus);outline:none}
+.dark .shell .pill.blue,.dark .shell .task-list>.task-row>.task-phase-label,.dark .shell .step-num.current{color:var(--ui-text)}
+.dark .shell .mobile-toggle,.dark .shell .metric-top span{color:var(--ui-muted)}
