@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Task = { id: number; title: string; phase: number; done: boolean };
 const phases = [
@@ -18,6 +19,7 @@ const docs = [
 ];
 const icons: Record<string,string> = { Dashboard:"◫", Proyectos:"▦", Fases:"◉", Tareas:"☑", Documentación:"▤", Actividad:"◷" };
 export default function Home() {
+  const router=useRouter();
   const [section,setSection]=useState("Dashboard");
   const [tasks,setTasks]=useState<Task[]>(initialTasks);
   const [taskError,setTaskError]=useState("");
@@ -39,7 +41,7 @@ export default function Home() {
       <div className="side-bottom"><span className="status-dot"/> Entorno de planificación <small>Geocontrol · v0.1</small></div>
     </aside>
     <main className="main">
-      <header className="topbar"><div className="crumb"><button className="mobile-toggle" onClick={()=>setMobile(!mobile)}>☰</button>Workspace <span>/</span> <b>{section}</b></div><div className="top-actions"><span className="top-status"><i/> Proyecto activo</span><button className="theme-button" onClick={()=>setDark(!dark)} aria-label="Cambiar tema">{dark?"☀":"☾"}</button><span className="avatar">GC</span></div></header>
+      <header className="topbar"><div className="crumb"><button className="mobile-toggle" onClick={()=>setMobile(!mobile)}>☰</button>Workspace <span>/</span> <b>{section}</b></div><div className="top-actions"><span className="top-status"><i/> Proyecto activo</span><button className="theme-button" onClick={()=>setDark(!dark)} aria-label="Cambiar tema">{dark?"☀":"☾"}</button><button className="theme-button" onClick={()=>{router.push("/change-password")}} aria-label="Cambiar contraseña">Cuenta</button><span className="avatar">GC</span></div></header>
       <div className="content">
         <div className="heading"><div><div className="eyebrow">GEOCONTROL / PROJECT MANAGEMENT</div><h1>{section==="Dashboard"?"Centro de control":section}</h1><p>{section==="Dashboard"?"Una visión clara de cada decisión, fase y avance del proyecto.":"Gestión y seguimiento de Geocontrol GPS Manager."}</p></div><span className="date-label">● EN PLANIFICACIÓN</span></div>
         {section==="Dashboard"&&<><div className="metrics">
