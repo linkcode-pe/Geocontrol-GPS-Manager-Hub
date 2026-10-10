@@ -45,3 +45,11 @@
 .add-task select:disabled,.task-row select:disabled{opacity:.6;cursor:wait}
 .dark .add-task select,.dark .task-row select{background:#24364d;color:#e7eef7;border-color:#435773}
 @media(max-width:760px){.add-task{flex-wrap:wrap}.add-task input{flex:1 1 100%;width:100%}.add-task select{flex:1 1 auto;max-width:none}.task-row{flex-wrap:wrap}.task-row span{flex:1 1 calc(100% - 42px)}.task-row select{margin-left:30px;flex:1 1 calc(100% - 30px);max-width:none}}
+.task-phase-editor{margin-left:auto;display:flex;flex-direction:column;gap:8px;flex:0 1 220px;min-width:0}
+.task-phase-editor select{width:100%;max-width:none;margin:0;flex:auto}
+.phase-actions{display:flex;gap:7px;flex-wrap:wrap}
+.phase-actions button{border:0;border-radius:7px;background:#168be0;color:#fff;padding:9px 11px;font-size:11px;font-weight:700}
+.phase-actions .phase-cancel{background:#e9eef5;color:#46546a}
+.phase-actions button:disabled{opacity:.5;cursor:wait}
+.dark .phase-actions .phase-cancel{background:#34445a;color:#e1eaf5}
+@media(max-width:760px){.task-phase-editor{margin-left:30px;flex:1 1 calc(100% - 30px)}.task-phase-editor select{width:100%}}
