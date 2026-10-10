@@ -87,3 +87,24 @@
  .task-list>.task-row .task-edit input{flex:1 1 100%}
  .task-list>.task-row .task-options button{flex:0 1 auto}
 }
+/* Clean task list: summary first, actions only on demand */
+.task-list>.task-row{grid-template-columns:20px minmax(0,1fr) 38px;grid-template-rows:auto auto;row-gap:5px;column-gap:11px;padding:15px 0;border-color:#e8eef5}
+.task-list>.task-row>input[type="checkbox"]{grid-column:1;grid-row:1;align-self:center}
+.task-list>.task-row>span:not(.task-phase-label){grid-column:2;grid-row:1;font-weight:650;color:#26374d;font-size:13px;line-height:1.45}
+.task-list>.task-row>span.done:not(.task-phase-label){color:#8a98a9;font-weight:500}
+.task-list>.task-row>.task-phase-label{grid-column:2;grid-row:2;justify-self:start;flex:none;width:auto;max-width:100%;padding:4px 9px;border-radius:6px;background:#eef5fb;color:#54718e;font-size:11px;line-height:1.4;white-space:normal}
+.task-list>.task-row>.task-gear{grid-column:3;grid-row:1/3;align-self:center;width:36px;height:36px;min-width:36px;border:0;background:transparent;color:#71849b}
+.task-list>.task-row>.task-gear[aria-expanded="true"]{background:#e8f4ff;color:#1686d7}
+.task-list>.task-row>.task-options{grid-column:1/-1;grid-row:3;margin-top:9px;padding:12px;border:1px solid #e6edf5;background:#f7f9fc;border-radius:10px;gap:7px}
+.task-list>.task-row>.task-phase-editor{display:none;grid-column:1/-1;grid-row:4;margin:0 0 3px;gap:7px;padding:0 12px 12px;background:#f7f9fc;border:1px solid #e6edf5;border-top:0;border-radius:0 0 10px 10px}
+.task-list>.task-row:has(>.task-options)>.task-phase-editor{display:flex}
+.task-list>.task-row:has(>.task-options)>.task-options{border-radius:10px 10px 0 0;margin-bottom:-7px}
+.task-list>.task-row>.task-phase-editor:before{content:"FASE ASIGNADA";font-size:10px;font-weight:750;letter-spacing:1px;color:#7d8ca0}
+.task-list>.task-row>.task-phase-editor select{height:40px}
+.task-list>.task-row .task-options button{padding:9px 12px;font-size:11px;border-radius:7px}
+.task-list>.task-row .task-edit button{min-width:82px}
+.dark .task-list>.task-row>span:not(.task-phase-label){color:#e5edf7}
+.dark .task-list>.task-row>.task-phase-label{background:#253b55;color:#a9c6e5}
+.dark .task-list>.task-row>.task-gear{color:#9eb3cb}
+.dark .task-list>.task-row>.task-options,.dark .task-list>.task-row>.task-phase-editor{background:#202f45;border-color:#354b65}
+@media(max-width:760px){.task-list>.task-row{padding:14px 0;row-gap:5px}.task-list>.task-row>.task-options{margin-top:8px}.task-list>.task-row>.task-phase-editor{margin:0 0 3px}.task-list>.task-row .task-options button{flex:0 1 auto}}
