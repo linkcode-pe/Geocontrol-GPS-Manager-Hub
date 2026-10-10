@@ -17,3 +17,20 @@
 .mobile-backdrop{display:none}
 @media(max-width:760px){.sidebar{width:min(300px,84vw);left:-100%;z-index:101;padding:24px 15px;height:100dvh;min-height:0;overflow-y:auto}.sidebar.mobile-open{left:0}.sidebar-close{display:inline-flex}.sidebar .brand{padding:0 5px 34px;gap:10px}.sidebar .brand strong{font-size:12px;letter-spacing:.7px}.sidebar .brand small{letter-spacing:1.4px}.sidebar .side-bottom{padding-bottom:16px}.mobile-backdrop{display:block;position:fixed;inset:0;z-index:100;background:rgba(9,20,38,.52);border:0;width:100%;height:100dvh;cursor:pointer}.roadmap{gap:12px}.road-step{gap:7px;padding-top:12px}.road-step b{font-size:11px;line-height:1.4}.road-step small{font-size:10px}.road-step .step-num{width:33px;height:33px}}
 .account-control{position:relative;display:flex;align-items:center}.account-menu{position:absolute;top:calc(100% + 10px);right:0;z-index:60;width:220px;background:#fff;border:1px solid #e1e8f0;border-radius:12px;box-shadow:0 14px 40px #162a452b;padding:6px}.account-menu button{display:flex;align-items:center;gap:10px;width:100%;padding:12px 10px;background:transparent;border:0;border-radius:8px;color:#24344b;font-size:13px;text-align:left;cursor:pointer}.account-menu button:hover{background:#eff6ff;color:#087cba}.dark .account-menu{background:#17263b;border-color:#32445e}.dark .account-menu button{color:#e7edf5}.dark .account-menu button:hover{background:#263b55}
+/* Mobile account controls and accessible dark-mode contrast */
+.top-actions{gap:12px}
+.top-actions .account-control>.theme-button{width:auto;min-width:88px;padding:0 10px;font-size:12px;font-weight:650;white-space:nowrap}
+.dark .theme-button:hover{background:#344c6c;border-color:#547297;color:#fff}
+.dark .progress{background:#33435a}
+.dark .progress span{background:linear-gradient(90deg,#279ce9,#65d0ff)}
+.dark .metric-top,.dark .section-progress{color:#b9c8da}
+.dark .metric small,.dark .project-line p{color:#aabbd0}
+@media(max-width:760px){
+ .top-actions{gap:9px}
+ .top-actions .account-control>.theme-button{width:38px;min-width:38px;padding:0}
+ .top-actions .account-control>.theme-button span{display:none}
+ .top-actions .theme-button[aria-label="Cambiar tema"]{width:38px;min-width:38px;height:38px}
+ .top-actions .avatar{width:34px;height:34px;flex-shrink:0}
+ .account-menu{right:0;max-width:calc(100vw - 28px)}
+}
+@media(max-width:380px){.top-actions{gap:6px}.top-actions .account-control>.theme-button,.top-actions .theme-button[aria-label="Cambiar tema"]{width:35px;min-width:35px}}
