@@ -83,3 +83,20 @@
 .shell .task-list>.task-row .task-edit input:focus,.shell input:focus-visible,.shell select:focus-visible{border-color:var(--ui-accent);box-shadow:0 0 0 3px var(--ui-focus);outline:none}
 .dark .shell .pill.blue,.dark .shell .task-list>.task-row>.task-phase-label,.dark .shell .step-num.current{color:var(--ui-text)}
 .dark .shell .mobile-toggle,.dark .shell .metric-top span{color:var(--ui-muted)}
+/* Compact task editing: one form and one save action */
+.shell .tasks-panel .panel-head p{max-width:32rem}
+.shell .tasks-panel .task-list{margin-top:20px}
+.shell .tasks-panel .task-row{align-items:center;row-gap:5px}
+.shell .task-unified-editor{grid-column:1/-1;width:100%;box-sizing:border-box;display:flex;flex-direction:column;gap:9px;padding:16px;margin-top:10px;border:1px solid var(--ui-border);border-radius:var(--ui-radius);background:var(--ui-surface-alt)}
+.shell .task-unified-editor label{font-size:var(--ui-small);font-weight:700;letter-spacing:.045em;color:var(--ui-muted)}
+.shell .task-unified-editor input,.shell .task-unified-editor select{width:100%;min-width:0;box-sizing:border-box;min-height:44px;padding:9px 12px}
+.shell .task-editor-actions,.shell .task-editor-secondary{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.shell .task-editor-actions{margin-top:5px}
+.shell .task-editor-secondary{padding-top:10px;margin-top:4px;border-top:1px solid var(--ui-border)}
+.shell .task-unified-editor button{min-height:39px;border-radius:var(--ui-radius-sm);padding:9px 14px;font-size:var(--ui-small);font-weight:600;border:1px solid var(--ui-border);background:var(--ui-surface);color:var(--ui-text)}
+.shell .task-unified-editor .task-save{background:var(--ui-accent);border-color:var(--ui-accent);color:#fff}
+.shell .task-unified-editor .task-save:disabled{opacity:.5}
+.shell .task-unified-editor .task-cancel{background:transparent;border-color:transparent;color:var(--ui-muted)}
+.shell .task-unified-editor .danger{color:var(--ui-danger)}
+.shell .add-task button:disabled{background:var(--ui-accent);border-color:var(--ui-accent);opacity:.45;color:#fff}
+@media(max-width:760px){.shell .tasks-panel .panel-head p{font-size:13px;line-height:1.4}.shell .tasks-panel .task-list{margin-top:14px}.shell .task-unified-editor{padding:13px;gap:8px}.shell .task-unified-editor button{font-size:14px}}

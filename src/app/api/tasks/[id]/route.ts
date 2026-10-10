@@ -18,7 +18,7 @@ export async function PATCH(req:Request,{params}:{params:Promise<{id:string}>}){
   if(body.phaseId!==null&&(!Number.isSafeInteger(body.phaseId)||body.phaseId<1))return NextResponse.json({error:"Fase inválida"},{status:400});
   if(body.phaseId!==null){const [valid]=await db().execute<RowDataPacket[]>("SELECT p.id FROM hub_phases p JOIN hub_tasks t ON t.project_id=p.project_id WHERE p.id=? AND t.id=? LIMIT 1",[body.phaseId,id]);if(!valid.length)return NextResponse.json({error:"Fase no pertenece al proyecto"},{status:400});}
  }
- const [result]=await db().execute<ResultSetHeader>(hasTitle?"UPDATE hub_tasks SET title=? WHERE id=?":hasPhase?"UPDATE hub_tasks SET phase_id=? WHERE id=?":"UPDATE hub_tasks SET status=? WHERE id=?",[hasTitle?body.title.trim():hasPhase?body.phaseId:body.done?"done":"todo",id]);
+ const updates:string[]=[];const values:(string|number|null)[]=[];if(hasTitle){updates.push("title=?");values.push(body.title.trim());}if(hasPhase){updates.push("phase_id=?");values.push(body.phaseId);}if(hasDone){updates.push("status=?");values.push(body.done?"done":"todo");}values.push(id);const [result]=await db().execute<ResultSetHeader>(`UPDATE hub_tasks SET ${updates.join(", ")} WHERE id=?`,values);
  if(result.affectedRows===0)return NextResponse.json({error:"Tarea no encontrada"},{status:404});
  await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','task',?,JSON_OBJECT('change',?))",[user.id,id,hasTitle?JSON.stringify({title:body.title.trim()}):hasPhase?JSON.stringify({phaseId:body.phaseId}):JSON.stringify({done:body.done})]);
  return NextResponse.json({ok:true});
