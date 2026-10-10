@@ -108,3 +108,16 @@
 .dark .task-list>.task-row>.task-gear{color:#9eb3cb}
 .dark .task-list>.task-row>.task-options,.dark .task-list>.task-row>.task-phase-editor{background:#202f45;border-color:#354b65}
 @media(max-width:760px){.task-list>.task-row{padding:14px 0;row-gap:5px}.task-list>.task-row>.task-options{margin-top:8px}.task-list>.task-row>.task-phase-editor{margin:0 0 3px}.task-list>.task-row .task-options button{flex:0 1 auto}}
+/* Polished inline task-name editor */
+.task-list>.task-row .task-edit{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;width:100%}
+.task-list>.task-row .task-edit input{grid-column:1/-1;box-sizing:border-box;width:100%;min-width:0;height:43px;padding:0 13px;border:1px solid #cbdcec;border-radius:10px;background:#fff;color:#243750;font-size:14px;line-height:1.4;box-shadow:0 1px 2px rgba(20,45,70,.03);outline:none;appearance:none;-webkit-appearance:none}
+.task-list>.task-row .task-edit input:focus,.task-list>.task-row .task-edit input:focus-visible{outline:none;border-color:#3294db;box-shadow:0 0 0 3px rgba(50,148,219,.13)}
+.task-list>.task-row .task-edit button{min-width:0;min-height:36px;padding:8px 15px;border-radius:8px;font-weight:650}
+.task-list>.task-row .task-edit button:first-of-type{background:#168bda;border-color:#168bda;color:#fff}
+.task-list>.task-row .task-edit button:last-of-type{background:transparent;border-color:transparent;color:#62748b}
+.task-list>.task-row .task-edit button:disabled{opacity:.45;cursor:not-allowed}
+.dark .task-list>.task-row .task-edit input{background:#1c2c42;color:#eaf1fa;border-color:#45617d}
+.dark .task-list>.task-row .task-edit input:focus{border-color:#61b6f4;box-shadow:0 0 0 3px rgba(97,182,244,.16)}
+.dark .task-list>.task-row .task-edit button:first-of-type{background:#168bda;border-color:#168bda;color:#fff}
+.dark .task-list>.task-row .task-edit button:last-of-type{background:transparent;border-color:transparent;color:#a9bdd3}
+@media(max-width:760px){.task-list>.task-row .task-edit{gap:7px}.task-list>.task-row .task-edit button{padding:8px 13px}}
