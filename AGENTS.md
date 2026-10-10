@@ -1,9 +1,24 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# Instrucciones para Codex — Geocontrol Project Hub
 
-## This is NOT the Next.js you know
+## Objetivo
+Crear una aplicación privada para gestionar proyectos, fases, tareas, documentación, decisiones y auditoría de Geocontrol GPS Manager.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+## Flujo obligatorio
+ChatGPT planifica → Codex desarrolla y propone PR en GitHub → Desktop Commander despliega versiones aprobadas → producción.
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+## Arquitectura
+- Next.js + TypeScript; MySQL exclusivo `geocontrol_hub`.
+- Nunca consultar, modificar o migrar bases `traccar` ni `traccar_dev`.
+- Integración futura con Traccar exclusivamente por API backend.
+- No exponer secretos, tokens, contraseñas ni datos internos en frontend o Git.
+- Autenticación, autorización por rol y registro de auditoría antes de desplegar en Internet.
+- Mantener el estilo SaaS ejecutivo responsive, modo claro/oscuro y accesibilidad.
 
-<!-- END:nextjs-agent-rules -->
+## Calidad
+- Ejecutar `npm run lint` y `npm run build` antes de PR.
+- Crear migraciones reversibles, sin cambios destructivos automáticos.
+- Documentar claramente los cambios y riesgos.
+- No presentar tareas simuladas como completadas.
+
+## Estado inicial
+La UI usa localStorage solo como prototipo. Sustituirlo por API autenticada y MySQL; no considerar este MVP apto para producción.

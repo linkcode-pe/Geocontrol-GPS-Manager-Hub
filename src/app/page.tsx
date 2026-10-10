@@ -30,7 +30,7 @@ export default function Home() {
   const [selectedDoc,setSelectedDoc]=useState(0);
   const [dark,setDark]=useState(false);
   const [mobile,setMobile]=useState(false);
-  useEffect(()=>{ try { const saved=localStorage.getItem("hub-tasks-v1"); if(saved) setTasks(JSON.parse(saved)); } catch {} setReady(true); },[]);
+  useEffect(()=>{ queueMicrotask(()=>{ try { const saved=localStorage.getItem("hub-tasks-v1"); if(saved) setTasks(JSON.parse(saved)); } catch {} setReady(true); }); },[]);
   useEffect(()=>{ if(ready) localStorage.setItem("hub-tasks-v1",JSON.stringify(tasks)); },[tasks,ready]);
   const complete=tasks.filter(t=>t.done).length;
   const progress=tasks.length ? Math.round(complete/tasks.length*100):0;
