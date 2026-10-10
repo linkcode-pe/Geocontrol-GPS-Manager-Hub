@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
+import { isAllowedOrigin } from "@/lib/origin";
 import { currentUser, sessionCookie } from "@/lib/auth";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import type { RowDataPacket } from "mysql2";
 type PasswordRow=RowDataPacket & {password_hash:string};
 export async function POST(req:Request){
- if(req.headers.get("origin")!==new URL(req.url).origin)return NextResponse.json({error:"Origen no autorizado"},{status:403});
+ if(!isAllowedOrigin(req))return NextResponse.json({error:"Origen no autorizado"},{status:403});
  const user=await currentUser();
  if(!user)return NextResponse.json({error:"No autorizado"},{status:401});
  let body;try{body=await req.json();}catch{return NextResponse.json({error:"Solicitud inválida"},{status:400});}
