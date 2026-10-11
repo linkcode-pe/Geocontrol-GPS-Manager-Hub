@@ -41,9 +41,15 @@ export async function DELETE(req:Request,{params}:{params:Promise<{id:string}>})
  if(!["owner","admin","editor"].includes(user.role))return NextResponse.json({error:"Sin permisos"},{status:403});
  if(!isAllowedOrigin(req))return NextResponse.json({error:"Origen no autorizado"},{status:403});
  const {id}=await params;if(!/^[1-9][0-9]*$/.test(id))return NextResponse.json({error:"ID inválido"},{status:400});
- const [existing]=await db().execute<RowDataPacket[]>("SELECT title FROM hub_tasks WHERE id=?",[id]);
- const [result]=await db().execute<ResultSetHeader>("DELETE FROM hub_tasks WHERE id=?",[id]);
- if(!result.affectedRows)return NextResponse.json({error:"Tarea no encontrada"},{status:404});
- await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'delete','task',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify({title:existing[0]?.title??""})]);
+ const conn=await db().getConnection();
+ try{
+  await conn.beginTransaction();
+  const [existing]=await conn.execute<RowDataPacket[]>("SELECT title FROM hub_tasks WHERE id=? FOR UPDATE",[id]);
+  if(!existing.length){await conn.rollback();return NextResponse.json({error:"Tarea no encontrada"},{status:404});}
+  const [result]=await conn.execute<ResultSetHeader>("DELETE FROM hub_tasks WHERE id=?",[id]);
+  if(!result.affectedRows){await conn.rollback();return NextResponse.json({error:"Tarea no encontrada"},{status:404});}
+  await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'delete','task',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify({title:existing[0].title})]);
+  await conn.commit();
+ }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
  return NextResponse.json({ok:true});
 }
