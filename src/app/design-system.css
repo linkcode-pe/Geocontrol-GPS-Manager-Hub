@@ -115,3 +115,16 @@
 .shell .task-list>.task-row>.task-unified-editor .task-editor-secondary{padding-top:8px;margin-top:5px;gap:7px}
 .shell .task-list>.task-row>.task-unified-editor button{min-height:36px;padding:7px 11px}
 @media(max-width:760px){.shell .main>.topbar{height:65px}.shell .task-list>.task-row>.task-unified-editor{padding:11px;gap:4px}.shell .task-list>.task-row>.task-unified-editor .task-editor-actions button,.shell .task-list>.task-row>.task-unified-editor .task-editor-secondary button{padding:8px 10px;font-size:13px}}
+/* Project management overview */
+.shell .project-manager{max-width:100%}
+.shell .project-create{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) auto;gap:10px;margin-bottom:22px}
+.shell .project-create input{min-width:0;width:100%;min-height:44px;padding:10px 13px;border:1px solid var(--ui-border);border-radius:var(--ui-radius-sm);background:var(--ui-surface);color:var(--ui-text)}
+.shell .project-create button{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border:0;border-radius:var(--ui-radius-sm);background:var(--ui-accent);color:#fff;font-weight:650}
+.shell .project-create button:disabled{opacity:.5}
+.shell .project-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:13px}
+.shell .project-card{min-width:0;border:1px solid var(--ui-border);background:var(--ui-surface-alt);border-radius:var(--ui-radius);padding:18px}
+.shell .project-card-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.shell .project-card h3{margin:0;font-size:18px;color:var(--ui-text)}
+.shell .project-card p{margin:10px 0;color:var(--ui-muted);overflow-wrap:anywhere}
+.shell .project-card-meta{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--ui-muted)}
+@media(max-width:760px){.shell .project-create{grid-template-columns:1fr}.shell .project-create button{min-height:44px}}
