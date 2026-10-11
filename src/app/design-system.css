@@ -264,3 +264,9 @@
 @media(max-width:760px){.shell .project-card{padding:16px}.shell .project-card p{margin:9px 0}.shell .project-card-controls{margin:8px 0}.shell .project-card-footer{gap:9px}.shell .project-report-menu .project-report-actions{display:flex}.shell .project-report-menu .project-export:last-child:nth-child(odd){grid-column:auto}}
 .shell .project-list-toolbar select{min-width:145px;max-width:100%;border:1px solid var(--ui-border);background:var(--ui-surface);color:var(--ui-text);border-radius:9px;padding:10px;font:inherit;font-size:13px}
 @media(max-width:760px){.shell .project-list-toolbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.shell .project-list-toolbar input{grid-column:1/-1;width:100%}.shell .project-list-toolbar select{width:100%;min-width:0;font-size:12px}.shell .project-list-toolbar>span{grid-column:1/-1}}
+.shell .project-clear-filters{border:1px solid var(--ui-border);border-radius:9px;padding:9px 12px;background:var(--ui-surface);color:var(--ui-accent);font-size:12px;font-weight:650;cursor:pointer}
+.shell .project-clear-filters:hover{border-color:var(--ui-accent)}
+.shell .project-empty-state{grid-column:1/-1;padding:30px 20px;border:1px dashed var(--ui-border);border-radius:12px;text-align:center;color:var(--ui-text)}
+.shell .project-empty-state strong{font-size:15px}.shell .project-empty-state p{font-size:13px;color:var(--ui-muted);margin:8px 0 16px}
+.shell .project-empty-state button{border:0;background:var(--ui-accent);color:#fff;padding:11px 16px;border-radius:9px;font-weight:650;cursor:pointer}
+@media(max-width:760px){.shell .project-clear-filters{grid-column:1/-1;width:100%}}
