@@ -335,3 +335,15 @@
   .task-active-filters button{padding:6px 9px;font-size:11px}
 }
 @media(max-width:350px){.task-planning-toolbar{gap:7px}.task-planning-toolbar select{padding:7px 5px;font-size:12px}}
+
+/* Desktop filters remain visible; mobile filters collapse into a native accessible disclosure. */
+.task-advanced-filters,.task-advanced-fields{display:contents}
+.task-advanced-filters>summary{display:none}
+@media(max-width:650px){
+  .task-advanced-filters{display:block;grid-column:1/-1;min-width:0}
+  .task-advanced-filters>summary{display:list-item;list-style-position:inside;min-height:42px;box-sizing:border-box;padding:11px 13px;border:1px solid var(--ui-border,#cbd5e1);border-radius:9px;background:var(--ui-surface,#fff);color:var(--ui-text,inherit);font-size:13px;font-weight:650;cursor:pointer}
+  .task-advanced-filters>summary:focus-visible{outline:2px solid #218de0;outline-offset:2px}
+  .task-advanced-filters[open]>summary{border-color:#218de0;border-radius:9px 9px 0 0}
+  .task-advanced-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:12px 10px;border:1px solid var(--ui-border,#cbd5e1);border-top:0;border-radius:0 0 9px 9px}
+  .task-advanced-fields label:last-child{grid-column:1/-1}
+}
