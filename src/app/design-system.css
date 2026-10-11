@@ -213,3 +213,7 @@
  .shell .portfolio-row .progress{height:5px}
  .shell .portfolio-row small{font-size:11px;line-height:1.4}
 }
+.shell .phase-tasks-link{display:inline-flex;align-items:center;margin-top:10px;border:0;background:transparent;color:var(--ui-accent);font:inherit;font-size:var(--ui-small);font-weight:650;padding:4px 0;cursor:pointer;text-align:left}
+.shell .phase-tasks-link:hover{text-decoration:underline;text-underline-offset:3px}
+.shell .task-filter-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+@media(max-width:760px){.shell .task-filter-actions{width:100%;justify-content:space-between;gap:10px}.shell .task-filter-banner{align-items:flex-start}}
