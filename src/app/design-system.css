@@ -236,3 +236,7 @@
 .shell.dark .donut-center{background:#172236}.shell.dark .donut-center strong{color:#e7edf7}.shell.dark .vertical-track,.shell.dark .status-track{background:#304158}.shell.dark .legend-dot.pending{background:#304158}
 @media(max-width:1150px){.shell .analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shell .analytics-grid>.analytics-card:last-child{grid-column:1/-1}}
 @media(max-width:760px){.shell .analytics-grid{grid-template-columns:minmax(0,1fr);gap:12px}.shell .analytics-grid>.analytics-card:last-child{grid-column:auto}.shell .analytics-card{padding:18px}.shell .vertical-chart{min-height:165px}.shell .donut-chart{width:134px;height:134px}.shell .donut-center{width:94px;height:94px}}
+.shell .vertical-column em{font-style:normal;color:#718096;font-size:10px;white-space:nowrap}
+.shell .vertical-track>.zero-progress{background:#7f9cb9;border-radius:4px 4px 0 0}
+.shell .vertical-column:focus-visible{outline:2px solid #1686d7;outline-offset:4px;border-radius:5px}
+.shell.dark .vertical-column em{color:#b3c1d3}
