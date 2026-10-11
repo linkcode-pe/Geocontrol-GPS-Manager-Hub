@@ -5,6 +5,7 @@ const base=process.env.HUB_SMOKE_URL;
 const json={'Content-Type':'application/json'};
 const cases=[
  ['GET','/api/activity'],
+ ['GET','/api/activity/export'],
  ['GET','/api/projects'],
  ['POST','/api/projects'],
  ['PATCH','/api/projects/1'],
