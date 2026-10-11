@@ -245,3 +245,4 @@
 .shell .project-report-actions .project-export:hover{background:#e5f1ff;border-color:#1686d7}
 .shell.dark .project-report-actions .project-export{background:#23364d;border-color:#415570;color:#7cc8ff}
 @media(max-width:760px){.shell .project-report-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.shell .project-report-actions .project-export{white-space:normal;text-align:center;min-height:42px;padding:9px 6px;font-size:11px}}
+@media(max-width:760px){.shell .project-report-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.shell .project-report-actions .project-export:last-child:nth-child(odd){grid-column:1/-1}}
