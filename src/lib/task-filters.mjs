@@ -16,3 +16,7 @@ export function filterSortTasks(tasks,{phaseId=null,priority='all',due='all',sor
   return b.id-a.id;
  });
 }
+export function taskAlertSummary(tasks,today){
+ const open=tasks.filter(t=>t.status!=='done');
+ return {overdue:open.filter(t=>taskDueState(t,today)==='overdue').length,soon:open.filter(t=>taskDueState(t,today)==='soon').length,urgent:open.filter(t=>t.priority==='urgent').length};
+}
