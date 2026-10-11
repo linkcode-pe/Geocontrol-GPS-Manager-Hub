@@ -141,3 +141,12 @@
 .shell .project-progress{height:7px;border-radius:10px;background:var(--ui-border);overflow:hidden;margin:10px 0}
 .shell .project-progress span{display:block;height:100%;background:var(--ui-accent);border-radius:10px}
 .shell .phase-manager-body select{display:block;margin-top:8px;max-width:100%;padding:8px;border:1px solid var(--ui-border);border-radius:8px;background:var(--ui-surface);color:var(--ui-text)}
+
+.shell .project-card{display:flex;flex-direction:column;gap:0;padding:20px}
+.shell .project-card p{line-height:1.5;margin:14px 0}
+.shell .project-card-meta{gap:8px 16px;margin-top:auto;font-size:var(--ui-small)}
+.shell .project-progress{margin:16px 0 10px}
+.shell .project-card-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:8px}
+.shell .project-card-footer small{font-size:var(--ui-small);color:var(--ui-muted);white-space:nowrap}
+.shell .project-card-footer .project-open{margin:0;white-space:nowrap}
+@media(max-width:760px){.shell .project-cards{gap:16px}.shell .project-card{padding:18px}.shell .project-card-footer{flex-direction:column;align-items:stretch;gap:14px}.shell .project-card-footer small{align-self:flex-start}.shell .project-card-footer .project-open{width:100%;min-height:48px;text-align:center}}
