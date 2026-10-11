@@ -49,6 +49,10 @@ export default function Home() {
   const [taskSort,setTaskSort]=useState("recent");
   const [groupByDue,setGroupByDue]=useState(false);
   const [weeklyFocus,setWeeklyFocus]=useState("");
+  const [taskPrefsLoaded,setTaskPrefsLoaded]=useState(false);
+  useEffect(()=>{queueMicrotask(()=>{try{const raw=window.localStorage.getItem("hub-task-view-v1");if(raw){const prefs=JSON.parse(raw);if(prefs&&typeof prefs==="object"){if(typeof prefs.search==="string")setTaskSearch(prefs.search.slice(0,255));if(["all","low","normal","high","urgent"].includes(prefs.priority))setTaskPriorityFilter(prefs.priority);if(["all","overdue","soon","later","none"].includes(prefs.due))setTaskDueFilter(prefs.due);if(["recent","priority","due"].includes(prefs.sort))setTaskSort(prefs.sort);if(typeof prefs.groupByDue==="boolean")setGroupByDue(prefs.groupByDue);}}}catch{}setTaskPrefsLoaded(true);});},[]);
+  useEffect(()=>{if(!taskPrefsLoaded)return;try{window.localStorage.setItem("hub-task-view-v1",JSON.stringify({search:taskSearch,priority:taskPriorityFilter,due:taskDueFilter,sort:taskSort,groupByDue}));}catch{}},[taskPrefsLoaded,taskSearch,taskPriorityFilter,taskDueFilter,taskSort,groupByDue]);
+
   const [phaseEditTitle,setPhaseEditTitle]=useState("");
   const [phaseError,setPhaseError]=useState("");
   const [projectPhases,setProjectPhases]=useState<{id:number;title:string;description:string|null;status:string;position:number}[]>([]);
