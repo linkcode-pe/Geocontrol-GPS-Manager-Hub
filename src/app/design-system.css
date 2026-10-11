@@ -105,3 +105,13 @@
 .shell .task-list>.task-row>.task-unified-editor input:not([type=checkbox]),.shell .task-list>.task-row>.task-unified-editor select{display:block;flex:none;margin:0;width:100%;max-width:100%;min-width:0;box-sizing:border-box}
 .shell .task-list>.task-row>.task-unified-editor .task-editor-actions,.shell .task-list>.task-row>.task-unified-editor .task-editor-secondary{width:100%;min-width:0;box-sizing:border-box}
 @media(max-width:760px){.shell .task-list>.task-row>.task-unified-editor{padding:12px}.shell .task-list>.task-row>.task-unified-editor .task-editor-actions{gap:6px}.shell .task-list>.task-row>.task-unified-editor .task-editor-actions button{padding:9px 11px}.shell .task-list>.task-row>.task-unified-editor .task-editor-secondary{gap:7px}}
+/* Keep the workspace navigation visible while scrolling */
+.shell .main>.topbar{position:sticky;top:0;z-index:30;box-shadow:0 1px 0 var(--ui-border)}
+/* Compact, consistent task editor */
+.shell .task-list>.task-row>.task-unified-editor{gap:5px;padding:12px;margin-top:5px}
+.shell .task-list>.task-row>.task-unified-editor label{font-size:11px;line-height:1.3;margin-top:4px}
+.shell .task-list>.task-row>.task-unified-editor input:not([type=checkbox]),.shell .task-list>.task-row>.task-unified-editor select{min-height:40px;padding:7px 11px}
+.shell .task-list>.task-row>.task-unified-editor .task-editor-actions{margin-top:8px;gap:7px}
+.shell .task-list>.task-row>.task-unified-editor .task-editor-secondary{padding-top:8px;margin-top:5px;gap:7px}
+.shell .task-list>.task-row>.task-unified-editor button{min-height:36px;padding:7px 11px}
+@media(max-width:760px){.shell .main>.topbar{height:65px}.shell .task-list>.task-row>.task-unified-editor{padding:11px;gap:4px}.shell .task-list>.task-row>.task-unified-editor .task-editor-actions button,.shell .task-list>.task-row>.task-unified-editor .task-editor-secondary button{padding:8px 10px;font-size:13px}}
