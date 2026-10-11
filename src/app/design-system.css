@@ -199,3 +199,17 @@
 .dark .portfolio-row{background:#223149;border-color:#35445c}
 .dark .portfolio-row small{color:#b3c1d3}
 @media(max-width:760px){.portfolio-list{grid-template-columns:1fr}}
+/* Resumen compacto de proyectos en pantallas pequeñas */
+@media(max-width:760px){
+ .shell .dashboard-portfolio{padding:17px}
+ .shell .dashboard-portfolio .panel-head{margin-bottom:14px;gap:12px}
+ .shell .dashboard-portfolio .panel-head h2{font-size:18px;margin-bottom:3px}
+ .shell .dashboard-portfolio .panel-head p{font-size:12px;line-height:1.4}
+ .shell .dashboard-portfolio .panel-head .text-link{font-size:12px;max-width:112px;text-align:right;line-height:1.4;flex-shrink:0}
+ .shell .portfolio-list{gap:8px}
+ .shell .portfolio-row{padding:12px 14px;gap:7px;border-radius:10px}
+ .shell .portfolio-row-heading b{font-size:13px;line-height:1.35}
+ .shell .portfolio-row-heading strong{font-size:13px}
+ .shell .portfolio-row .progress{height:5px}
+ .shell .portfolio-row small{font-size:11px;line-height:1.4}
+}
