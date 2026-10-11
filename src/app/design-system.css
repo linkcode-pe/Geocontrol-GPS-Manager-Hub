@@ -347,3 +347,15 @@
   .task-advanced-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:12px 10px;border:1px solid var(--ui-border,#cbd5e1);border-top:0;border-radius:0 0 9px 9px}
   .task-advanced-fields label:last-child{grid-column:1/-1}
 }
+
+/* Task cards live inside due-date groups: keep titles readable and actions reachable. */
+@media(max-width:650px){
+ .shell .task-due-group>.task-row{display:grid;grid-template-columns:24px minmax(0,1fr) 44px;gap:7px 10px;align-items:center;padding:13px 12px;margin:9px 0;border:1px solid var(--ui-border,#cbd5e1);border-radius:12px;background:var(--ui-surface,#fff);min-width:0}
+ .shell .task-due-group>.task-row>input[type="checkbox"]{grid-column:1;grid-row:1;margin:0;width:19px;height:19px}
+ .shell .task-due-group>.task-row>span:not(.task-phase-label):not(.task-status-chip):not(.task-priority-label):not(.task-due-date){grid-column:2;grid-row:1;font-size:15px;line-height:1.45;font-weight:650;min-width:0;overflow-wrap:anywhere;flex:none}
+ .shell .task-due-group>.task-row>.task-gear{grid-column:3;grid-row:1;width:44px;height:44px;min-width:44px;margin:0;justify-self:end}
+ .shell .task-due-group>.task-row>.task-status-chip,.shell .task-due-group>.task-row>.task-priority-label,.shell .task-due-group>.task-row>.task-due-date,.shell .task-due-group>.task-row>.task-phase-label{grid-column:2/4;grid-row:auto;justify-self:start;max-width:100%;min-width:0;margin:0;font-size:12px;overflow-wrap:anywhere;flex:none}
+ .shell .task-due-group>.task-row>.task-unified-editor,.shell .task-due-group>.task-row>.task-options,.shell .task-due-group>.task-row>.task-phase-editor{grid-column:1/-1;grid-row:auto;min-width:0;width:100%;box-sizing:border-box}
+ .shell .task-due-group>.task-row>.task-unified-editor{margin-top:8px;padding:12px;overflow:hidden}
+ .shell .task-due-group>.task-row>.task-unified-editor input:not([type="checkbox"]),.shell .task-due-group>.task-row>.task-unified-editor select{width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+}
