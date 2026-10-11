@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 const base=process.env.HUB_SMOKE_URL;
 const json={'Content-Type':'application/json'};
 const cases=[
+ ['GET','/api/activity'],
  ['GET','/api/projects'],
  ['POST','/api/projects'],
  ['PATCH','/api/projects/1'],
