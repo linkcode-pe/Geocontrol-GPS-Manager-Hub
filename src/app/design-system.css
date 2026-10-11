@@ -321,3 +321,17 @@
 .task-active-filters{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:-6px 0 16px}.task-active-filters>span{font-size:12px;font-weight:650;opacity:.7}.task-active-filters button{max-width:100%;border:1px solid rgba(33,141,224,.35);border-radius:99px;background:rgba(33,141,224,.09);color:inherit;padding:7px 11px;font-size:12px;cursor:pointer;overflow-wrap:anywhere;text-align:left}.task-active-filters button:hover{background:rgba(33,141,224,.18)}.task-active-filters button:focus-visible{outline:2px solid #218de0;outline-offset:2px}
 
 .task-preferences-status{font-size:11px;opacity:.65;white-space:nowrap;padding-bottom:9px}.task-planning-toolbar .task-reset-view{min-height:38px;border:1px solid var(--ui-border,#cbd5e1);border-radius:9px;background:transparent;color:inherit;padding:7px 12px;font-size:12px;cursor:pointer}.task-planning-toolbar .task-reset-view:hover{border-color:#218de0;background:rgba(33,141,224,.1)}.task-planning-toolbar .task-reset-view:focus-visible{outline:2px solid #218de0;outline-offset:2px}
+
+/* Compact task controls on narrow screens without hiding available filters. */
+@media(max-width:650px){
+  .task-planning-toolbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:10px 0 12px;align-items:end}
+  .task-planning-toolbar label{min-width:0;gap:4px;font-size:11px}
+  .task-planning-toolbar .task-search-field{grid-column:1/-1;min-width:0}
+  .task-planning-toolbar select,.task-planning-toolbar input[type="search"]{min-height:42px;min-width:0;font-size:13px}
+  .task-planning-toolbar .task-filter-count{grid-column:1/-1;margin:0;font-size:12px}
+  .task-planning-toolbar .task-preferences-status{grid-column:1/-1;padding:0;font-size:11px}
+  .task-planning-toolbar .task-clear-filters,.task-planning-toolbar .task-reset-view{width:100%;min-height:42px;font-size:12px}
+  .task-active-filters{gap:6px;margin:0 0 12px}
+  .task-active-filters button{padding:6px 9px;font-size:11px}
+}
+@media(max-width:350px){.task-planning-toolbar{gap:7px}.task-planning-toolbar select{padding:7px 5px;font-size:12px}}
