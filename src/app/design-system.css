@@ -217,3 +217,6 @@
 .shell .phase-tasks-link:hover{text-decoration:underline;text-underline-offset:3px}
 .shell .task-filter-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
 @media(max-width:760px){.shell .task-filter-actions{width:100%;justify-content:space-between;gap:10px}.shell .task-filter-banner{align-items:flex-start}}
+.shell .project-export{color:#1686d7;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
+.shell .project-export:hover{text-decoration:underline}
+.shell .project-card-footer{flex-wrap:wrap;gap:10px}
