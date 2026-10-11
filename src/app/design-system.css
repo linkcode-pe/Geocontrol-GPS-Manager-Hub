@@ -186,3 +186,16 @@
 .shell .project-list-toolbar input{flex:1 1 230px;min-width:0;padding:13px 15px;border:1px solid var(--ui-border);border-radius:10px;background:var(--ui-surface);color:var(--ui-text);font:inherit}
 .shell .project-list-toolbar span{font-size:13px;color:var(--ui-muted);white-space:nowrap}
 .shell .project-card:focus-visible{outline:3px solid var(--ui-accent);outline-offset:3px}
+.dashboard-portfolio{margin-bottom:20px}
+.portfolio-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.portfolio-row{display:flex;flex-direction:column;gap:11px;text-align:left;background:var(--ui-surface,#f5f7fb);border:1px solid var(--ui-border,#dfe6ef);border-radius:12px;padding:17px;color:inherit;min-width:0}
+.portfolio-row:hover{border-color:#8ba9c5}
+.portfolio-row:focus-visible{outline:3px solid #3999dc;outline-offset:2px}
+.portfolio-row-heading{display:flex;justify-content:space-between;align-items:start;gap:12px;width:100%}
+.portfolio-row-heading b{font-size:14px;overflow-wrap:anywhere}
+.portfolio-row-heading strong{white-space:nowrap;color:#258ac9}
+.portfolio-row .progress{width:100%}
+.portfolio-row small{color:#74849a;font-size:12px}
+.dark .portfolio-row{background:#223149;border-color:#35445c}
+.dark .portfolio-row small{color:#b3c1d3}
+@media(max-width:760px){.portfolio-list{grid-template-columns:1fr}}
