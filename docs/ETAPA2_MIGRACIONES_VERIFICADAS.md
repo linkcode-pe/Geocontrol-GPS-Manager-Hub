@@ -1,0 +1,7 @@
+## 34. Etapa 2 — migraciones aisladas y permisos de documentos (11/10/2026)
+
+**Migraciones validadas sin afectar producción.** Nuevo `scripts/verify-stage2-migrations-isolated.py`: toma último respaldo Hub del servidor, lo restaura a esquema `hub_restore_check_<12 hex>` y ejecuta únicamente allí `20261011_guide_versions.sql` y `20261011_document_versions.sql`. Inserta documento de prueba preexistente en el esquema temporal y verifica que después de migrar se conserve título, contenido y revisión 1 en tabla de versiones; comprueba snapshot inicial de la memoria. Resultado real: `PASS: latest Hub backup restored; existing document preserved and versioned; guide baseline revision 16`. Limpieza del esquema temporal en finally.
+
+**Permisos de interfaz:** `GET /api/documents` expone `canEdit` según rol owner/admin/editor; la pantalla `/documentos` oculta editor, nuevo y recuperar para lectores. Los endpoints ya comprobaban permisos de servidor. Validación aislada: lint 0 errores (3 avisos auxiliares), build Next.js y TypeScript correctos, 20 páginas.
+
+**Advertencias:** el último respaldo restaurado contiene memoria revisión 16, inferior a la memoria viva revisión 22, por lo que la copia no representa la memoria actual. Se requiere respaldo actualizado y comprobación de frescura antes de publicar. No se han aplicado migraciones ni desplegado código en producción. Pendientes pruebas de navegador y publicación controlada.

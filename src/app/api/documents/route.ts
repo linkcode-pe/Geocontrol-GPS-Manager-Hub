@@ -10,7 +10,7 @@ export async function GET(req:Request){
  if(!Number.isSafeInteger(projectId)||projectId<1)return NextResponse.json({error:'Proyecto inválido'},{status:400});
  const includeArchived=url.searchParams.get('archived')==='1';
  const [rows]=await db().execute<RowDataPacket[]>('SELECT id,project_id,title,body,revision,archived_at,created_at,updated_at FROM hub_documents WHERE project_id=? '+(includeArchived?'':'AND archived_at IS NULL ')+'ORDER BY id DESC LIMIT 100',[projectId]);
- return NextResponse.json({documents:rows});
+ return NextResponse.json({documents:rows,canEdit:['owner','admin','editor'].includes(user.role)});
 }
 export async function POST(req:Request){
  const user=await currentUser();if(!user)return NextResponse.json({error:'No autorizado'},{status:401});
