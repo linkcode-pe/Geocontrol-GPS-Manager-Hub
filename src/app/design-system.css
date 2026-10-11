@@ -246,3 +246,19 @@
 .shell.dark .project-report-actions .project-export{background:#23364d;border-color:#415570;color:#7cc8ff}
 @media(max-width:760px){.shell .project-report-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.shell .project-report-actions .project-export{white-space:normal;text-align:center;min-height:42px;padding:9px 6px;font-size:11px}}
 @media(max-width:760px){.shell .project-report-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.shell .project-report-actions .project-export:last-child:nth-child(odd){grid-column:1/-1}}
+/* Compact project cards and accessible report menu */
+.shell .project-progress-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;font-size:12px;color:var(--ui-muted)}
+.shell .project-progress-heading strong{font-weight:600;color:var(--ui-text)}
+.shell .project-progress-heading span{font-weight:800;font-size:15px;color:var(--ui-accent)}
+.shell .project-progress{height:10px;margin:7px 0 9px}
+.shell .project-card-footer{display:flex;flex-direction:column;align-items:stretch;gap:9px;margin-top:0}
+.shell .project-card-footer .project-open{width:100%;min-height:44px}
+.shell .project-report-menu{width:100%;border:1px solid var(--ui-border);border-radius:10px;background:var(--ui-surface)}
+.shell .project-report-menu summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;cursor:pointer;font-size:13px;font-weight:650;color:var(--ui-accent);list-style:none}
+.shell .project-report-menu summary::-webkit-details-marker{display:none}
+.shell .project-report-menu summary span{font-size:18px;transition:transform .2s}
+.shell .project-report-menu[open] summary span{transform:rotate(180deg)}
+.shell .project-report-menu[open] summary{border-bottom:1px solid var(--ui-border)}
+.shell .project-report-menu .project-report-actions{padding:10px;gap:8px;display:flex;flex-direction:column;align-items:stretch}
+.shell .project-report-menu .project-export{width:100%;min-height:38px}
+@media(max-width:760px){.shell .project-card{padding:16px}.shell .project-card p{margin:9px 0}.shell .project-card-controls{margin:8px 0}.shell .project-card-footer{gap:9px}.shell .project-report-menu .project-report-actions{display:flex}.shell .project-report-menu .project-export:last-child:nth-child(odd){grid-column:auto}}
