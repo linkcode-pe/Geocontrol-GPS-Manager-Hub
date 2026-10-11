@@ -4,10 +4,10 @@ import { isAllowedOrigin } from '@/lib/origin';
 import { db } from '@/lib/db';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
-type GuideRow=RowDataPacket & {content:string;revision:number;updated_at:Date};
+type GuideRow=RowDataPacket & {content:string;revision:number;updated_at:Date;updated_by:number|null};
 export async function GET(){
  const user=await currentUser();if(!user)return NextResponse.json({error:'No autorizado'},{status:401});
- const [rows]=await db().execute<GuideRow[]>('SELECT content,revision,updated_at FROM hub_project_guide WHERE id=1');
+ const [rows]=await db().execute<GuideRow[]>('SELECT content,revision,updated_at,updated_by FROM hub_project_guide WHERE id=1');
  if(!rows.length)return NextResponse.json({error:'Guía no inicializada'},{status:404});
  return NextResponse.json({content:rows[0].content,revision:rows[0].revision,updatedAt:rows[0].updated_at,canEdit:['owner','admin'].includes(user.role)});
 }
@@ -20,8 +20,13 @@ export async function PUT(req:Request){
  const conn=await db().getConnection();
  try{
   await conn.beginTransaction();
+  const [existing]=await conn.execute<GuideRow[]>('SELECT content,revision,updated_by FROM hub_project_guide WHERE id=1 FOR UPDATE');
+  if(!existing.length){await conn.rollback();return NextResponse.json({error:'Guía no inicializada'},{status:404});}
+  if(existing[0].revision!==body.revision){await conn.rollback();return NextResponse.json({error:'El documento fue modificado en otra sesión. Recarga antes de guardar.'},{status:409});}
+  await conn.execute('INSERT INTO hub_project_guide_versions(guide_id,revision,content,updated_by) VALUES(1,?,?,?) ON DUPLICATE KEY UPDATE id=id',[existing[0].revision,existing[0].content,existing[0].updated_by]);
   const [result]=await conn.execute<ResultSetHeader>('UPDATE hub_project_guide SET content=?,revision=revision+1,updated_by=? WHERE id=1 AND revision=?',[body.content,user.id,body.revision]);
-  if(result.affectedRows!==1){await conn.rollback();return NextResponse.json({error:'El documento fue modificado en otra sesión. Recarga antes de guardar.'},{status:409});}
+  if(result.affectedRows!==1){await conn.rollback();return NextResponse.json({error:'Conflicto de versión'},{status:409});}
+  await conn.execute('INSERT INTO hub_project_guide_versions(guide_id,revision,content,updated_by) VALUES(1,?,?,?)',[body.revision+1,body.content,user.id]);
   await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','project_guide',1,JSON_OBJECT('revision',?))",[user.id,body.revision+1]);
   await conn.commit();
  }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
