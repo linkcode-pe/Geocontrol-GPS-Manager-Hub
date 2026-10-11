@@ -1,6 +1,6 @@
 # Geocontrol Project Hub — memoria y guía permanente
 
-**Última actualización:** 11 de octubre de 2026  
+**Última actualización:** 11 de octubre de 2026 (publicación de guía editable)  
 **Estado:** desarrollo activo; la web `https://hub.geocontrol.online` está en servicio, pero no debe confundirse con la rama aprobada para publicación.  
 **Repositorio:** `linkcode-pe/Geocontrol-GPS-Manager-Hub`  
 **Rama de trabajo:** `feat/mysql-auth`  
@@ -46,7 +46,7 @@ No dar por publicado algo solo porque está en GitHub. No dar por correcto un de
 - GitHub: `https://github.com/linkcode-pe/Geocontrol-GPS-Manager-Hub`.
 - La llave SSH del servidor funciona para `git push`. La integración GitHub de ChatGPT devolvió error 403 al intentar crear un pull request; no implica que falle SSH.
 
-**Riesgo confirmado:** el servicio público utiliza el mismo directorio en que se ejecutaban compilaciones de desarrollo. Esto causó pérdida temporal de archivos estáticos y un error de carga en el navegador. Se reconstruyó la aplicación y se verificó que el login y sus archivos CSS/JS respondían correctamente. **Prioridad alta:** separar compilación y ejecución mediante directorios/releases aislados antes de seguir construyendo en el servidor.
+**Incidencia histórica:** el servicio público utilizaba el mismo directorio en que se ejecutaban compilaciones de desarrollo; esto causó un error de carga por archivos estáticos faltantes. El 11/10/2026 se cambió el servicio a `/opt/geocontrol-hub-releases/807-guide`, un directorio de release independiente. Se verificaron login y archivos CSS/JS. Mantener siempre compilaciones fuera del directorio activo y verificar reversión.
 
 ## 6. Estado funcional comprobado
 
@@ -64,21 +64,29 @@ El usuario informa que la web **no registra datos nuevos**. La conexión directa
 ## 8. Evolución prevista
 
 **Prioridad 1:** diagnosticar y reparar el guardado real en la web, con pruebas de creación y lectura.  
-**Prioridad 2:** aislar producción del entorno de desarrollo y preparar despliegues reversibles.  
+**Prioridad 2:** mantener los despliegues en releases separados, verificar reversión y automatizar el procedimiento.  
 **Prioridad 3:** completar revisión de seguridad, respaldo/restauración y propuesta de fusión a `main`.  
 **Prioridad 4:** enriquecer documentación persistente, historial, decisiones, métricas y seguimiento multiproyecto.  
 **Futuro:** integración backend autorizada con Traccar, sin modificar sus bases directamente.
 
-## 9. Estado GitHub y documentación
+## 9. Guía editable publicada
 
-- Último commit confirmado antes de esta guía: `57b8433` (`Document Hub release review and safe deployment gates`).
+- En la web, abrir el menú lateral y pulsar **Memoria del proyecto · Ver y editar**, encima de «Entorno de planificación».
+- Ruta web: `/guia-proyecto`, protegida por inicio de sesión.
+- Los usuarios `owner` y `admin` pueden editar y guardar; los demás solo leer.
+- Las ediciones se almacenan en la tabla MySQL `hub_project_guide` con control de versiones concurrentes y registro de auditoría. **La copia en MySQL es la versión viva de la web**; el archivo `docs/PROJECT_CONTEXT.md` de GitHub es la base inicial y debe sincronizarse deliberadamente al actualizar hitos importantes, sin sobrescribir las ediciones del usuario.
+- La guía editable se publicó el 11/10/2026 mediante commit `35594dc`. Se realizó respaldo SQL antes de crear su tabla y se comprobó la carga de archivos públicos.
+
+## 10. Estado GitHub y documentación
+
+- Publicación confirmada: `35594dc` (`Add editable persistent project guide in Hub`).
 - La rama `feat/mysql-auth` estaba sincronizada con GitHub.
 - Guía de revisión previa: `docs/release-review.md`.
 - Verificar siempre `git status -sb`, historial, pruebas y estado real del servicio al retomar.
 - **Actualizar esta memoria en cada hito significativo**: cambios hechos, pruebas realizadas, commit, si se publicó o no, incidencias y siguiente paso.
 
-## 10. Instrucción para el siguiente chat
+## 11. Instrucción para el siguiente chat
 
-> Estamos trabajando en **Geocontrol Project Hub** (`hub.geocontrol.online`), no en Traccar Manager. Lee íntegramente `docs/PROJECT_CONTEXT.md` del repositorio `linkcode-pe/Geocontrol-GPS-Manager-Hub`, revisa el estado real por Desktop Commander remoto y GitHub, y continúa con las prioridades e incidencias abiertas. No supongas que los cambios en GitHub ya están publicados. No modifiques producción sin autorización. Mantén esta guía actualizada después de cada hito.
+> Estamos trabajando en **Geocontrol Project Hub** (`hub.geocontrol.online`), no en Traccar Manager. Consulta primero la guía editable en `/guia-proyecto` (MySQL, fuente viva) cuando sea accesible y lee también `docs/PROJECT_CONTEXT.md` del repositorio `linkcode-pe/Geocontrol-GPS-Manager-Hub`, revisa el estado real por Desktop Commander remoto y GitHub, y continúa con las prioridades e incidencias abiertas. No supongas que los cambios en GitHub ya están publicados. No modifiques producción sin autorización. Mantén esta guía actualizada después de cada hito.
 
 **Importante:** el documento conserva el contexto técnico, pero un chat nuevo no lo consulta automáticamente si no tiene acceso al repositorio o si no se comparte su enlace/contenido.
