@@ -240,3 +240,8 @@
 .shell .vertical-track>.zero-progress{background:#7f9cb9;border-radius:4px 4px 0 0}
 .shell .vertical-column:focus-visible{outline:2px solid #1686d7;outline-offset:4px;border-radius:5px}
 .shell.dark .vertical-column em{color:#b3c1d3}
+.shell .project-report-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;width:100%}
+.shell .project-report-actions .project-export{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border:1px solid #cbd9e9;border-radius:9px;background:#f5f9ff;font-size:12px;text-decoration:none}
+.shell .project-report-actions .project-export:hover{background:#e5f1ff;border-color:#1686d7}
+.shell.dark .project-report-actions .project-export{background:#23364d;border-color:#415570;color:#7cc8ff}
+@media(max-width:760px){.shell .project-report-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.shell .project-report-actions .project-export{white-space:normal;text-align:center;min-height:42px;padding:9px 6px;font-size:11px}}
