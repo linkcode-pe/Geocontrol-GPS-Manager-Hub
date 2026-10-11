@@ -313,3 +313,5 @@
 @media(max-width:340px){.weekly-attention-controls{grid-template-columns:minmax(0,1fr)}}
 
 .task-planning-toolbar input[type="search"]{width:100%;min-height:38px;border:1px solid var(--ui-border,#cbd5e1);border-radius:9px;background:var(--ui-surface,#fff);color:var(--ui-text,inherit);padding:7px 10px;font:inherit;font-size:13px}.task-planning-toolbar .task-search-field{flex:1.4 1 190px}.task-planning-toolbar input[type="search"]:focus-visible{outline:2px solid #218de0;outline-offset:2px}
+
+.task-planning-toolbar .task-clear-filters{min-height:38px;border:1px solid var(--ui-border,#cbd5e1);border-radius:9px;padding:7px 12px;background:var(--ui-surface,#fff);color:var(--ui-text,inherit);font-size:12px;font-weight:650;cursor:pointer}.task-planning-toolbar .task-clear-filters:hover{border-color:#218de0;background:rgba(33,141,224,.1)}.task-planning-toolbar .task-clear-filters:focus-visible{outline:2px solid #218de0;outline-offset:2px}@media(max-width:520px){.task-planning-toolbar .task-clear-filters{width:100%}}
