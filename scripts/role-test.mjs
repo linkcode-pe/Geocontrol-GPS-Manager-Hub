@@ -51,8 +51,12 @@ try {
   await expect(task,201,user.role+' task create');
   const [rows]=await conn.query('SELECT id FROM hub_tasks WHERE project_id=?',[id]);
   const taskId=rows[0].id;
-  await expect(await request('PATCH','/api/tasks/'+taskId,headers,{status:'blocked'}),200,user.role+' task edit');
+  await expect(await request('PATCH','/api/tasks/'+taskId,headers,{status:'blocked',priority:'urgent',dueDate:'2026-12-15'}),200,user.role+' task edit');
   await expect(await request('PATCH','/api/tasks/'+taskId,headers,{status:'invalid'}),400,user.role+' invalid status');
+  await expect(await request('PATCH','/api/tasks/'+taskId,headers,{priority:'invalid'}),400,user.role+' invalid priority');
+  await expect(await request('PATCH','/api/tasks/'+taskId,headers,{dueDate:'2026-02-30'}),400,user.role+' invalid date');
+  const [planned]=await conn.query('SELECT priority,DATE_FORMAT(due_date,\"%Y-%m-%d\") AS dueDate FROM hub_tasks WHERE id=?',[taskId]);
+  if(planned[0].priority!=='urgent'||planned[0].dueDate!=='2026-12-15')throw Error('Task planning fields not persisted');
   await expect(await request('DELETE','/api/phases/'+phaseId,headers),409,user.role+' phase with task');
   await expect(await request('DELETE','/api/tasks/'+taskId,headers),200,user.role+' task delete');
   await expect(await request('DELETE','/api/phases/'+phaseId,headers),200,user.role+' phase delete');

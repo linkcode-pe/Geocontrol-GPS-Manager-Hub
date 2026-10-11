@@ -11,7 +11,7 @@ export async function GET(req:Request){
  const pagination=taskPagination(url.searchParams.get("page"),url.searchParams.get("limit"));
  if(!pagination)return NextResponse.json({error:"Paginación inválida"},{status:400});
  if(!Number.isSafeInteger(projectId)||projectId<1)return NextResponse.json({error:"Proyecto inválido"},{status:400});
- const [rows]=await db().execute<RowDataPacket[]>(`SELECT id,title,status,phase_id FROM hub_tasks WHERE project_id=? ORDER BY id DESC LIMIT ${pagination.limit} OFFSET ${pagination.offset}`,[projectId]);
+ const [rows]=await db().execute<RowDataPacket[]>(`SELECT id,title,status,phase_id,priority,DATE_FORMAT(due_date,'%Y-%m-%d') AS due_date FROM hub_tasks WHERE project_id=? ORDER BY id DESC LIMIT ${pagination.limit} OFFSET ${pagination.offset}`,[projectId]);
  const [phaseRows]=await db().execute<RowDataPacket[]>("SELECT id,title FROM hub_phases WHERE project_id=? ORDER BY position,id",[projectId]);
  return NextResponse.json({tasks:rows,phases:phaseRows,page:pagination.page,limit:pagination.limit,hasMore:rows.length===pagination.limit});
 }
@@ -26,9 +26,13 @@ export async function POST(req:Request){
  if(!Number.isSafeInteger(projectId)||projectId<1)return NextResponse.json({error:"Proyecto inválido"},{status:400});
  const [projects]=await db().execute<RowDataPacket[]>("SELECT id FROM hub_projects WHERE id=? LIMIT 1",[projectId]);
  if(!projects.length)return NextResponse.json({error:"Proyecto inexistente"},{status:404});
+ const priority=body?.priority??'normal';
+ if(!['low','normal','high','urgent'].includes(priority))return NextResponse.json({error:'Prioridad inválida'},{status:400});
+ const dueDate=body?.dueDate??null;
+ if(dueDate!==null&&(typeof dueDate!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(dueDate)||Number.isNaN(Date.parse(dueDate))||new Date(dueDate).toISOString().slice(0,10)!==dueDate))return NextResponse.json({error:'Fecha inválida'},{status:400});
  const phaseId=body.phaseId??null;
  if(phaseId!==null){if(!Number.isSafeInteger(phaseId)||phaseId<1)return NextResponse.json({error:"Fase inválida"},{status:400});const [valid]=await db().execute<RowDataPacket[]>("SELECT id FROM hub_phases WHERE id=? AND project_id=? LIMIT 1",[phaseId,projectId]);if(!valid.length)return NextResponse.json({error:"Fase no pertenece al proyecto"},{status:400});}
- const [result]=await db().execute("INSERT INTO hub_tasks(project_id,title,phase_id) VALUES(?,?,?)",[projectId,title,phaseId]);
+ const [result]=await db().execute("INSERT INTO hub_tasks(project_id,title,phase_id,priority,due_date) VALUES(?,?,?,?,?)",[projectId,title,phaseId,priority,dueDate]);
  await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,metadata) VALUES(?,'create','task',JSON_OBJECT('title',?))",[user.id,title]);
  return NextResponse.json({ok:true,result},{status:201});
 }
