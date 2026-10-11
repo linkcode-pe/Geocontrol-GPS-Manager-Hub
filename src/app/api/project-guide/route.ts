@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { currentUser } from '@/lib/auth';
 import { isAllowedOrigin } from '@/lib/origin';
 import { db } from '@/lib/db';
-import type { RowDataPacket } from 'mysql2';
+import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 type GuideRow=RowDataPacket & {content:string;revision:number;updated_at:Date};
 export async function GET(){
@@ -17,8 +17,13 @@ export async function PUT(req:Request){
  if(!isAllowedOrigin(req))return NextResponse.json({error:'Origen no autorizado'},{status:403});
  let body;try{body=await req.json();}catch{return NextResponse.json({error:'Datos inválidos'},{status:400});}
  if(typeof body?.content!=='string'||body.content.trim().length<20||body.content.length>100000||!Number.isSafeInteger(body.revision)||body.revision<1)return NextResponse.json({error:'Contenido o versión inválida'},{status:400});
- const [result]=await db().execute('UPDATE hub_project_guide SET content=?,revision=revision+1,updated_by=? WHERE id=1 AND revision=?',[body.content,user.id,body.revision]);
- if((result as {affectedRows:number}).affectedRows!==1)return NextResponse.json({error:'El documento fue modificado en otra sesión. Recarga antes de guardar.'},{status:409});
- await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','project_guide',1,JSON_OBJECT('revision',?))",[user.id,body.revision+1]);
+ const conn=await db().getConnection();
+ try{
+  await conn.beginTransaction();
+  const [result]=await conn.execute<ResultSetHeader>('UPDATE hub_project_guide SET content=?,revision=revision+1,updated_by=? WHERE id=1 AND revision=?',[body.content,user.id,body.revision]);
+  if(result.affectedRows!==1){await conn.rollback();return NextResponse.json({error:'El documento fue modificado en otra sesión. Recarga antes de guardar.'},{status:409});}
+  await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','project_guide',1,JSON_OBJECT('revision',?))",[user.id,body.revision+1]);
+  await conn.commit();
+ }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
  return NextResponse.json({ok:true,revision:body.revision+1});
 }
