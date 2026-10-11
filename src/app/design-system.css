@@ -359,3 +359,12 @@
  .shell .task-due-group>.task-row>.task-unified-editor{margin-top:8px;padding:12px;overflow:hidden}
  .shell .task-due-group>.task-row>.task-unified-editor input:not([type="checkbox"]),.shell .task-due-group>.task-row>.task-unified-editor select{width:100%;max-width:100%;min-width:0;box-sizing:border-box}
 }
+
+/* High-contrast priority and due-date indicators for mobile task cards. */
+@media(max-width:650px){
+ .shell .task-due-group>.task-row>.task-priority-label,.shell .task-due-group>.task-row>.task-due-date{display:inline-flex;align-items:center;min-height:30px;padding:5px 10px;border-radius:8px;border:1px solid var(--ui-border,#cbd5e1);background:var(--ui-surface-alt,#f5f7fa);opacity:1;font-size:12px;font-weight:650;white-space:normal}
+ .shell .task-due-group>.task-row>.task-priority-label.priority-urgent,.shell .task-due-group>.task-row>.task-due-date.due-overdue{border-color:rgba(220,38,38,.45);background:rgba(220,38,38,.1);color:var(--ui-text,inherit)}
+ .shell .task-due-group>.task-row>.task-priority-label.priority-high,.shell .task-due-group>.task-row>.task-due-date.due-soon{border-color:rgba(217,119,6,.45);background:rgba(217,119,6,.1);color:var(--ui-text,inherit)}
+ .shell .task-due-group>.task-row>.task-gear:focus-visible,.shell .task-due-group>.task-row>input[type="checkbox"]:focus-visible{outline:3px solid #218de0;outline-offset:3px}
+ .shell .task-due-group>.task-row>.task-status-chip{white-space:normal;min-height:30px;padding:5px 10px;font-size:12px}
+}
