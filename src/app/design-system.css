@@ -160,3 +160,20 @@
 .shell .project-card-edit textarea{min-height:75px;resize:vertical}
 .shell .project-card-edit button{background:var(--ui-accent);color:white;border:0;border-radius:var(--ui-radius-sm);padding:11px;font-weight:650}
 .shell .project-card-edit button:disabled{opacity:.5}
+/* Compact phase cards: one menu replaces the full-width action buttons. */
+.shell .phase-list{gap:12px}
+.shell .phase-manager-row{align-items:flex-start;flex-wrap:nowrap;padding:15px;border:1px solid var(--ui-border);border-radius:var(--ui-radius-sm);background:var(--ui-surface);margin-bottom:0}
+.shell .phase-manager-row>.step-num{flex:0 0 36px;margin-top:3px}
+.shell .phase-manager-row .phase-manager-body{flex:1;min-width:0}
+.shell .phase-manager-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.shell .phase-manager-heading h3{font-size:var(--ui-body);font-weight:650;line-height:1.35}
+.shell .phase-manager-heading small{display:block;margin-top:4px;font-size:var(--ui-small)}
+.shell .phase-menu-trigger{flex:0 0 38px;height:38px;display:grid;place-items:center;border:1px solid var(--ui-border);border-radius:9px;background:var(--ui-surface);color:var(--ui-text);cursor:pointer}
+.shell .phase-manager-progress{height:5px;border-radius:9px;background:var(--ui-border);overflow:hidden;margin:11px 0 9px}
+.shell .phase-manager-progress span{display:block;height:100%;background:var(--ui-accent);border-radius:9px}
+.shell .phase-manager-body select{font-size:var(--ui-small);padding:7px 10px;margin-top:0}
+.shell .phase-menu-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.shell .phase-menu-actions button{border:1px solid var(--ui-border);background:var(--ui-surface);color:var(--ui-text);border-radius:8px;padding:9px 12px;font:inherit;font-size:var(--ui-small)}
+.shell .phase-menu-actions .danger{color:#b44545}
+.shell .phase-manager-row .phase-inline-edit{margin-top:10px}
+@media(max-width:760px){.shell .phase-manager-row{gap:10px;padding:12px}.shell .phase-manager-body{flex-basis:auto}.shell .phase-manager-heading h3{font-size:17px}}
