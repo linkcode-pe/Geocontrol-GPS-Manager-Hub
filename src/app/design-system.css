@@ -177,3 +177,8 @@
 .shell .phase-menu-actions .danger{color:#b44545}
 .shell .phase-manager-row .phase-inline-edit{margin-top:10px}
 @media(max-width:760px){.shell .phase-manager-row{gap:10px;padding:12px}.shell .phase-manager-body{flex-basis:auto}.shell .phase-manager-heading h3{font-size:17px}}
+.shell .phase-open-tasks{display:block;text-align:left;border:0;background:transparent;color:var(--ui-text);padding:0;cursor:pointer}
+.shell .phase-open-tasks:hover h3{text-decoration:underline;text-underline-offset:3px}
+.shell .phase-open-tasks:focus-visible{outline:2px solid var(--ui-accent);outline-offset:4px;border-radius:3px}
+.shell .task-filter-banner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:12px 14px;margin:0 0 15px;border:1px solid var(--ui-border);border-radius:10px;background:var(--ui-surface-alt,var(--ui-surface));color:var(--ui-text);font-size:var(--ui-small)}
+.shell .task-filter-banner button{border:0;background:transparent;color:var(--ui-accent);font:inherit;font-weight:650;cursor:pointer}
