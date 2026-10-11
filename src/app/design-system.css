@@ -150,3 +150,13 @@
 .shell .project-card-footer small{font-size:var(--ui-small);color:var(--ui-muted);white-space:nowrap}
 .shell .project-card-footer .project-open{margin:0;white-space:nowrap}
 @media(max-width:760px){.shell .project-cards{gap:16px}.shell .project-card{padding:18px}.shell .project-card-footer{flex-direction:column;align-items:stretch;gap:14px}.shell .project-card-footer small{align-self:flex-start}.shell .project-card-footer .project-open{width:100%;min-height:48px;text-align:center}}
+/* Consistent project management controls */
+.shell .project-card-controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.shell .project-card-controls select,.shell .project-card-controls button,.shell .project-card-edit input,.shell .project-card-edit textarea{border:1px solid var(--ui-border);background:var(--ui-surface);color:var(--ui-text);border-radius:var(--ui-radius-sm);padding:10px;font:inherit;min-width:0}
+.shell .project-card-controls select{flex:1;min-width:130px}
+.shell .project-card-controls button{cursor:pointer}
+.shell .project-card-edit{display:grid;gap:10px;margin:12px 0;padding:12px;border-radius:var(--ui-radius-sm);background:var(--ui-surface)}
+.shell .project-card-edit label{display:grid;gap:5px;color:var(--ui-text);font-size:14px}
+.shell .project-card-edit textarea{min-height:75px;resize:vertical}
+.shell .project-card-edit button{background:var(--ui-accent);color:white;border:0;border-radius:var(--ui-radius-sm);padding:11px;font-weight:650}
+.shell .project-card-edit button:disabled{opacity:.5}
