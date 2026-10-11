@@ -1,5 +1,5 @@
-const labels={title:'Título',phaseId:'Fase',status:'Estado',priority:'Prioridad',dueDate:'Vencimiento',done:'Completada'};
-const values={todo:'Pendiente',in_progress:'En curso',blocked:'Bloqueada',done:'Completada',low:'Baja',normal:'Normal',high:'Alta',urgent:'Urgente'};
+const labels={title:'Título',summary:'Descripción',phaseId:'Fase',status:'Estado',priority:'Prioridad',dueDate:'Vencimiento',done:'Completada'};
+const values={todo:'Pendiente',in_progress:'En curso',blocked:'Bloqueada',done:'Completada',low:'Baja',normal:'Normal',high:'Alta',urgent:'Urgente',planning:'Planificación',active:'Activo',paused:'Pausado',completed:'Completado',pending:'Pendiente'};
 export function activityDetails(metadata){
  if(!metadata)return '';
  let parsed=metadata;

@@ -19,6 +19,6 @@ export async function POST(req:Request){
  if(!title||title.length>255||summary.length>5000)return NextResponse.json({error:"Datos inválidos"},{status:400});
  const slug=`project-${crypto.randomUUID()}`;
  const [result]=await db().execute<ResultSetHeader>("INSERT INTO hub_projects(slug,title,summary,status) VALUES(?,?,?,'planning')",[slug,title,summary]);
- await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id) VALUES(?,'create','project',?)",[user.id,result.insertId]);
+ await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'create','project',?,JSON_OBJECT('change',?))",[user.id,result.insertId,JSON.stringify({title,summary,status:"planning"})]);
  return NextResponse.json({id:result.insertId},{status:201});
 }
