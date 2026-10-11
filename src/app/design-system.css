@@ -270,3 +270,7 @@
 .shell .project-empty-state strong{font-size:15px}.shell .project-empty-state p{font-size:13px;color:var(--ui-muted);margin:8px 0 16px}
 .shell .project-empty-state button{border:0;background:var(--ui-accent);color:#fff;padding:11px 16px;border-radius:9px;font-weight:650;cursor:pointer}
 @media(max-width:760px){.shell .project-clear-filters{grid-column:1/-1;width:100%}}
+.shell .portfolio-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.shell .portfolio-export{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--ui-border);border-radius:9px;padding:9px 12px;background:var(--ui-surface);color:var(--ui-accent);font-size:12px;font-weight:650;text-decoration:none;text-align:center}
+.shell .portfolio-export:hover{border-color:var(--ui-accent);text-decoration:underline}
+@media(max-width:760px){.shell .portfolio-actions{width:100%;justify-content:space-between}.shell .portfolio-export{min-height:40px}}
