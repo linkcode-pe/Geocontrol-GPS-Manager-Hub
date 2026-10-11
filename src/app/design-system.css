@@ -387,3 +387,15 @@
 .shell .task-unified-editor .task-saving-status{width:100%;margin:5px 0;color:var(--ui-text,inherit);font-size:12px;line-height:1.5}
 .shell .task-unified-editor input:disabled,.shell .task-unified-editor select:disabled{opacity:.7;cursor:wait}
 @media(max-width:350px){.shell .task-unified-editor .task-editor-actions{display:grid;grid-template-columns:minmax(0,1fr)}.shell .task-unified-editor .task-editor-actions button{width:100%;min-height:44px}}
+/* Permanent project guide, independent of the dashboard UI. */
+.project-guide{min-height:100vh;padding:clamp(18px,4vw,48px);background:var(--ui-bg,#f5f7fb);color:var(--ui-text,#17253a)}
+.project-guide-top{max-width:1050px;margin:0 auto 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.project-guide-kicker{font-size:12px;font-weight:750;letter-spacing:.12em;color:var(--ui-accent,#285cc5)}
+.project-guide-top h1{font-size:clamp(24px,3.5vw,36px);margin:8px 0}
+.project-guide-top p{font-size:14px;color:var(--ui-muted,#65748b);line-height:1.6}
+.project-guide-top a{padding:11px 15px;border:1px solid var(--ui-border,#cdd5e2);border-radius:10px;text-decoration:none;color:inherit;font-weight:650}
+.project-guide-paper{max-width:1050px;margin:auto;background:var(--ui-card,#fff);border:1px solid var(--ui-border,#dbe2ed);border-radius:16px;padding:clamp(16px,4vw,36px);box-shadow:0 10px 35px #1223420c}
+.project-guide-paper pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;font-size:14px;line-height:1.85;margin:0}
+.project-guide-foot{max-width:1050px;margin:18px auto;font-size:12px;color:var(--ui-muted,#65748b)}
+.shell .project-guide-entry{display:block;margin:10px 0 14px;padding:12px;border-radius:10px;border:1px solid var(--ui-accent,#285cc5);color:var(--ui-accent,#285cc5);font-weight:700;text-decoration:none;overflow-wrap:anywhere}
+.shell .project-guide-entry:hover{background:var(--ui-accent-soft,#eef3ff)}
