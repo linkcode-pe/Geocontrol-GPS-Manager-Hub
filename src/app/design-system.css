@@ -137,3 +137,7 @@
 .shell .phase-action.danger{color:#b44545}.shell .phase-inline-edit{display:flex;gap:8px;flex-wrap:wrap}.shell .phase-inline-edit input{min-width:130px;flex:1;border:1px solid var(--ui-border);border-radius:8px;padding:8px;background:var(--ui-surface);color:var(--ui-text)}
 .shell .phase-inline-edit button{padding:8px;border:1px solid var(--ui-border);border-radius:8px;background:var(--ui-surface);color:var(--ui-text)}
 @media(max-width:760px){.shell .phase-manager-row{flex-wrap:wrap}.shell .phase-manager-body{flex-basis:calc(100% - 65px)}.shell .phase-action{flex:1}}
+
+.shell .project-progress{height:7px;border-radius:10px;background:var(--ui-border);overflow:hidden;margin:10px 0}
+.shell .project-progress span{display:block;height:100%;background:var(--ui-accent);border-radius:10px}
+.shell .phase-manager-body select{display:block;margin-top:8px;max-width:100%;padding:8px;border:1px solid var(--ui-border);border-radius:8px;background:var(--ui-surface);color:var(--ui-text)}
