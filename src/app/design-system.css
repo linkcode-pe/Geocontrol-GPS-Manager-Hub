@@ -368,3 +368,16 @@
  .shell .task-due-group>.task-row>.task-gear:focus-visible,.shell .task-due-group>.task-row>input[type="checkbox"]:focus-visible{outline:3px solid #218de0;outline-offset:3px}
  .shell .task-due-group>.task-row>.task-status-chip{white-space:normal;min-height:30px;padding:5px 10px;font-size:12px}
 }
+
+/* Mobile task editing: full-width fields and reachable save/cancel actions. */
+@media(max-width:650px){
+ .shell .task-due-group>.task-row>.task-unified-editor{gap:9px;padding:14px 12px;border-radius:10px}
+ .shell .task-due-group>.task-row>.task-unified-editor label{display:block;font-size:12px;line-height:1.4;margin:2px 0 0;overflow-wrap:anywhere}
+ .shell .task-due-group>.task-row>.task-unified-editor input:not([type="checkbox"]),.shell .task-due-group>.task-row>.task-unified-editor select{min-height:44px;font-size:16px;padding:9px 11px;border-radius:8px}
+ .shell .task-due-group>.task-row>.task-unified-editor .task-editor-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
+ .shell .task-due-group>.task-row>.task-unified-editor .task-editor-actions button{width:100%;min-width:0;min-height:44px;padding:9px 8px;font-size:13px}
+ .shell .task-due-group>.task-row>.task-unified-editor .task-editor-secondary{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;padding-top:12px}
+ .shell .task-due-group>.task-row>.task-unified-editor .task-editor-secondary button{min-height:44px;font-size:13px}
+ .shell .task-due-group>.task-row>.task-unified-editor button:focus-visible{outline:3px solid #218de0;outline-offset:2px}
+}
+@media(max-width:350px){.shell .task-due-group>.task-row>.task-unified-editor .task-editor-actions{grid-template-columns:minmax(0,1fr)}}
