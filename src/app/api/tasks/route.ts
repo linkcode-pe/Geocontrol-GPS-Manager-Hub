@@ -33,6 +33,6 @@ export async function POST(req:Request){
  const phaseId=body.phaseId??null;
  if(phaseId!==null){if(!Number.isSafeInteger(phaseId)||phaseId<1)return NextResponse.json({error:"Fase inválida"},{status:400});const [valid]=await db().execute<RowDataPacket[]>("SELECT id FROM hub_phases WHERE id=? AND project_id=? LIMIT 1",[phaseId,projectId]);if(!valid.length)return NextResponse.json({error:"Fase no pertenece al proyecto"},{status:400});}
  const [result]=await db().execute("INSERT INTO hub_tasks(project_id,title,phase_id,priority,due_date) VALUES(?,?,?,?,?)",[projectId,title,phaseId,priority,dueDate]);
- await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,metadata) VALUES(?,'create','task',JSON_OBJECT('title',?))",[user.id,title]);
+ await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'create','task',?,JSON_OBJECT('change',?))",[user.id,(result as {insertId:number}).insertId,JSON.stringify({title,phaseId,priority,dueDate,status:"todo"})]);
  return NextResponse.json({ok:true,result},{status:201});
 }

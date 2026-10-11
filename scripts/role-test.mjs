@@ -51,6 +51,10 @@ try {
   await expect(task,201,user.role+' task create');
   const [rows]=await conn.query('SELECT id FROM hub_tasks WHERE project_id=?',[id]);
   const taskId=rows[0].id;
+  const [createdAudit]=await conn.query("SELECT entity_id,metadata FROM hub_audit_log WHERE entity_type='task' AND action='create' ORDER BY id DESC LIMIT 1");
+  const audit=typeof createdAudit[0].metadata==='string'?JSON.parse(createdAudit[0].metadata):createdAudit[0].metadata;
+  const change=typeof audit.change==='string'?JSON.parse(audit.change):audit.change;
+  if(Number(createdAudit[0].entity_id)!==taskId||change.title!=='Task'||Number(change.phaseId)!==phaseId||change.priority!=='normal'||change.dueDate!==null||change.status!=='todo')throw Error('Task creation audit incomplete');
   await expect(await request('PATCH','/api/tasks/'+taskId,headers,{status:'blocked',priority:'urgent',dueDate:'2026-12-15'}),200,user.role+' task edit');
   await expect(await request('PATCH','/api/tasks/'+taskId,headers,{status:'invalid'}),400,user.role+' invalid status');
   await expect(await request('PATCH','/api/tasks/'+taskId,headers,{priority:'invalid'}),400,user.role+' invalid priority');
