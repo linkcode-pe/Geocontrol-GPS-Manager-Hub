@@ -381,3 +381,5 @@
  .shell .task-due-group>.task-row>.task-unified-editor button:focus-visible{outline:3px solid #218de0;outline-offset:2px}
 }
 @media(max-width:350px){.shell .task-due-group>.task-row>.task-unified-editor .task-editor-actions{grid-template-columns:minmax(0,1fr)}}
+
+.task-save-notice{color:var(--ui-text,inherit);background:rgba(22,128,60,.1);border:1px solid rgba(22,128,60,.35);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:650;overflow-wrap:anywhere}.task-editor-error{color:var(--ui-text,inherit);background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.4);border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.5;margin:5px 0}
