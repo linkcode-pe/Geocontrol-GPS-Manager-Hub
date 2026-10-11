@@ -448,3 +448,8 @@ La ficha técnica debe admitir varios repositorios, servidores y bases cuando un
 **Validación:** lint aislado 0 errores (3 avisos en scripts E2E), Next.js build aislado y TypeScript correctos (20 páginas). Se añadió `scripts/e2e-stage2-browser-isolated.mjs`, que replica E2E autenticado de API sobre esquema desechable e intenta abrir `/documentos` con Puppeteer y verificar lista, editor e historial. **No pasó la prueba de navegador**: Chromium instalado en caché no puede arrancar por falta de `libatk-1.0.so.0` y otras bibliotecas de SO. El test falló con código 1, limpió esquema temporal. **No instalar dependencias de SO en producción sin evaluación/autorización.** La API sí había superado su E2E previo.
 
 **Pendiente:** ejecutar navegador en entorno aislado con dependencias completas, verificar apariencia móvil y escritorio; después preparar release con migraciones respaldadas, publicación aprobada y smoke tests. No desplegado.
+## 37. Etapa 2 — comprobación autenticada de permisos y página (11/10/2026)
+
+Se amplió `scripts/e2e-stage2-documents-isolated.mjs` con pruebas reales sobre Next.js aislado y esquema MySQL desechable: `/documentos` sin sesión redirige; con sesión devuelve 200 y el encabezado correcto; rol `viewer` recibe `canEdit=false` y 403 al intentar crear; propietario recibe `canEdit=true`. La prueba vuelve a recorrer tareas, memoria, documentos, historial, 409, archivo/desarchivo y recuperación. Resultado **PASS**, salida 0, esquema desechable eliminado. No se ejecutó navegador Chromium: sigue pendiente prueba visual por dependencias del sistema faltantes.
+
+**Producción** activa, sin despliegue de Etapa 2 ni migraciones. Próximo: cerrar validación visual en entorno adecuado y preparar despliegue sujeto a aprobación previa.
