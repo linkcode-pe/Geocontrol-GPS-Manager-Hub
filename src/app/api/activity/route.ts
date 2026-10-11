@@ -10,6 +10,6 @@ export async function GET(req:Request){
  const filters=parseActivityFilters(url.searchParams);
  if(!filters)return NextResponse.json({error:'Filtros inválidos'},{status:400});
  const {page,where,values}=filters,limit=30,offset=(page-1)*limit;
- const [rows]=await db().query<RowDataPacket[]>(`SELECT a.id,a.action,a.entity_type,a.entity_id,a.created_at FROM hub_audit_log a${where} ORDER BY a.id DESC LIMIT ? OFFSET ?`,[...values,limit+1,offset]);
+ const [rows]=await db().query<RowDataPacket[]>(`SELECT a.id,a.action,a.entity_type,a.entity_id,a.created_at,a.metadata FROM hub_audit_log a${where} ORDER BY a.id DESC LIMIT ? OFFSET ?`,[...values,limit+1,offset]);
  return NextResponse.json({events:rows.slice(0,limit),page,hasMore:rows.length>limit},{headers:{'Cache-Control':'no-store'}});
 }

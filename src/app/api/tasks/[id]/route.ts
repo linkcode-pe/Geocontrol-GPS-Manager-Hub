@@ -27,7 +27,7 @@ export async function PATCH(req:Request,{params}:{params:Promise<{id:string}>}){
  }
  const updates:string[]=[];const values:(string|number|null)[]=[];if(hasPriority){updates.push("priority=?");values.push(body.priority);}if(hasDueDate){updates.push("due_date=?");values.push(body.dueDate);}if(hasTitle){updates.push("title=?");values.push(body.title.trim());}if(hasPhase){updates.push("phase_id=?");values.push(body.phaseId);}if(hasDone||hasStatus){updates.push("status=?");values.push(hasStatus?body.status:body.done?"done":"todo");}values.push(id);const [result]=await db().execute<ResultSetHeader>(`UPDATE hub_tasks SET ${updates.join(", ")} WHERE id=?`,values);
  if(result.affectedRows===0)return NextResponse.json({error:"Tarea no encontrada"},{status:404});
- await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','task',?,JSON_OBJECT('change',?))",[user.id,id,hasTitle?JSON.stringify({title:body.title.trim()}):hasPhase?JSON.stringify({phaseId:body.phaseId}):JSON.stringify(hasStatus?{status:body.status}:{done:body.done})]);
+ await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','task',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify({...hasTitle?{title:body.title.trim()}: {},...hasPhase?{phaseId:body.phaseId}:{},...hasPriority?{priority:body.priority}:{},...hasDueDate?{dueDate:body.dueDate}:{},...hasStatus?{status:body.status}:hasDone?{done:body.done}:{}})]);
  return NextResponse.json({ok:true});
 }
 export async function DELETE(req:Request,{params}:{params:Promise<{id:string}>}){
