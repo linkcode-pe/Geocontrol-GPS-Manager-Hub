@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { isAllowedOrigin } from "@/lib/origin";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import type { RowDataPacket } from "mysql2";
+import type { RowDataPacket, ResultSetHeader } from "mysql2";
 import { taskPagination } from "@/lib/pagination";
 export async function GET(req:Request){
  const user=await currentUser();if(!user)return NextResponse.json({error:"No autorizado"},{status:401});
@@ -32,7 +32,14 @@ export async function POST(req:Request){
  if(dueDate!==null&&(typeof dueDate!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(dueDate)||Number.isNaN(Date.parse(dueDate))||new Date(dueDate).toISOString().slice(0,10)!==dueDate))return NextResponse.json({error:'Fecha inválida'},{status:400});
  const phaseId=body.phaseId??null;
  if(phaseId!==null){if(!Number.isSafeInteger(phaseId)||phaseId<1)return NextResponse.json({error:"Fase inválida"},{status:400});const [valid]=await db().execute<RowDataPacket[]>("SELECT id FROM hub_phases WHERE id=? AND project_id=? LIMIT 1",[phaseId,projectId]);if(!valid.length)return NextResponse.json({error:"Fase no pertenece al proyecto"},{status:400});}
- const [result]=await db().execute("INSERT INTO hub_tasks(project_id,title,phase_id,priority,due_date) VALUES(?,?,?,?,?)",[projectId,title,phaseId,priority,dueDate]);
- await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'create','task',?,JSON_OBJECT('change',?))",[user.id,(result as {insertId:number}).insertId,JSON.stringify({title,phaseId,priority,dueDate,status:"todo"})]);
- return NextResponse.json({ok:true,result},{status:201});
+ const conn=await db().getConnection();
+ let insertId:number;
+ try{
+  await conn.beginTransaction();
+  const [result]=await conn.execute<ResultSetHeader>("INSERT INTO hub_tasks(project_id,title,phase_id,priority,due_date) VALUES(?,?,?,?,?)",[projectId,title,phaseId,priority,dueDate]);
+  insertId=result.insertId;
+  await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'create','task',?,JSON_OBJECT('change',?))",[user.id,insertId,JSON.stringify({title,phaseId,priority,dueDate,status:"todo"})]);
+  await conn.commit();
+ }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
+ return NextResponse.json({ok:true,result:{insertId}},{status:201});
 }

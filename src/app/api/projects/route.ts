@@ -18,7 +18,14 @@ export async function POST(req:Request){
  const summary=typeof body?.summary==="string"?body.summary.trim():"";
  if(!title||title.length>255||summary.length>5000)return NextResponse.json({error:"Datos inválidos"},{status:400});
  const slug=`project-${crypto.randomUUID()}`;
- const [result]=await db().execute<ResultSetHeader>("INSERT INTO hub_projects(slug,title,summary,status) VALUES(?,?,?,'planning')",[slug,title,summary]);
- await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'create','project',?,JSON_OBJECT('change',?))",[user.id,result.insertId,JSON.stringify({title,summary,status:"planning"})]);
- return NextResponse.json({id:result.insertId},{status:201});
+ const conn=await db().getConnection();
+ let insertId:number;
+ try{
+  await conn.beginTransaction();
+  const [result]=await conn.execute<ResultSetHeader>("INSERT INTO hub_projects(slug,title,summary,status) VALUES(?,?,?,'planning')",[slug,title,summary]);
+  insertId=result.insertId;
+  await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'create','project',?,JSON_OBJECT('change',?))",[user.id,insertId,JSON.stringify({title,summary,status:"planning"})]);
+  await conn.commit();
+ }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
+ return NextResponse.json({id:insertId},{status:201});
 }
