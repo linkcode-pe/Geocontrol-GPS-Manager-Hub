@@ -3,13 +3,17 @@ import { isAllowedOrigin } from "@/lib/origin";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import type { RowDataPacket } from "mysql2";
+import { taskPagination } from "@/lib/pagination";
 export async function GET(req:Request){
  const user=await currentUser();if(!user)return NextResponse.json({error:"No autorizado"},{status:401});
- const projectId=Number(new URL(req.url).searchParams.get("projectId"));
+ const url=new URL(req.url);
+ const projectId=Number(url.searchParams.get("projectId"));
+ const pagination=taskPagination(url.searchParams.get("page"),url.searchParams.get("limit"));
+ if(!pagination)return NextResponse.json({error:"Paginación inválida"},{status:400});
  if(!Number.isSafeInteger(projectId)||projectId<1)return NextResponse.json({error:"Proyecto inválido"},{status:400});
- const [rows]=await db().execute<RowDataPacket[]>("SELECT id,title,status,phase_id FROM hub_tasks WHERE project_id=? ORDER BY id DESC LIMIT 200",[projectId]);
+ const [rows]=await db().execute<RowDataPacket[]>(`SELECT id,title,status,phase_id FROM hub_tasks WHERE project_id=? ORDER BY id DESC LIMIT ${pagination.limit} OFFSET ${pagination.offset}`,[projectId]);
  const [phaseRows]=await db().execute<RowDataPacket[]>("SELECT id,title FROM hub_phases WHERE project_id=? ORDER BY position,id",[projectId]);
- return NextResponse.json({tasks:rows,phases:phaseRows});
+ return NextResponse.json({tasks:rows,phases:phaseRows,page:pagination.page,limit:pagination.limit,hasMore:rows.length===pagination.limit});
 }
 export async function POST(req:Request){
  const user=await currentUser();if(!user)return NextResponse.json({error:"No autorizado"},{status:401});
