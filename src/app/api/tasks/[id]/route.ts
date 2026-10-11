@@ -35,8 +35,9 @@ export async function DELETE(req:Request,{params}:{params:Promise<{id:string}>})
  if(!["owner","admin","editor"].includes(user.role))return NextResponse.json({error:"Sin permisos"},{status:403});
  if(!isAllowedOrigin(req))return NextResponse.json({error:"Origen no autorizado"},{status:403});
  const {id}=await params;if(!/^[1-9][0-9]*$/.test(id))return NextResponse.json({error:"ID inválido"},{status:400});
+ const [existing]=await db().execute<RowDataPacket[]>("SELECT title FROM hub_tasks WHERE id=?",[id]);
  const [result]=await db().execute<ResultSetHeader>("DELETE FROM hub_tasks WHERE id=?",[id]);
  if(!result.affectedRows)return NextResponse.json({error:"Tarea no encontrada"},{status:404});
- await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id) VALUES(?,'delete','task',?)",[user.id,id]);
+ await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'delete','task',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify({title:existing[0]?.title??""})]);
  return NextResponse.json({ok:true});
 }
