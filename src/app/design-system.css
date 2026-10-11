@@ -182,3 +182,7 @@
 .shell .phase-open-tasks:focus-visible{outline:2px solid var(--ui-accent);outline-offset:4px;border-radius:3px}
 .shell .task-filter-banner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:12px 14px;margin:0 0 15px;border:1px solid var(--ui-border);border-radius:10px;background:var(--ui-surface-alt,var(--ui-surface));color:var(--ui-text);font-size:var(--ui-small)}
 .shell .task-filter-banner button{border:0;background:transparent;color:var(--ui-accent);font:inherit;font-weight:650;cursor:pointer}
+.shell .project-list-toolbar{display:flex;align-items:center;gap:12px;margin:18px 0 12px;flex-wrap:wrap}
+.shell .project-list-toolbar input{flex:1 1 230px;min-width:0;padding:13px 15px;border:1px solid var(--ui-border);border-radius:10px;background:var(--ui-surface);color:var(--ui-text);font:inherit}
+.shell .project-list-toolbar span{font-size:13px;color:var(--ui-muted);white-space:nowrap}
+.shell .project-card:focus-visible{outline:3px solid var(--ui-accent);outline-offset:3px}
