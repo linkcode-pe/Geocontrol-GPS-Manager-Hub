@@ -311,3 +311,5 @@
 .weekly-attention-controls .weekly-complete{min-height:42px;padding:8px 14px}
 @media(max-width:650px){.weekly-attention-item{padding:10px}.weekly-attention-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.weekly-attention-controls .weekly-date{max-width:none}.weekly-attention-controls .weekly-complete{white-space:normal}}
 @media(max-width:340px){.weekly-attention-controls{grid-template-columns:minmax(0,1fr)}}
+
+.task-planning-toolbar input[type="search"]{width:100%;min-height:38px;border:1px solid var(--ui-border,#cbd5e1);border-radius:9px;background:var(--ui-surface,#fff);color:var(--ui-text,inherit);padding:7px 10px;font:inherit;font-size:13px}.task-planning-toolbar .task-search-field{flex:1.4 1 190px}.task-planning-toolbar input[type="search"]:focus-visible{outline:2px solid #218de0;outline-offset:2px}
