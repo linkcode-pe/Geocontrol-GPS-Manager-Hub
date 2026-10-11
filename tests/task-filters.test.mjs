@@ -1,0 +1,8 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {taskDueState,filterSortTasks} from '../src/lib/task-filters.mjs';
+const today='2026-10-11';
+const tasks=[{id:1,priority:'low',dueDate:'2026-10-10',status:'todo',phase:0},{id:2,priority:'urgent',dueDate:'2026-10-12',status:'todo',phase:1},{id:3,priority:'high',dueDate:'2026-10-10',status:'done',phase:0},{id:4,priority:'normal',dueDate:null,status:'blocked',phase:-1}];
+test('overdue and upcoming ignore completed tasks',()=>{assert.equal(taskDueState(tasks[0],today),'overdue');assert.equal(taskDueState(tasks[1],today),'soon');assert.equal(taskDueState(tasks[2],today),'none');assert.equal(taskDueState(tasks[3],today),'none');});
+test('priority and due date sorting',()=>{assert.deepEqual(filterSortTasks(tasks,{sort:'priority',today}).map(t=>t.id),[2,3,4,1]);assert.deepEqual(filterSortTasks(tasks,{sort:'due',today}).map(t=>t.id),[3,1,2,4]);});
+test('phase, priority and overdue filters',()=>{const phaseOptions=[{id:10},{id:20}];assert.deepEqual(filterSortTasks(tasks,{phaseId:10,priority:'low',due:'overdue',today,phaseOptions}).map(t=>t.id),[1]);});
