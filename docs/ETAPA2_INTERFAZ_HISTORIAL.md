@@ -1,0 +1,5 @@
+## 31. Etapa 2 — interfaz de historial de memoria (11/10/2026)
+
+**Estado:** implementado en desarrollo, **no desplegado**. Componente `src/app/guia-proyecto/guide-history.tsx` conectado a `guide-editor.tsx`. Permite abrir/cerrar historial, listar revisiones, previsualizar contenido histórico y (solo owner/admin) recuperar una revisión como nueva versión. Solicita confirmación antes de recuperar; usa `expectedRevision` para detectar conflictos, recarga la memoria al recuperar y muestra errores/éxito. No permite recuperar mientras se edita ni restaurar la misma revisión.
+
+**Pruebas:** copia aislada `/opt/geocontrol-hub-stage1-check`: `npm run lint` 0 errores (2 avisos de variables no usadas en scripts auxiliares), `npm run build` compilación/TypeScript correctos y 18 páginas generadas. E2E previo de recuperación autenticada en esquema temporal aprobado, pero **la interacción del navegador todavía no fue probada manualmente**. Producción continúa usando release `stage1-6398c74`. Falta migración productiva y versionado/archivado de documentos.
