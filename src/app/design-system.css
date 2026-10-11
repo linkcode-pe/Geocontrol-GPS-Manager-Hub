@@ -262,3 +262,5 @@
 .shell .project-report-menu .project-report-actions{padding:10px;gap:8px;display:flex;flex-direction:column;align-items:stretch}
 .shell .project-report-menu .project-export{width:100%;min-height:38px}
 @media(max-width:760px){.shell .project-card{padding:16px}.shell .project-card p{margin:9px 0}.shell .project-card-controls{margin:8px 0}.shell .project-card-footer{gap:9px}.shell .project-report-menu .project-report-actions{display:flex}.shell .project-report-menu .project-export:last-child:nth-child(odd){grid-column:auto}}
+.shell .project-list-toolbar select{min-width:145px;max-width:100%;border:1px solid var(--ui-border);background:var(--ui-surface);color:var(--ui-text);border-radius:9px;padding:10px;font:inherit;font-size:13px}
+@media(max-width:760px){.shell .project-list-toolbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.shell .project-list-toolbar input{grid-column:1/-1;width:100%}.shell .project-list-toolbar select{width:100%;min-width:0;font-size:12px}.shell .project-list-toolbar>span{grid-column:1/-1}}
