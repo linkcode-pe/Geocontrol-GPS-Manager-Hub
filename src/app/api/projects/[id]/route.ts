@@ -15,8 +15,14 @@ export async function PATCH(req:Request,{params}:{params:Promise<{id:string}>}){
  if(Object.hasOwn(body,"summary")){if(typeof body.summary!=="string"||body.summary.length>5000)return NextResponse.json({error:"Descripción inválida"},{status:400});updates.push("summary=?");values.push(body.summary.trim());change.summary=body.summary.trim();}
  if(Object.hasOwn(body,"status")){if(!["planning","active","paused","completed"].includes(body.status))return NextResponse.json({error:"Estado inválido"},{status:400});updates.push("status=?");values.push(body.status);change.status=body.status;}
  if(!updates.length)return NextResponse.json({error:"Sin cambios"},{status:400});
- values.push(id);const [result]=await db().execute<ResultSetHeader>(`UPDATE hub_projects SET ${updates.join(",")} WHERE id=?`,values);
- if(!result.affectedRows)return NextResponse.json({error:"Proyecto no encontrado"},{status:404});
- await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','project',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify(change)]);
+ values.push(id);
+ const conn=await db().getConnection();
+ try{
+  await conn.beginTransaction();
+  const [result]=await conn.execute<ResultSetHeader>(`UPDATE hub_projects SET ${updates.join(",")} WHERE id=?`,values);
+  if(!result.affectedRows){await conn.rollback();return NextResponse.json({error:"Proyecto no encontrado"},{status:404});}
+  await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','project',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify(change)]);
+  await conn.commit();
+ }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
  return NextResponse.json({ok:true});
 }

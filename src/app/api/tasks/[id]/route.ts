@@ -25,9 +25,15 @@ export async function PATCH(req:Request,{params}:{params:Promise<{id:string}>}){
   if(body.phaseId!==null&&(!Number.isSafeInteger(body.phaseId)||body.phaseId<1))return NextResponse.json({error:"Fase inválida"},{status:400});
   if(body.phaseId!==null){const [valid]=await db().execute<RowDataPacket[]>("SELECT p.id FROM hub_phases p JOIN hub_tasks t ON t.project_id=p.project_id WHERE p.id=? AND t.id=? LIMIT 1",[body.phaseId,id]);if(!valid.length)return NextResponse.json({error:"Fase no pertenece al proyecto"},{status:400});}
  }
- const updates:string[]=[];const values:(string|number|null)[]=[];if(hasPriority){updates.push("priority=?");values.push(body.priority);}if(hasDueDate){updates.push("due_date=?");values.push(body.dueDate);}if(hasTitle){updates.push("title=?");values.push(body.title.trim());}if(hasPhase){updates.push("phase_id=?");values.push(body.phaseId);}if(hasDone||hasStatus){updates.push("status=?");values.push(hasStatus?body.status:body.done?"done":"todo");}values.push(id);const [result]=await db().execute<ResultSetHeader>(`UPDATE hub_tasks SET ${updates.join(", ")} WHERE id=?`,values);
- if(result.affectedRows===0)return NextResponse.json({error:"Tarea no encontrada"},{status:404});
- await db().execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','task',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify({...hasTitle?{title:body.title.trim()}: {},...hasPhase?{phaseId:body.phaseId}:{},...hasPriority?{priority:body.priority}:{},...hasDueDate?{dueDate:body.dueDate}:{},...hasStatus?{status:body.status}:hasDone?{done:body.done}:{}})]);
+ const updates:string[]=[];const values:(string|number|null)[]=[];if(hasPriority){updates.push("priority=?");values.push(body.priority);}if(hasDueDate){updates.push("due_date=?");values.push(body.dueDate);}if(hasTitle){updates.push("title=?");values.push(body.title.trim());}if(hasPhase){updates.push("phase_id=?");values.push(body.phaseId);}if(hasDone||hasStatus){updates.push("status=?");values.push(hasStatus?body.status:body.done?"done":"todo");}values.push(id);
+ const conn=await db().getConnection();
+ try{
+  await conn.beginTransaction();
+  const [result]=await conn.execute<ResultSetHeader>(`UPDATE hub_tasks SET ${updates.join(", ")} WHERE id=?`,values);
+  if(result.affectedRows===0){await conn.rollback();return NextResponse.json({error:"Tarea no encontrada"},{status:404});}
+  await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','task',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify({...hasTitle?{title:body.title.trim()}: {},...hasPhase?{phaseId:body.phaseId}:{},...hasPriority?{priority:body.priority}:{},...hasDueDate?{dueDate:body.dueDate}:{},...hasStatus?{status:body.status}:hasDone?{done:body.done}:{}})]);
+  await conn.commit();
+ }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
  return NextResponse.json({ok:true});
 }
 export async function DELETE(req:Request,{params}:{params:Promise<{id:string}>}){
