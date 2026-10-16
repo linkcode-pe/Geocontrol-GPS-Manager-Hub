@@ -112,7 +112,27 @@ try{
   await page.waitForFunction(()=>document.body.innerText.includes('Initial document'),{timeout:15000});
   const mobile=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
   assert(mobile.content<=mobile.viewport+2,'Horizontal overflow on mobile: '+JSON.stringify(mobile));
-  console.log('PASS: headless browser document page, list, edit form, history and mobile layout');
+  // A read-only user must see document content and history but no editor actions.
+  const readerEmail='browser-reader-'+randomUUID()+'@example.invalid';
+  const readerPassword=randomBytes(24).toString('hex');
+  await testDb.execute("INSERT INTO hub_users(email,password_hash,display_name,role,active) VALUES(?,?,?,'viewer',1)",[readerEmail,await bcrypt.hash(readerPassword,10),'Browser reader']);
+  const readerLogin=await api('POST','/api/auth/login',{email:readerEmail,password:readerPassword});
+  assert.equal(readerLogin.status,200);
+  const readerCookie=readerLogin.headers.get('set-cookie')?.split(';')[0];
+  assert(readerCookie?.startsWith('geocontrol_hub_session='));
+  const readerPage=await browser.newPage();
+  await readerPage.setViewport({width:375,height:812,isMobile:true,hasTouch:true});
+  await readerPage.setCookie({name:'geocontrol_hub_session',value:readerCookie.split('=')[1],url:base});
+  await readerPage.goto(base+'/documentos',{waitUntil:'networkidle2',timeout:30000});
+  await readerPage.waitForFunction(()=>document.body.innerText.includes('Initial document'),{timeout:15000});
+  await readerPage.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.includes('Initial document'))?.click());
+  await readerPage.waitForFunction(()=>document.body.innerText.includes('Consulta del documento')||!!document.querySelector('section[aria-label="Consulta del documento"]'),{timeout:10000});
+  assert.equal(await readerPage.$('section[aria-label="Editor de documentos"]'),null,'Viewer should not have an editor');
+  assert.equal(await readerPage.$('section[aria-label="Consulta del documento"] textarea')!==null,true);
+  assert.equal(await readerPage.evaluate(()=>[...document.querySelectorAll('button')].some(b=>b.innerText.includes('Nuevo documento'))),false);
+  await readerPage.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.includes('Ver historial'))?.click());
+  await readerPage.waitForFunction(()=>!!document.querySelector('section[aria-label="Historial del documento"]'),{timeout:10000});
+  console.log('PASS: browser desktop/mobile document editor, history, viewer read-only permissions');
  }finally{await browser.close()}
  const [audit]=await testDb.execute("SELECT COUNT(*) AS n FROM hub_audit_log WHERE entity_type IN ('task','project_guide')");assert(audit[0].n>=4);
  console.log('PASS: documents create/update/archive/unarchive/restore/history; version history, conflict 409, non-destructive restore; unauthenticated 401, login, authenticated create/read/update/reread, guide save/reread, audit',audit[0].n);
