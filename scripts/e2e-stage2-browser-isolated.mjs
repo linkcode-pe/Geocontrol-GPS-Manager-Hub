@@ -92,7 +92,7 @@ try{
  const docRestore=await api('POST','/api/documents/'+docId+'/versions',{revision:1,expectedRevision:4},cookie);assert.equal(docRestore.status,200,JSON.stringify(docRestore.result));
  const docAfterRestore=await api('GET','/api/documents?projectId='+project.insertId,undefined,cookie);assert(docAfterRestore.result.documents.some(d=>d.id===docId&&d.revision===5&&d.body==='First content'));
  const docVersion2=await api('GET','/api/documents/'+docId+'/versions?revision=2',undefined,cookie);assert.equal(docVersion2.status,200);assert.equal(docVersion2.result.version.body,'Second content');
- const browser=await puppeteer.launch({headless:true,args:['--no-sandbox','--disable-setuid-sandbox']});
+ const browser=await puppeteer.launch({headless:true,...process.env.HUB_CHROME_PATH?{executablePath:process.env.HUB_CHROME_PATH}:{},args:['--no-sandbox','--disable-setuid-sandbox']});
  try{
   const page=await browser.newPage();
   await page.setViewport({width:1280,height:900});
@@ -107,7 +107,12 @@ try{
   assert.equal(await textarea.evaluate(el=>el.value),'First content');
   await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.includes('Ver historial'))?.click());
   await page.waitForFunction(()=>document.body.innerText.includes('Historial'),{timeout:10000});
-  console.log('PASS: headless browser document page, list, edit form and history');
+  await page.setViewport({width:375,height:812,isMobile:true,hasTouch:true});
+  await page.reload({waitUntil:'networkidle2'});
+  await page.waitForFunction(()=>document.body.innerText.includes('Initial document'),{timeout:15000});
+  const mobile=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+  assert(mobile.content<=mobile.viewport+2,'Horizontal overflow on mobile: '+JSON.stringify(mobile));
+  console.log('PASS: headless browser document page, list, edit form, history and mobile layout');
  }finally{await browser.close()}
  const [audit]=await testDb.execute("SELECT COUNT(*) AS n FROM hub_audit_log WHERE entity_type IN ('task','project_guide')");assert(audit[0].n>=4);
  console.log('PASS: documents create/update/archive/unarchive/restore/history; version history, conflict 409, non-destructive restore; unauthenticated 401, login, authenticated create/read/update/reread, guide save/reread, audit',audit[0].n);
