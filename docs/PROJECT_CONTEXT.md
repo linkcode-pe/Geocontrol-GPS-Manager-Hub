@@ -460,3 +460,10 @@ Se amplió `scripts/e2e-stage2-documents-isolated.mjs` con pruebas reales sobre 
 **Resultados reales:** E2E Puppeteer autenticado de `/documentos` verifica lista, editor, contenido, historial; repite en viewport móvil 375×812 y comprueba que no existe desplazamiento horizontal. También pasa el E2E de API (tareas, memoria, documentos, historial, archivo/desarchivo, conflictos 409 y restauración no destructiva). **PASS** y salida 0; base MySQL temporal eliminada. Prueba de salud de respaldos: OK.
 
 **Pendiente:** preparar paquete de release y procedimiento de migración/rollback; producción sigue en release de Etapa 1, sin migraciones de Etapa 2. Los cambios productivos requieren aprobación previa.
+## 39. Etapa 2 — comprobación integral de migraciones y limpieza segura (16/10/2026)
+
+Se reforzó `scripts/verify-stage2-migrations-isolated.py`: después de restaurar la última copia del Hub en un esquema `hub_restore_check_<12hex>`, inserta un documento heredado de prueba **solo en el esquema temporal**, aplica las dos migraciones y compara **todos** los documentos anteriores con su snapshot inicial, incluidos título, cuerpo, fecha de archivo y cantidad total. Verifica también la revisión inicial de la memoria. El bloque `finally` limpia el esquema temporal aun cuando la importación falle después de crearlo; nombre aleatorio estrictamente validado.
+
+**Resultado real:** `PASS: backup restored, 1 legacy documents preserved and versioned, guide baseline revision 26`; `Disposable schema cleaned`. La memoria de producción estaba en revisión 27 al iniciar, por lo que el respaldo disponible era anterior por una revisión; se requiere respaldo nuevo justo antes de desplegar. `npm test` aislado: 68 pruebas, 50 superadas, 18 omitidas (requieren servidor HTTP), 0 fallos. No se modificó el release productivo.
+
+**Siguiente:** verificar preparación de release y publicación solo tras aprobación explícita, respaldo reciente y smoke tests. No aplicar migraciones reales de forma anticipada.
