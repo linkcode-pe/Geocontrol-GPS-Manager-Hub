@@ -1,0 +1,5 @@
+## 42. Etapa 2 — respaldo fresco y ensayo de migraciones (18/10/2026)
+
+Con autorización para continuar tareas autónomas sin afectar producción, se comprobó `python3 scripts/check-backup-health.py`: temporizador activo y gzip válido. Se creó respaldo local **`/opt/geocontrol/backups/hub/geocontrol-hub-20261018T162805Z.sql.gz`** (22638 bytes, permisos 0600). Se restauró en esquema temporal y se aplicaron exclusivamente allí las migraciones de guía y documentos: **PASS**, se preservó el documento heredado y su instantánea; la memoria respaldada quedó en revisión **30**. Esquema temporal eliminado. Se verificó que producción sigue activa en `/opt/geocontrol-hub-releases/stage1-6398c74` y GitHub rama `feat/mysql-auth` commit `95f25c4`.
+
+**Pendiente:** no se aplicaron migraciones ni se publicó Etapa 2. El respaldo de esta fecha es una evidencia del ensayo, pero debe generarse uno nuevo justo antes de cualquier despliegue autorizado. Continuar pruebas/preparación aisladas; requerir aprobación específica antes de alterar producción.
