@@ -85,9 +85,19 @@ try{
  const viewerSheet=await api('GET',sheetPath,undefined,readerCookie);assert.equal(viewerSheet.status,200);assert.equal(viewerSheet.result.canEdit,false);
  const viewerWrite=await api('PUT',sheetPath,{expectedRevision:0,content:'Not allowed'},readerCookie);assert.equal(viewerWrite.status,403);
  const missingSheetProject=await api('GET','/api/projects/99999999/technical-sheet',undefined,cookie);assert.equal(missingSheetProject.status,404);
+ const noOrigin=await fetch(base+sheetPath,{method:'PUT',headers:{'Content-Type':'application/json','Cookie':cookie},body:JSON.stringify({expectedRevision:0,content:'Forbidden'})});assert.equal(noOrigin.status,403);
+ const forgedOrigin=await fetch(base+sheetPath,{method:'PUT',headers:{'Content-Type':'application/json','Cookie':cookie,'Origin':'https://evil.example.invalid'},body:JSON.stringify({expectedRevision:0,content:'Forbidden'})});assert.equal(forgedOrigin.status,403);
+ const invalidExpected=await api('PUT',sheetPath,{expectedRevision:-1,content:'Invalid'},cookie);assert.equal(invalidExpected.status,400);
+ const hugeSheet=await api('PUT',sheetPath,{expectedRevision:0,content:'x'.repeat(1000001)},cookie);assert.equal(hugeSheet.status,400);
+ const invalidProject=await api('PUT','/api/projects/not-a-number/technical-sheet',{expectedRevision:0,content:'Invalid'},cookie);assert.equal(invalidProject.status,400);
+ const invalidJson=await fetch(base+sheetPath,{method:'PUT',headers:{'Content-Type':'application/json','Cookie':cookie,'Origin':base},body:'not-json'});assert.equal(invalidJson.status,400);
  const initialSheet=await api('PUT',sheetPath,{expectedRevision:0,content:'Technical v1'},cookie);assert.equal(initialSheet.status,200,JSON.stringify(initialSheet.result));assert.equal(initialSheet.result.revision,1);
  const updatedSheet=await api('PUT',sheetPath,{expectedRevision:1,content:'Technical v2'},cookie);assert.equal(updatedSheet.status,200);assert.equal(updatedSheet.result.revision,2);
  const staleSheet=await api('PUT',sheetPath,{expectedRevision:1,content:'Stale'},cookie);assert.equal(staleSheet.status,409);
+ const invalidRestore=await api('POST',sheetPath,{revision:0,expectedRevision:2},cookie);assert.equal(invalidRestore.status,400);
+ const absentRestore=await api('POST',sheetPath,{revision:999,expectedRevision:2},cookie);assert.equal(absentRestore.status,404);
+ const restoreNoOrigin=await fetch(base+sheetPath,{method:'POST',headers:{'Content-Type':'application/json','Cookie':cookie},body:JSON.stringify({revision:1,expectedRevision:2})});assert.equal(restoreNoOrigin.status,403);
+
  const sheetHistory=await api('GET',sheetPath,undefined,readerCookie);assert.equal(sheetHistory.status,200);assert.equal(sheetHistory.result.versions.length,2);assert.equal(sheetHistory.result.sheet.content,'Technical v2');
  const historicalSheet=await api('GET',sheetPath+'?revision=1',undefined,readerCookie);assert.equal(historicalSheet.status,200);assert.equal(historicalSheet.result.version.content,'Technical v1');
  const invalidSheetRevision=await api('GET',sheetPath+'?revision=oops',undefined,cookie);assert.equal(invalidSheetRevision.status,400);
@@ -97,7 +107,7 @@ try{
  const restoredSheet=await api('POST',sheetPath,{revision:1,expectedRevision:2},cookie);assert.equal(restoredSheet.status,200);assert.equal(restoredSheet.result.revision,3);
  const sheetAfterRestore=await api('GET',sheetPath,undefined,cookie);assert.equal(sheetAfterRestore.result.sheet.content,'Technical v1');assert.equal(sheetAfterRestore.result.versions.length,3);
  const preservedSheet=await api('GET',sheetPath+'?revision=2',undefined,cookie);assert.equal(preservedSheet.result.version.content,'Technical v2');
- console.log('PASS: technical sheet create/edit/409/history/restore, viewer read-only, old revision preserved');
+ console.log('PASS: technical sheet create/edit/409/history/restore, viewer read-only, CSRF, invalid payload, content size, old revision preserved');
  const marker='isolated-'+randomUUID();
  const creation=await api('POST','/api/tasks',{projectId:project.insertId,title:marker,priority:'low'},cookie);assert.equal(creation.status,201,JSON.stringify(creation.result));
  const taskId=creation.result.result.insertId;assert(taskId>0);
