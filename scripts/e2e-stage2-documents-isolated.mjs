@@ -93,6 +93,13 @@ try{
  const v3=await api('GET','/api/project-guide/versions?revision=3',undefined,cookie);assert.equal(v3.status,200);assert.equal(v3.result.version.content,restoredRead.result.content);
  const createdDoc=await api('POST','/api/documents',{projectId:project.insertId,title:'Initial document',content:'First content'},cookie);assert.equal(createdDoc.status,201,JSON.stringify(createdDoc.result));const docId=createdDoc.result.id;
  const docList=await api('GET','/api/documents?projectId='+project.insertId,undefined,cookie);assert.equal(docList.status,200);assert(docList.result.documents.some(d=>d.id===docId&&d.revision===1));
+ const deniedUpdate=await api('PATCH','/api/documents/'+docId,{action:'update',revision:1,title:'Viewer cannot edit',content:'Denied'},readerCookie);assert.equal(deniedUpdate.status,403);
+ const deniedArchive=await api('PATCH','/api/documents/'+docId,{action:'archive',revision:1},readerCookie);assert.equal(deniedArchive.status,403);
+ const deniedRestore=await api('POST','/api/documents/'+docId+'/versions',{revision:1,expectedRevision:1},readerCookie);assert.equal(deniedRestore.status,403);
+ const readerHistory=await api('GET','/api/documents/'+docId+'/versions',undefined,readerCookie);assert.equal(readerHistory.status,200);assert(readerHistory.result.versions.some(v=>v.revision===1));
+ const invalidRevision=await api('GET','/api/documents/'+docId+'/versions?revision=not-a-number',undefined,cookie);assert.equal(invalidRevision.status,400);
+ const missingVersion=await api('GET','/api/documents/'+docId+'/versions?revision=99999',undefined,cookie);assert.equal(missingVersion.status,404);
+ const missingDocument=await api('GET','/api/documents/99999999/versions',undefined,cookie);assert.equal(missingDocument.status,404);
  const changedDoc=await api('PATCH','/api/documents/'+docId,{action:'update',revision:1,title:'Updated document',content:'Second content'},cookie);assert.equal(changedDoc.status,200,JSON.stringify(changedDoc.result));
  const staleDoc=await api('PATCH','/api/documents/'+docId,{action:'update',revision:1,title:'Stale',content:'Stale'},cookie);assert.equal(staleDoc.status,409);
  const archivedDoc=await api('PATCH','/api/documents/'+docId,{action:'archive',revision:2},cookie);assert.equal(archivedDoc.status,200,JSON.stringify(archivedDoc.result));
