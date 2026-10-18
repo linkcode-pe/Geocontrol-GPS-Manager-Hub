@@ -503,3 +503,10 @@ Se agregó `scripts/e2e-technical-sheet-isolated.mjs`, basado en el E2E autentic
 **Resultado real: PASS (exit 0, ~29 s)** para ficha vacía, crear revisión 1, editar revisión 2, rechazo de revisión obsoleta 409, historial, lectura histórica, revisión inválida 400/inexistente 404, rechazo de escritura/restauración por lector 403, restauración de revisión 1 como nueva revisión 3 conservando revisión 2. También PASS para E2E de documentos, tareas y memoria. El esquema temporal y usuario fueron eliminados.
 
 **Estado:** commit de implementación previo `69c2dac`; producción sigue en release `stage2-806899a`, sin migración de fichas. **Pendiente:** interfaz de ficha técnica por proyecto, pruebas de navegador y migración de respaldo aislado antes de solicitar autorización de publicación.
+## 46. Etapa 2 — interfaz y navegador de fichas técnicas (18/10/2026)
+
+**Desarrollado sin publicar:** página `/fichas-tecnicas` con selector de proyecto, contenido técnico editable, aviso de cambios sin guardar, historial, vista previa, recuperación como nueva revisión y lectura para viewer. Enlace desde sección Documentación del panel. Advertencia explícita de no incluir secretos.
+
+**Verificado en entorno aislado:** `npm run lint` sin errores (5 advertencias de variables no usadas en scripts E2E), `npm run build` y TypeScript correctos, ruta `/fichas-tecnicas` compilada. Prueba de navegador `scripts/e2e-technical-sheet-browser-isolated.mjs` **PASS, exit 0 (~40 s)** con Puppeteer: escritorio 1280, móvil 375, lectura de ficha e historial, usuario viewer sin editor ni botón Guardar, sin overflow horizontal; regresión documentos y memoria también PASS. Esquema y usuario MySQL temporales limpiados.
+
+**Pendiente:** prueba de migración de ficha en restauración aislada del respaldo actual (sin volver a aplicar migraciones Etapa 2 ya presentes), ampliar prueba UI para guardar/recuperar con clics y confirmar criterios de publicación. No aplicar migración ni desplegar sin aprobación específica. Producción permanece `stage2-806899a`.
