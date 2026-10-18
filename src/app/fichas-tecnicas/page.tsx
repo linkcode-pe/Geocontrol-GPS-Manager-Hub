@@ -1,6 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import Link from 'next/link';
+import {initialProjectId} from '@/lib/project-selection';
 type Project={id:number;title:string};
 type Version={revision:number;created_at:string};
 type Sheet={revision:number;content:string};
@@ -9,7 +10,7 @@ export default function TechnicalSheetsPage(){
  const [projects,setProjects]=useState<Project[]>([]),[projectId,setProjectId]=useState(0),[sheet,setSheet]=useState<Sheet|null>(null),[content,setContent]=useState(''),[versions,setVersions]=useState<Version[]>([]),[preview,setPreview]=useState<Sheet|null>(null);
  const [canEdit,setCanEdit]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const dirty=content!==(sheet?.content??'');
- useEffect(()=>{request('/api/projects').then(d=>{setProjects(d.projects||[]);if(d.projects?.length)setProjectId(d.projects[0].id)}).catch(e=>setError(e.message))},[]);
+ useEffect(()=>{request('/api/projects').then(d=>{setProjects(d.projects||[]);if(d.projects?.length)setProjectId(initialProjectId(d.projects))}).catch(e=>setError(e.message))},[]);
  useEffect(()=>{if(!projectId)return;let active=true;request('/api/projects/'+projectId+'/technical-sheet').then(d=>{if(active){setSheet(d.sheet);setContent(d.sheet?.content??'');setVersions(d.versions||[]);setCanEdit(!!d.canEdit);setPreview(null)}}).catch(e=>{if(active)setError(e.message)});return()=>{active=false}},[projectId]);
  useEffect(()=>{if(!dirty)return;const warn=(e:BeforeUnloadEvent)=>{e.preventDefault();e.returnValue=''};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn)},[dirty]);
  async function reload(){const d=await request('/api/projects/'+projectId+'/technical-sheet');setSheet(d.sheet);setContent(d.sheet?.content??'');setVersions(d.versions||[]);setCanEdit(!!d.canEdit)}
@@ -18,7 +19,7 @@ export default function TechnicalSheetsPage(){
  async function showVersion(revision:number){await run(async()=>{const d=await request('/api/projects/'+projectId+'/technical-sheet?revision='+revision);setPreview(d.version)})}
  async function restore(){if(!canEdit||!sheet||!preview||dirty||busy||!window.confirm('¿Recuperar la versión '+preview.revision+' como nueva revisión? Se conservará la actual.'))return;await run(async()=>{await request('/api/projects/'+projectId+'/technical-sheet',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({revision:preview.revision,expectedRevision:sheet.revision})});await reload();setPreview(null);setNotice('Versión recuperada sin eliminar las demás.')})}
  function selectProject(id:number){if(dirty&&!window.confirm('¿Descartar los cambios sin guardar?'))return;setProjectId(id);setSheet(null);setContent('');setVersions([]);setPreview(null);setCanEdit(false);setError('');setNotice('')}
- return <main className="project-guide"><div className="project-guide-top"><div><span className="project-guide-kicker">GEOCONTROL PROJECT HUB</span><h1>Fichas técnicas por proyecto</h1><p>Información técnica editable, historial y recuperación de versiones. No introduzcas contraseñas, tokens ni claves privadas.</p></div><Link href="/">Volver al panel</Link></div>
+ return <main className="project-guide"><div className="project-guide-top"><div><span className="project-guide-kicker">GEOCONTROL PROJECT HUB</span><h1>Fichas técnicas por proyecto</h1><p>Información técnica editable, historial y recuperación de versiones. No introduzcas contraseñas, tokens ni claves privadas.</p></div><Link href={"/expedientes?projectId="+projectId}>Volver al panel</Link></div>
  <div className="project-guide-toolbar"><label>Proyecto <select aria-label="Proyecto de ficha técnica" value={projectId} onChange={e=>selectProject(Number(e.target.value))}>{projects.map(p=><option key={p.id} value={p.id}>{p.title}</option>)}</select></label></div>
  {error&&<p role="alert" className="project-guide-error">{error}</p>}{notice&&<p role="status" className="project-guide-success">{notice}</p>}
  {projectId>0&&<section aria-label="Ficha técnica"><h2>Ficha técnica {sheet?'· revisión '+sheet.revision:'· sin crear'}</h2><p>Registra lenguajes, frameworks, repositorios y ramas, servidores, bases de datos, entornos, despliegues, pruebas y recuperación. Utiliza referencias seguras para las credenciales.</p><label>Contenido técnico <textarea aria-label="Contenido técnico" rows={18} value={content} readOnly={!canEdit} onChange={e=>setContent(e.target.value)} placeholder="Lenguajes, frameworks, repositorios, infraestructura, despliegues y recuperación…"/></label>{canEdit&&<div className="project-guide-buttons"><button disabled={busy||!dirty} onClick={()=>void save()}>{busy?'Procesando…':'Guardar nueva revisión'}</button></div>}</section>}

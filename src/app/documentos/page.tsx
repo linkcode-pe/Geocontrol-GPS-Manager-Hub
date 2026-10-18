@@ -1,6 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import Link from 'next/link';
+import {initialProjectId} from '@/lib/project-selection';
 type Project={id:number;title:string};
 type Document={id:number;title:string;body:string;revision:number;archived_at:string|null};
 type Version={revision:number;title:string;created_at:string};
@@ -9,7 +10,7 @@ export default function DocumentsPage(){
  const [selected,setSelected]=useState<Document|null>(null),[title,setTitle]=useState(''),[body,setBody]=useState(''),[versions,setVersions]=useState<Version[]>([]),[preview,setPreview]=useState<{revision:number;title:string;body:string}|null>(null);
  const [canEdit,setCanEdit]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  async function request(url:string,init?:RequestInit){const r=await fetch(url,init);const data=await r.json();if(!r.ok)throw Error(data.error||'Operación fallida');return data;}
- useEffect(()=>{request('/api/projects').then(data=>{setProjects(data.projects||[]);if(data.projects?.length)setProjectId(data.projects[0].id)}).catch(e=>setError(e.message))},[]);
+ useEffect(()=>{request('/api/projects').then(data=>{setProjects(data.projects||[]);if(data.projects?.length)setProjectId(initialProjectId(data.projects))}).catch(e=>setError(e.message))},[]);
  useEffect(()=>{if(!projectId)return;let active=true;request('/api/documents?projectId='+projectId+(includeArchived?'&archived=1':'')).then(data=>{if(active){setDocuments(data.documents);setCanEdit(!!data.canEdit)}}).catch(e=>{if(active)setError(e.message)});return()=>{active=false}},[projectId,includeArchived]);
  const dirty=title!== (selected?.title||'')||body!==(selected?.body||'');
  useEffect(()=>{if(!dirty)return;const warn=(e:BeforeUnloadEvent)=>{e.preventDefault();e.returnValue=''};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn)},[dirty]);
@@ -21,7 +22,7 @@ export default function DocumentsPage(){
  async function loadVersions(){if(!selected||dirty)return;await perform(async()=>{const data=await request('/api/documents/'+selected.id+'/versions');setVersions(data.versions)})}
  async function showVersion(revision:number){if(!selected)return;await perform(async()=>{const data=await request('/api/documents/'+selected.id+'/versions?revision='+revision);setPreview(data.version)})}
  async function restore(){if(!canEdit||!selected||!preview||busy||dirty||!window.confirm('¿Recuperar versión '+preview.revision+' como una revisión nueva? Se conservará la actual.'))return;await perform(async()=>{await request('/api/documents/'+selected.id+'/versions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({revision:preview.revision,expectedRevision:selected.revision})});setPreview(null);setVersions([]);setNotice('Versión histórica recuperada sin borrar las demás.')})}
- return <main className="project-guide"><div className="project-guide-top"><div><span className="project-guide-kicker">GEOCONTROL PROJECT HUB</span><h1>Documentos por proyecto</h1><p>Edición, versiones y archivo reversible. Los documentos no se eliminan físicamente.</p></div><Link href="/">Volver al panel</Link></div>
+ return <main className="project-guide"><div className="project-guide-top"><div><span className="project-guide-kicker">GEOCONTROL PROJECT HUB</span><h1>Documentos por proyecto</h1><p>Edición, versiones y archivo reversible. Los documentos no se eliminan físicamente.</p></div><Link href={"/expedientes?projectId="+projectId}>Volver al panel</Link></div>
  <div className="project-guide-toolbar"><label>Proyecto <select value={projectId} onChange={e=>{if(dirty&&!window.confirm('¿Descartar cambios?'))return;setProjectId(Number(e.target.value));setSelected(null);setTitle('');setBody('');setVersions([]);setPreview(null);setCanEdit(false);setDocuments([])}}>{projects.map(p=><option key={p.id} value={p.id}>{p.title}</option>)}</select></label><label><input type="checkbox" checked={includeArchived} onChange={e=>{if(dirty&&!window.confirm('¿Descartar cambios?'))return;setIncludeArchived(e.target.checked);setSelected(null);setTitle('');setBody('');setVersions([]);setPreview(null)}}/> Mostrar archivados</label>{canEdit&&<button onClick={()=>choose(null)}>Nuevo documento</button>}</div>
  {error&&<p role="alert" className="project-guide-error">{error}</p>}{notice&&<p role="status" className="project-guide-success">{notice}</p>}
  <section aria-label="Documentos del proyecto"><h2>Documentos</h2>{documents.length===0&&<p>Este proyecto todavía no tiene documentos visibles.</p>}<div className="project-guide-buttons">{documents.map(doc=><button key={doc.id} onClick={()=>choose(doc)} disabled={busy}>{doc.title} · v{doc.revision}{doc.archived_at?' · Archivado':''}</button>)}</div></section>

@@ -581,3 +581,10 @@ Se corrigió `scripts/e2e-project-memory-browser-isolated.mjs` para que la pági
 **Evidencia:** `LD_LIBRARY_PATH=/opt/geocontrol-hub-browser-test-libs/lib/usr/lib/x86_64-linux-gnu HUB_E2E_APP_DIR=/opt/geocontrol-hub-build-stage2-806899a node e2e-project-memory-browser-isolated.mjs` terminó **exit 0**, PASS: UI de memorias escritorio/móvil, guardar, historial, restauración, viewer read-only, aislamiento A/B, expediente siete tarjetas, sin scroll horizontal; regresiones de documentos también PASS. El esquema temporal y usuario de prueba se limpiaron. Las pruebas visuales de ficha técnica se habían retirado de este script y **no se incluyen** en esta afirmación de PASS.
 
 **Pendiente:** terminar continuidad/decisiones y revisar UX de enlaces de documentos/fichas con proyecto seleccionado. Etapa 3 no publicada, migración no aplicada en producción. Requiere aprobación específica para desplegar.
+## 56. Etapa 3 — navegación por proyecto y memoria en expediente (18/10/2026)
+
+Se añadió `src/lib/project-selection.ts` para validar `?projectId=<entero positivo>` y elegir el proyecto solicitado solo si figura en el listado autorizado de la API. Las pantallas `/expedientes`, `/documentos`, `/fichas-tecnicas` y `/memorias` respetan ese parámetro al cargar, con selección predeterminada cuando no existe o no corresponde a un proyecto visible. Los enlaces del expediente llevan a cada editor conservando `projectId`; las pantallas de ficha, documentos y memoria permiten volver al expediente correspondiente.
+
+La tarjeta 6 del expediente consulta la API de memoria independiente y muestra su revisión y extracto, o estado sin memoria, sin mezclarla con la guía global. Al cambiar de proyecto se limpia también la memoria anterior y se cancela la aplicación de resultados de peticiones obsoletas.
+
+**Verificado:** `npm run build` en el entorno aislado `/opt/geocontrol-hub-build-stage2-806899a` PASS, TypeScript PASS, 23 rutas estáticas y dinámicas. `git diff --check` PASS. **Pendiente:** E2E de navegación profunda con `projectId`, completar continuidad/decisiones y verificar despliegue solo tras aprobación específica. Producción intacta.
