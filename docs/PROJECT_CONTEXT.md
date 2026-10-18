@@ -1,7 +1,7 @@
 # Geocontrol Project Hub — memoria y guía permanente
 
-**Última actualización:** 11 de octubre de 2026 (revisión integral multiproyecto y ficha técnica)
-**Estado:** desarrollo activo; la web `https://hub.geocontrol.online` está en servicio, pero no debe confundirse con la rama aprobada para publicación.  
+**Última actualización:** 18 de octubre de 2026 (publicación verificada de Etapa 3; memoria principal revisión 46)
+**Estado:** Etapa 3 publicada y verificada en `https://hub.geocontrol.online`; Etapa 4 (continuidad y decisiones) pendiente. La rama de desarrollo y el release publicado son entornos distintos.
 **Repositorio:** `linkcode-pe/Geocontrol-GPS-Manager-Hub`  
 **Rama de trabajo:** `feat/mysql-auth`  
 **Rama principal:** `main`
