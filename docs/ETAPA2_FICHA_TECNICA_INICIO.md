@@ -1,0 +1,5 @@
+## 44. Etapa 2 — fichas técnicas versionadas, primer incremento (18/10/2026)
+
+**Desarrollo NO desplegado:** migración `database/migrations/20261018_technical_sheets.sql` para dos tablas nuevas de ficha por proyecto e historial inmutable, exclusiva de `geocontrol_hub`. API autenticada `/api/projects/[id]/technical-sheet`: GET actual e historial o versión histórica, PUT crear/editar con revisión esperada y bloqueo transaccional, POST restaurar una revisión previa como nueva revisión; auditoría y permisos owner/admin/editor para mutaciones, viewer solo lectura. No almacenar credenciales en fichas. Migración de ejecución única, **no aplicada a producción**.
+
+**Validación:** copia de código en `/opt/geocontrol-hub-build-stage2-806899a`, `npm run lint` 0 errores/4 advertencias previas; `npm run build` y TypeScript correctos, ruta API compilada. **Pendiente:** prueba E2E real de ficha con esquema temporal y roles, interfaz de usuario, ensayo de migración aislado; no publicar sin nueva autorización. Producción sigue en release `stage2-806899a` con memoria global revisión 32 al comenzar.
