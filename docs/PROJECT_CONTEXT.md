@@ -2,8 +2,8 @@
 
 **Última actualización:** 18 de octubre de 2026 (publicación verificada de Etapa 3; memoria principal revisión 47)
 **Estado:** Etapa 3 publicada y verificada en `https://hub.geocontrol.online`; Etapa 4 (continuidad y decisiones) pendiente. La rama de desarrollo y el release publicado son entornos distintos.
-**Repositorio:** `linkcode-pe/Geocontrol-GPS-Manager-Hub`  
-**Rama de trabajo:** `feat/mysql-auth`  
+**Repositorio:** `linkcode-pe/Geocontrol-GPS-Manager-Hub`
+**Rama de trabajo:** `feat/mysql-auth`
 **Rama principal:** `main`
 
 ## 1. ¿Para qué sirve?
@@ -63,10 +63,10 @@ El usuario informa que la web **no registra datos nuevos**. La conexión directa
 
 ## 8. Evolución prevista
 
-**Prioridad 1:** diagnosticar y reparar el guardado real en la web, con pruebas de creación y lectura.  
-**Prioridad 2:** mantener los despliegues en releases separados, verificar reversión y automatizar el procedimiento.  
-**Prioridad 3:** completar revisión de seguridad, respaldo/restauración y propuesta de fusión a `main`.  
-**Prioridad 4:** enriquecer documentación persistente, historial, decisiones, métricas y seguimiento multiproyecto.  
+**Prioridad 1:** diagnosticar y reparar el guardado real en la web, con pruebas de creación y lectura.
+**Prioridad 2:** mantener los despliegues en releases separados, verificar reversión y automatizar el procedimiento.
+**Prioridad 3:** completar revisión de seguridad, respaldo/restauración y propuesta de fusión a `main`.
+**Prioridad 4:** enriquecer documentación persistente, historial, decisiones, métricas y seguimiento multiproyecto.
 **Futuro:** integración backend autorizada con Traccar, sin modificar sus bases directamente.
 
 ## 9. Guía editable publicada
@@ -624,3 +624,10 @@ Se recuperó la conexión normal de Desktop Commander al servidor. `scripts/veri
 `scripts/e2e-continuity-browser-isolated.mjs` PASS (exit 0, Chromium aislado con bibliotecas locales): crear decisión desde navegador, completar, historial v1/v2, selección profunda `?projectId`, tarjeta 7 de expediente con contadores, viewer solo lectura, aislamiento entre proyectos, móvil 375px sin desbordamiento horizontal. Las regresiones de memorias, documentos y guía también PASS. El primer intento falló por falta de espera asíncrona y el segundo por una aserción incorrecta del test (el expediente muestra el título de la próxima acción, no de todas las decisiones); se ajustó únicamente el test y el tercero terminó PASS. Esquema y usuario temporales limpiados.
 
 **Producción:** permanece en `stage3-dbd9df3`; migración Etapa 4 no aplicada, nueva UI no publicada. Próximo paso: revisión final de UX/seguridad y autorización **específica** antes de publicar Etapa 4.
+## 61. Etapa 4 — revisión UX final y protección de borradores (18/10/2026)
+
+Se añadió en `src/app/continuidad/page.tsx` advertencia al cambiar de proyecto si el formulario tiene título, detalles o fecha sin guardar: cancelar conserva el proyecto y el borrador; confirmar limpia el formulario y cambia de proyecto. Se deshabilitó el selector durante guardados/cambios de estado y se protegió la recarga de datos contra respuestas tardías de operaciones previas al cambio de proyecto. Esto evita registrar accidentalmente una decisión en otro proyecto o perder trabajo sin advertencia.
+
+Se amplió `scripts/e2e-continuity-browser-isolated.mjs` con pruebas reales en Chromium para cancelar y confirmar el cambio con borrador. **PASS exit 0**, además de crear decisión, completar, historial, móvil sin overflow, viewer, expedientes y regresiones de memoria/documentos/guía. `npm run build` y TypeScript **PASS** en build aislado (24 páginas). El ensayo de restauración de respaldo real y migración aditiva Etapa 4 también pasó previamente.
+
+**Producción intacta:** sigue release `stage3-dbd9df3`; no se aplicó migración Etapa 4. La autorización recibida fue para **continuar con Etapa 4**, no para publicar explícitamente; solicitar autorización específica de despliegue antes de aplicar la migración y cambiar el release.

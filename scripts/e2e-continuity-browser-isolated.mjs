@@ -146,6 +146,17 @@ try{
   await page.goto(base+'/continuidad?projectId='+project.insertId,{waitUntil:'networkidle2',timeout:30000});
   await page.waitForFunction(id=>document.querySelector('select[aria-label="Proyecto de continuidad"]')?.value===String(id),{},project.insertId);
   await page.waitForSelector('select[aria-label="Tipo de registro"]',{timeout:15000});
+  await page.type('input[aria-label="Título de continuidad"]','Unsaved draft');
+  page.once('dialog',dialog=>dialog.dismiss());
+  await page.select('select[aria-label="Proyecto de continuidad"]',String(projectB.insertId));
+  await page.waitForFunction(id=>document.querySelector('select[aria-label="Proyecto de continuidad"]')?.value===String(id),{},project.insertId);
+  assert.equal(await page.$eval('input[aria-label="Título de continuidad"]',el=>el.value),'Unsaved draft');
+  page.once('dialog',dialog=>dialog.accept());
+  await page.select('select[aria-label="Proyecto de continuidad"]',String(projectB.insertId));
+  await page.waitForFunction(id=>document.querySelector('select[aria-label="Proyecto de continuidad"]')?.value===String(id),{},projectB.insertId);
+  await page.waitForFunction(()=>document.querySelector('input[aria-label="Título de continuidad"]')?.value==='',{timeout:15000});
+  await page.select('select[aria-label="Proyecto de continuidad"]',String(project.insertId));
+  await page.waitForSelector('select[aria-label="Tipo de registro"]',{timeout:15000});
   await page.select('select[aria-label="Tipo de registro"]','decision');
   await page.type('input[aria-label="Título de continuidad"]','Decision browser A');
   await page.type('textarea[aria-label="Detalles de continuidad"]','Description browser');
