@@ -1,0 +1,7 @@
+## 60. Etapa 4 — migración de respaldo y navegador móvil/escritorio PASS (18/10/2026)
+
+Se recuperó la conexión normal de Desktop Commander al servidor. `scripts/verify-continuity-migration-isolated.py` restauró `geocontrol-hub-20261018T182953Z.sql.gz` en esquema temporal, preservó 3 proyectos, 0 documentos y guía revisión 45 **correspondiente al respaldo**, aplicó únicamente allí las dos tablas aditivas de Etapa 4, comprobó registros A/B y eliminó el esquema. La memoria principal actual seguía en revisión 49 antes de registrar este avance.
+
+`scripts/e2e-continuity-browser-isolated.mjs` PASS (exit 0, Chromium aislado con bibliotecas locales): crear decisión desde navegador, completar, historial v1/v2, selección profunda `?projectId`, tarjeta 7 de expediente con contadores, viewer solo lectura, aislamiento entre proyectos, móvil 375px sin desbordamiento horizontal. Las regresiones de memorias, documentos y guía también PASS. El primer intento falló por falta de espera asíncrona y el segundo por una aserción incorrecta del test (el expediente muestra el título de la próxima acción, no de todas las decisiones); se ajustó únicamente el test y el tercero terminó PASS. Esquema y usuario temporales limpiados.
+
+**Producción:** permanece en `stage3-dbd9df3`; migración Etapa 4 no aplicada, nueva UI no publicada. Próximo paso: revisión final de UX/seguridad y autorización **específica** antes de publicar Etapa 4.

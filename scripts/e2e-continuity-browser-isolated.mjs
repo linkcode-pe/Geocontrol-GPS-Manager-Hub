@@ -1,0 +1,221 @@
+import fs from 'node:fs';
+import {createRequire} from 'node:module';
+const puppeteer=createRequire('/opt/geocontrol/connector/package.json')('puppeteer');
+import {randomBytes,randomUUID} from 'node:crypto';
+import {spawn} from 'node:child_process';
+import mysql from 'mysql2/promise';
+import bcrypt from 'bcryptjs';
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+
+const source='/opt/geocontrol-project-hub/.env.production';
+const env={};
+for(const line of fs.readFileSync(source,'utf8').split('\n')){
+ const i=line.indexOf('=');if(i<0||line.trimStart().startsWith('#'))continue;
+ env[line.slice(0,i).trim()]=line.slice(i+1).trim().replace(/^["']|["']$/g,'');
+}
+assert.equal(env.DB_NAME,'geocontrol_hub','Only Hub database is permitted as source');
+const schema='hub_restore_check_'+randomBytes(6).toString('hex');
+assert.match(schema,/^hub_restore_check_[a-f0-9]{12}$/);
+const testUser='hub_stage1_'+randomBytes(5).toString('hex');
+const testPassword=randomBytes(30).toString('hex');
+const adminSql=(sql)=>execFileSync('mysql',['-e',sql],{stdio:['ignore','pipe','pipe']});
+const db=await mysql.createConnection({host:env.DB_HOST||'127.0.0.1',user:env.DB_USER,password:env.DB_PASSWORD,multipleStatements:false});
+let testDb;
+const tables=['hub_users','hub_projects','hub_phases','hub_tasks','hub_documents','hub_audit_log','hub_login_attempts','hub_project_guide'];
+let server;let created=false;
+const base='http://localhost:3199';
+async function api(method,path,body,cookie){
+ const response=await fetch(base+path,{method,headers:{'Content-Type':'application/json','Origin':base,...cookie?{'Cookie':cookie}:{}},...body?{body:JSON.stringify(body)}:{}});
+ const result=await response.json();return {status:response.status,result,headers:response.headers};
+}
+try{
+ adminSql('CREATE DATABASE `'+schema+'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');created=true;
+ adminSql("CREATE USER '"+testUser+"'@'localhost' IDENTIFIED BY '"+testPassword+"'");
+ adminSql("GRANT ALL PRIVILEGES ON `"+schema+"`.* TO '"+testUser+"'@'localhost'");
+ testDb=await mysql.createConnection({host:'127.0.0.1',user:testUser,password:testPassword,database:schema});
+ await testDb.query('SET FOREIGN_KEY_CHECKS=0');
+ for(const table of tables){
+  const [rows]=await db.query('SHOW CREATE TABLE `geocontrol_hub`.`'+table+'`');
+   
+  await testDb.query(rows[0]['Create Table']);
+ }
+ await testDb.query('SET FOREIGN_KEY_CHECKS=1');
+ const technicalSql=fs.readFileSync('/opt/geocontrol-project-hub/database/migrations/20261018_technical_sheets.sql','utf8');
+ for(const statement of technicalSql.replace(/--[^\n]*/g,'').split(';').map(x=>x.trim()).filter(x=>x.includes('CREATE TABLE')))await testDb.query(statement);
+
+ const continuitySql=fs.readFileSync('/opt/geocontrol-project-hub/database/migrations/20261018_project_continuity.sql','utf8');
+ for(const statement of continuitySql.replace(/--[^\n]*/g,'').split(';').map(x=>x.trim()).filter(x=>x.includes('CREATE TABLE')))await testDb.query(statement);
+ const memorySql=fs.readFileSync('/opt/geocontrol-project-hub/database/migrations/20261018_project_memories.sql','utf8');
+ for(const statement of memorySql.replace(/--[^\n]*/g,'').split(';').map(x=>x.trim()).filter(x=>x.includes('CREATE TABLE')))await testDb.query(statement);
+ await testDb.query('CREATE TABLE hub_document_versions (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,document_id BIGINT UNSIGNED NOT NULL,revision INT UNSIGNED NOT NULL,title VARCHAR(255) NOT NULL,body LONGTEXT NOT NULL,archived_at TIMESTAMP NULL DEFAULT NULL,updated_by BIGINT UNSIGNED NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uq_document_revision(document_id,revision)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
+ await testDb.query('CREATE TABLE hub_project_guide_versions (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,guide_id TINYINT UNSIGNED NOT NULL,revision INT UNSIGNED NOT NULL,content MEDIUMTEXT NOT NULL,updated_by BIGINT UNSIGNED NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uq_guide_revision(guide_id,revision)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
+ const email='stage1-'+randomUUID()+'@example.invalid';
+ const password=randomBytes(24).toString('hex');
+ const hash=await bcrypt.hash(password,10);
+ const [user]=await testDb.execute("INSERT INTO hub_users(email,password_hash,display_name,role,active) VALUES(?,?,?,'owner',1)",[email,hash,'Isolated E2E']);
+ const [project]=await testDb.execute("INSERT INTO hub_projects(slug,title,status) VALUES(?,?,'planning')",['stage1-'+randomUUID(),'Isolated test project']);
+ await testDb.execute("INSERT INTO hub_project_guide(id,content,revision) VALUES(1,?,1)",['Isolated guide test content with sufficient length.']);
+ const secret=randomBytes(48).toString('hex');
+ server=spawn('./node_modules/.bin/next',['dev','--hostname','127.0.0.1','--port','3199'],{cwd:process.env.HUB_E2E_APP_DIR||'/opt/geocontrol-hub-stage1-check',env:{...process.env,NODE_ENV:'development',DB_HOST:env.DB_HOST||'127.0.0.1',DB_USER:testUser,DB_PASSWORD:testPassword,DB_NAME:schema,AUTH_SECRET:secret},stdio:['ignore','pipe','pipe']});
+ let output='';server.stdout.on('data',x=>{output+=x.toString().slice(0,500)});server.stderr.on('data',x=>{output+=x.toString().slice(0,500)});
+ let ready=false;
+ for(let i=0;i<90;i++){
+  if(server.exitCode!==null)throw Error('Isolated server exited: '+output.slice(-1000));
+  try{const response=await fetch(base+'/login');if(response.ok){ready=true;break;}}catch{}
+  await new Promise(resolve=>setTimeout(resolve,1000));
+ }
+ assert(ready,'Isolated localhost server failed to start: '+output.slice(-1000));
+ const unauth=await api('GET','/api/projects');assert.equal(unauth.status,401);
+ const login=await api('POST','/api/auth/login',{email,password});assert.equal(login.status,200,JSON.stringify(login.result));
+ const cookie=login.headers.get('set-cookie')?.split(';')[0];assert(cookie?.startsWith('geocontrol_hub_session='));
+ const projects=await api('GET','/api/projects',undefined,cookie);assert.equal(projects.status,200);assert(projects.result.projects.some(p=>p.id===project.insertId));
+ const marker='isolated-'+randomUUID();
+ const creation=await api('POST','/api/tasks',{projectId:project.insertId,title:marker,priority:'low'},cookie);assert.equal(creation.status,201,JSON.stringify(creation.result));
+ const taskId=creation.result.result.insertId;assert(taskId>0);
+ const list=await api('GET','/api/tasks?projectId='+project.insertId+'&limit=100',undefined,cookie);assert.equal(list.status,200);assert(list.result.tasks.some(t=>t.id===taskId&&t.title===marker));
+ const update=await api('PATCH','/api/tasks/'+taskId,{title:marker+'-edited',status:'in_progress'},cookie);assert.equal(update.status,200,JSON.stringify(update.result));
+ const reread=await api('GET','/api/tasks?projectId='+project.insertId+'&limit=100',undefined,cookie);assert.equal(reread.status,200);assert(reread.result.tasks.some(t=>t.id===taskId&&t.title===marker+'-edited'&&t.status==='in_progress'));
+ const guide=await api('GET','/api/project-guide',undefined,cookie);assert.equal(guide.status,200);
+ const saved=await api('PUT','/api/project-guide',{content:'Isolated guide saved and read successfully '+marker,revision:guide.result.revision},cookie);assert.equal(saved.status,200,JSON.stringify(saved.result));
+ const guideRead=await api('GET','/api/project-guide',undefined,cookie);assert.equal(guideRead.result.revision,saved.result.revision);assert(guideRead.result.content.includes(marker));
+ const history=await api('GET','/api/project-guide/versions',undefined,cookie);assert.equal(history.status,200);assert(history.result.versions.some(v=>v.revision===1)&&history.result.versions.some(v=>v.revision===2));
+ const v1=await api('GET','/api/project-guide/versions?revision=1',undefined,cookie);assert.equal(v1.status,200);assert(v1.result.version.content.includes('Isolated guide test content'));
+ const conflict=await api('POST','/api/project-guide/versions',{revision:1,expectedRevision:1},cookie);assert.equal(conflict.status,409);
+ const restored=await api('POST','/api/project-guide/versions',{revision:1,expectedRevision:2},cookie);assert.equal(restored.status,200,JSON.stringify(restored.result));assert.equal(restored.result.revision,3);
+ const restoredRead=await api('GET','/api/project-guide',undefined,cookie);assert.equal(restoredRead.result.revision,3);assert.equal(restoredRead.result.content,'Isolated guide test content with sufficient length.');
+ const v2=await api('GET','/api/project-guide/versions?revision=2',undefined,cookie);assert.equal(v2.status,200);assert(v2.result.version.content.includes(marker),'Newer content must remain recoverable');
+ const v3=await api('GET','/api/project-guide/versions?revision=3',undefined,cookie);assert.equal(v3.status,200);assert.equal(v3.result.version.content,restoredRead.result.content);
+ const createdDoc=await api('POST','/api/documents',{projectId:project.insertId,title:'Initial document',content:'First content'},cookie);assert.equal(createdDoc.status,201,JSON.stringify(createdDoc.result));const docId=createdDoc.result.id;
+ const docList=await api('GET','/api/documents?projectId='+project.insertId,undefined,cookie);assert.equal(docList.status,200);assert(docList.result.documents.some(d=>d.id===docId&&d.revision===1));
+ const changedDoc=await api('PATCH','/api/documents/'+docId,{action:'update',revision:1,title:'Updated document',content:'Second content'},cookie);assert.equal(changedDoc.status,200,JSON.stringify(changedDoc.result));
+ const staleDoc=await api('PATCH','/api/documents/'+docId,{action:'update',revision:1,title:'Stale',content:'Stale'},cookie);assert.equal(staleDoc.status,409);
+ const archivedDoc=await api('PATCH','/api/documents/'+docId,{action:'archive',revision:2},cookie);assert.equal(archivedDoc.status,200,JSON.stringify(archivedDoc.result));
+ const hiddenDoc=await api('GET','/api/documents?projectId='+project.insertId,undefined,cookie);assert(!hiddenDoc.result.documents.some(d=>d.id===docId));
+ const listedArchived=await api('GET','/api/documents?projectId='+project.insertId+'&archived=1',undefined,cookie);assert(listedArchived.result.documents.some(d=>d.id===docId&&d.revision===3&&d.archived_at));
+ const unarchivedDoc=await api('PATCH','/api/documents/'+docId,{action:'unarchive',revision:3},cookie);assert.equal(unarchivedDoc.status,200,JSON.stringify(unarchivedDoc.result));
+ const docHistory=await api('GET','/api/documents/'+docId+'/versions',undefined,cookie);assert.equal(docHistory.status,200);assert.deepEqual(docHistory.result.versions.map(v=>v.revision),[4,3,2,1]);
+ const docRestore=await api('POST','/api/documents/'+docId+'/versions',{revision:1,expectedRevision:4},cookie);assert.equal(docRestore.status,200,JSON.stringify(docRestore.result));
+ const docAfterRestore=await api('GET','/api/documents?projectId='+project.insertId,undefined,cookie);assert(docAfterRestore.result.documents.some(d=>d.id===docId&&d.revision===5&&d.body==='First content'));
+ const docVersion2=await api('GET','/api/documents/'+docId+'/versions?revision=2',undefined,cookie);assert.equal(docVersion2.status,200);assert.equal(docVersion2.result.version.body,'Second content');
+ const browser=await puppeteer.launch({headless:true,...process.env.HUB_CHROME_PATH?{executablePath:process.env.HUB_CHROME_PATH}:{},args:['--no-sandbox','--disable-setuid-sandbox']});
+ try{
+  const page=await browser.newPage();
+  await page.setViewport({width:1280,height:900});
+  await page.setCookie({name:'geocontrol_hub_session',value:cookie.split('=')[1],url:base});
+  await page.goto(base+'/documentos',{waitUntil:'networkidle2',timeout:30000});
+  await page.waitForFunction(()=>document.body.innerText.includes('Documentos por proyecto'),{timeout:15000});
+  await page.waitForFunction(()=>document.body.innerText.includes('Initial document'),{timeout:15000});
+  await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.includes('Initial document'))?.click());
+  await page.waitForFunction(()=>document.body.innerText.includes('Editar documento'),{timeout:10000});
+  const textarea=await page.$('section[aria-label="Editor de documentos"] textarea');
+  assert(textarea,'Document editor missing');
+  assert.equal(await textarea.evaluate(el=>el.value),'First content');
+  await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.includes('Ver historial'))?.click());
+  await page.waitForFunction(()=>document.body.innerText.includes('Historial'),{timeout:10000});
+  await page.setViewport({width:375,height:812,isMobile:true,hasTouch:true});
+  await page.reload({waitUntil:'networkidle2'});
+  await page.waitForFunction(()=>document.body.innerText.includes('Initial document'),{timeout:15000});
+  const mobile=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+  assert(mobile.content<=mobile.viewport+2,'Horizontal overflow on mobile: '+JSON.stringify(mobile));
+  // A read-only user must see document content and history but no editor actions.
+  const readerEmail='browser-reader-'+randomUUID()+'@example.invalid';
+  const readerPassword=randomBytes(24).toString('hex');
+  await testDb.execute("INSERT INTO hub_users(email,password_hash,display_name,role,active) VALUES(?,?,?,'viewer',1)",[readerEmail,await bcrypt.hash(readerPassword,10),'Browser reader']);
+  const readerLogin=await api('POST','/api/auth/login',{email:readerEmail,password:readerPassword});
+  assert.equal(readerLogin.status,200);
+  const readerCookie=readerLogin.headers.get('set-cookie')?.split(';')[0];
+  assert(readerCookie?.startsWith('geocontrol_hub_session='));
+  const readerContext=await browser.createBrowserContext(); const readerPage=await readerContext.newPage();
+  await readerPage.setViewport({width:375,height:812,isMobile:true,hasTouch:true});
+  await readerPage.setCookie({name:'geocontrol_hub_session',value:readerCookie.split('=')[1],url:base});
+  await readerPage.goto(base+'/documentos',{waitUntil:'networkidle2',timeout:30000});
+  await readerPage.waitForFunction(()=>document.body.innerText.includes('Initial document'),{timeout:15000});
+  await readerPage.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.includes('Initial document'))?.click());
+  await readerPage.waitForFunction(()=>document.body.innerText.includes('Consulta del documento')||!!document.querySelector('section[aria-label="Consulta del documento"]'),{timeout:10000});
+  assert.equal(await readerPage.$('section[aria-label="Editor de documentos"]'),null,'Viewer should not have an editor');
+  assert.equal(await readerPage.$('section[aria-label="Consulta del documento"] textarea')!==null,true);
+  assert.equal(await readerPage.evaluate(()=>[...document.querySelectorAll('button')].some(b=>b.innerText.includes('Nuevo documento'))),false);
+  await readerPage.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.includes('Ver historial'))?.click());
+  await readerPage.waitForFunction(()=>!!document.querySelector('section[aria-label="Historial del documento"]'),{timeout:10000});
+
+  const [projectB]=await testDb.execute("INSERT INTO hub_projects(slug,title,status) VALUES(?,?,'planning')",['browser-memory-'+randomUUID(),'Project B isolated']);
+  const continuityA='/api/projects/'+project.insertId+'/continuity';
+  const continuityB='/api/projects/'+projectB.insertId+'/continuity';
+  await page.setViewport({width:1280,height:900,isMobile:false,hasTouch:false});
+  await page.goto(base+'/continuidad?projectId='+project.insertId,{waitUntil:'networkidle2',timeout:30000});
+  await page.waitForFunction(id=>document.querySelector('select[aria-label="Proyecto de continuidad"]')?.value===String(id),{},project.insertId);
+  await page.waitForSelector('select[aria-label="Tipo de registro"]',{timeout:15000});
+  await page.select('select[aria-label="Tipo de registro"]','decision');
+  await page.type('input[aria-label="Título de continuidad"]','Decision browser A');
+  await page.type('textarea[aria-label="Detalles de continuidad"]','Description browser');
+  await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText==='Registrar')?.click());
+  await page.waitForFunction(()=>document.body.innerText.includes('Decision browser A')&&document.body.innerText.includes('Registro añadido'),{timeout:15000});
+  const entriesA=(await api('GET',continuityA,undefined,cookie)).result.entries;
+  assert.equal(entriesA.length,1);assert.equal((await api('GET',continuityB,undefined,cookie)).result.entries.length,0);
+  await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText==='Marcar completado')?.click());
+  await page.waitForFunction(()=>document.body.innerText.includes('Completado')&&document.body.innerText.includes('Revisión 2'),{timeout:15000});
+  await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText==='Ver historial')?.click());
+  await page.waitForFunction(()=>document.body.innerText.includes('v1 · Pendiente')&&document.body.innerText.includes('v2 · Completado'),{timeout:15000});
+  await page.setViewport({width:375,height:812,isMobile:true,hasTouch:true});
+  await page.reload({waitUntil:'networkidle2'});
+  await page.waitForFunction(()=>document.body.innerText.includes('Decision browser A'),{timeout:15000});
+  const continuityMobile=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+  assert(continuityMobile.content<=continuityMobile.viewport+2,'Continuity mobile overflow: '+JSON.stringify(continuityMobile));
+  await readerPage.goto(base+'/continuidad?projectId='+project.insertId,{waitUntil:'networkidle2',timeout:30000});
+  await readerPage.waitForFunction(()=>document.body.innerText.includes('Decision browser A'),{timeout:15000});
+  assert.equal(await readerPage.evaluate(()=>[...document.querySelectorAll('button')].some(b=>b.innerText==='Registrar'||b.innerText==='Reabrir')),false);
+  await page.goto(base+'/expedientes?projectId='+project.insertId,{waitUntil:'networkidle2'});
+  await page.waitForFunction(()=>document.body.innerText.includes('1 registros')&&document.body.innerText.includes('0 pendientes'),{timeout:15000});
+  assert.equal((await page.$$('section')).length,7);
+  await page.evaluate(()=>[...document.querySelectorAll('a')].find(a=>a.innerText==='Abrir continuidad')?.click());
+  await page.waitForFunction(()=>location.pathname==='/continuidad'&&new URLSearchParams(location.search).has('projectId'),{timeout:15000});
+  assert.equal(new URL(page.url()).searchParams.get('projectId'),String(project.insertId));
+  console.log('PASS: Stage4 continuity browser desktop/mobile, create/status/history, viewer read-only, deep link and dossier, no overflow');
+  const memoryA='/api/projects/'+project.insertId+'/memory',memoryB='/api/projects/'+projectB.insertId+'/memory';
+  assert.equal((await api('PUT',memoryA,{expectedRevision:0,content:'Memory Alpha'},cookie)).status,200);
+  assert.equal((await api('PUT',memoryB,{expectedRevision:0,content:'Memory Beta'},cookie)).status,200);
+  await page.setViewport({width:1280,height:900,isMobile:false,hasTouch:false});
+  await page.goto(base+'/memorias',{waitUntil:'networkidle2',timeout:30000});
+  await page.waitForFunction(()=>document.querySelector('textarea[aria-label="Contenido de memoria"]')?.value==='Memory Beta',{timeout:15000});
+  await page.select('select[aria-label="Proyecto de memoria"]',String(project.insertId));
+  await page.waitForFunction(()=>document.querySelector('textarea[aria-label="Contenido de memoria"]')?.value==='Memory Alpha',{timeout:15000});
+  await page.click('textarea[aria-label="Contenido de memoria"]');
+  await page.keyboard.press('End');await page.keyboard.type(' updated');
+  await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.includes('Guardar nueva revisión'))?.click());
+  await page.waitForFunction(()=>document.querySelector('textarea[aria-label="Contenido de memoria"]')?.value==='Memory Alpha updated'&&document.body.innerText.includes('revisión 2'),{timeout:15000});
+  await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.startsWith('v1 '))?.click());
+  await page.waitForFunction(()=>document.querySelector('textarea[aria-label="Vista previa histórica"]')?.value==='Memory Alpha',{timeout:10000});
+  page.once('dialog',dialog=>dialog.accept());
+  await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.includes('Recuperar como nueva revisión'))?.click());
+  await page.waitForFunction(()=>document.querySelector('textarea[aria-label="Contenido de memoria"]')?.value==='Memory Alpha'&&document.body.innerText.includes('revisión 3'),{timeout:15000});
+  assert.equal((await api('GET',memoryB,undefined,cookie)).result.memory.content,'Memory Beta');
+  await page.setViewport({width:375,height:812,isMobile:true,hasTouch:true});
+  await page.reload({waitUntil:'networkidle2'});
+  await page.waitForFunction(()=>document.querySelector('textarea[aria-label="Contenido de memoria"]')?.value==='Memory Beta',{timeout:15000});
+  const memMobile=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+  assert(memMobile.content<=memMobile.viewport+2,'Memory mobile overflow: '+JSON.stringify(memMobile));
+  await readerPage.goto(base+'/memorias',{waitUntil:'networkidle2',timeout:30000});
+  await readerPage.waitForFunction(()=>document.querySelector('textarea[aria-label="Contenido de memoria"]')?.value==='Memory Beta',{timeout:15000});
+  assert.equal(await readerPage.$eval('textarea[aria-label="Contenido de memoria"]',el=>el.readOnly),true);
+  assert.equal(await readerPage.evaluate(()=>[...document.querySelectorAll('button')].some(b=>b.innerText.includes('Guardar nueva revisión'))),false);
+  await page.goto(base+'/expedientes',{waitUntil:'networkidle2',timeout:30000});
+  await page.waitForFunction(()=>document.body.innerText.includes('Expediente del proyecto'),{timeout:15000});
+  await page.waitForFunction(()=>document.querySelectorAll('section').length===7,{timeout:15000});
+  assert.equal((await page.$$('section')).length,7);
+  const dossierMobile=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+  assert(dossierMobile.content<=dossierMobile.viewport+2,'Dossier mobile overflow: '+JSON.stringify(dossierMobile));
+  await page.select('select[aria-label="Proyecto del expediente"]',String(project.insertId));
+  await page.waitForFunction(()=>document.body.innerText.includes('Memory')===false,{timeout:10000});
+  console.log('PASS: browser memories desktop/mobile save/history/restore, viewer read-only, A/B isolated, dossier 7 cards, no horizontal overflow');
+  console.log('PASS: browser desktop/mobile document editor, history, viewer read-only permissions');
+ }finally{await browser.close()}
+ const [audit]=await testDb.execute("SELECT COUNT(*) AS n FROM hub_audit_log WHERE entity_type IN ('task','project_guide')");assert(audit[0].n>=4);
+ console.log('PASS: documents create/update/archive/unarchive/restore/history; version history, conflict 409, non-destructive restore; unauthenticated 401, login, authenticated create/read/update/reread, guide save/reread, audit',audit[0].n);
+}finally{
+ if(server){server.kill('SIGTERM');await new Promise(resolve=>setTimeout(resolve,1500));if(server.exitCode===null)server.kill('SIGKILL');}
+ if(testDb)await testDb.end();
+ if(created){assert.match(schema,/^hub_restore_check_[a-f0-9]{12}$/);adminSql('DROP DATABASE IF EXISTS `'+schema+'`');console.log('Disposable schema cleaned');}
+ adminSql("DROP USER IF EXISTS '"+testUser+"'@'localhost'");
+ await db.end();
+}
