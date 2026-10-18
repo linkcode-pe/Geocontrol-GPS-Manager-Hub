@@ -560,3 +560,10 @@ Creado `scripts/e2e-project-memory-isolated.mjs`, basado en el E2E existente de 
 **Evidencia:** `HUB_E2E_APP_DIR=/opt/geocontrol-hub-build-stage2-806899a node e2e-project-memory-isolated.mjs` ejecutado desde el build aislado, **exit 0**, mensajes PASS de aislamiento A/B, seguridad, restauración y regresiones; esquema desechable limpiado.
 
 **Pendiente:** prueba navegador/móvil de memorias y expediente, verificar restauración aislada desde respaldo real con migración nueva, revisar paginación de tarjetas y UX antes de considerar Etapa 3 lista. Producción sigue en `stage2-3c5bef9` sin migración de memorias ni publicación de Etapa 3. Despliegue requiere aprobación específica.
+## 53. Etapa 3 — migración de memorias validada con respaldo real (18/10/2026)
+
+Se creó `scripts/verify-project-memory-migration-isolated.py`: utiliza el respaldo más reciente disponible de Hub, verifica inventario de tablas permitidas y usa `restore-dump-safety.py` para restaurar exclusivamente en esquema temporal `hub_restore_check_<12hex>`. Aplica allí `database/migrations/20261018_project_memories.sql`, verifica creación de exactamente dos tablas, escritura y lectura de memorias independientes A/B, conservación de proyectos, documentos y revisión de la guía. Limpia esquema temporal en `finally`.
+
+**Resultado real:** PASS restaurando `geocontrol-hub-20261018T174139Z.sql.gz`; 3 proyectos, 0 documentos y revisión 37 del respaldo conservados; migración y escritura de A/B verificadas; esquema temporal eliminado. El respaldo es anterior a la revisión actual 41 de memoria principal, lo cual es normal: no se restauró en producción.
+
+**Pendiente:** pruebas automatizadas visuales desktop/móvil de `/expedientes` y `/memorias`; completar continuidad/decisiones y UX. No se ha desplegado Etapa 3 ni aplicado su migración a producción.
