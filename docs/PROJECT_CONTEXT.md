@@ -869,3 +869,7 @@ En desarrollo se centralizó la navegación Fases/Hoja de ruta → Tareas en ope
 
 ## 89. Publicación autorizada de limpieza de filtros por fase (19/10/2026)
 Con autorización expresa se publicó commit f8d33ad: al navegar de Hoja de ruta o Fases hacia Tareas, se mantiene el proyecto y la fase seleccionados y se limpian filtros anteriores de búsqueda, prioridad, vencimiento y vista semanal. Antes: TypeScript PASS, 51 pruebas PASS/18 SKIP/0 FAIL, build aislada Next.js PASS y E2E general navegador escritorio/móvil PASS. Backup MySQL verificado geocontrol-hub-20261019T074311Z.sql.gz. Release activa /opt/geocontrol-hub-releases/phase5-phase-filters-f8d33ad; systemd active NRestarts=0; login local/público HTTP 200 y API sin sesión HTTP 401. Release anterior phase5-roadmap-tasks-5b8be1f conservada. Pendiente: confirmación funcional en Android de que una búsqueda/filtro previo no oculta tareas al pulsar «Ver tareas» desde una fase.
+
+
+## 90. Confirmación Android de limpieza de filtros por fase (19/10/2026)
+El usuario confirmó en Android que al introducir una búsqueda en Tareas y después navegar Dashboard → Hoja de ruta → «Ver tareas» de una fase, se limpia la búsqueda anterior y se muestran las tareas correspondientes a la fase. Mejora Fase 5 cerrada y validada. Producción continúa activa en phase5-phase-filters-f8d33ad; no se realizaron cambios adicionales. Backup MySQL verificado geocontrol-hub-20261019T074658Z.sql.gz. Siguiente paso: continuar con la próxima mejora de Fase 5 en desarrollo, probar y pedir autorización antes de publicar.
