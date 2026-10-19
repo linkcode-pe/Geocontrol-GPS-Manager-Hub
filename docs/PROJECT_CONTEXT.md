@@ -646,3 +646,12 @@ Se amplió `scripts/e2e-continuity-browser-isolated.mjs` con pruebas reales en C
 **Rollback:** restaurar override `release.conf.pre-stage4-a01dc98` sobre `release.conf`, `systemctl daemon-reload`, reiniciar servicio y verificar login/API. Conservar las dos tablas aditivas de Etapa 4 y no restaurar el respaldo sobre producción sin evaluar datos nuevos.
 
 **Pendiente:** completar comprobación autenticada de solo lectura de la nueva UI/API en producción y seguimiento operativo. La prueba autenticada efímera no pudo ejecutarse por bloqueo de seguridad de la herramienta, sin eludirlo.
+## 63. Navegación móvil — publicación autorizada (18/10/2026)
+
+Tras verificación visual autenticada por el usuario de `/expedientes` y `/continuidad` en Android, se identificó que el menú lateral principal carecía de accesos a esas secciones. Se añadieron `Expedientes` y `Continuidad` al menú `src/app/page.tsx`, con iconos, navegación al proyecto activo mediante `?projectId`, cierre del menú móvil y protección de cambios de tareas sin guardar. Commit de código `90db1eb` en `feat/mysql-auth` publicado en GitHub.
+
+Usuario autorizó expresamente la publicación de esta mejora. Se comprobó MySQL `geocontrol_hub.hub_project_guide` revisión 52, servicio activo y release anterior `stage4-a01dc98`. Se compiló exclusivamente en `/opt/geocontrol-hub-build-navigation-90db1eb` (sin compilar en carpeta de producción), TypeScript PASS, Next.js 16.4 build PASS y 50/50 tests locales ejecutados PASS (18 omitidos por no configurar URL pública). El primer intento de build aislado falló por enlace simbólico de `node_modules`; se reemplazó por copia física en el build aislado y terminó correctamente.
+
+Nuevo release `/opt/geocontrol-hub-releases/navigation-90db1eb`, `.env.production` protegida, release previo intacto. Respaldo del override: `/etc/systemd/system/geocontrol-hub.service.d/release.conf.pre-navigation-90db1eb`. Se cambió `WorkingDirectory` y reinició el servicio. Comprobación posterior: `ActiveState=active`, `WorkingDirectory=/opt/geocontrol-hub-releases/navigation-90db1eb`, `/login` HTTP 200 y `HUB_SMOKE_URL=https://hub.geocontrol.online npm test` **68/68 PASS, 0 fallos**. No se aplicaron migraciones ni se modificaron proyectos reales.
+
+Rollback: restaurar el override `.pre-navigation-90db1eb`, `systemctl daemon-reload`, reiniciar y ejecutar smoke. Pendiente: confirmación visual del usuario de los dos enlaces en el menú móvil tras refrescar la web. Memoria MySQL es fuente principal; este documento es respaldo.
