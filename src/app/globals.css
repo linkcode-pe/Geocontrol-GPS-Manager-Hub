@@ -129,3 +129,9 @@
 .dark .workspace-subpage .project-guide{--ui-bg:#0d1422;--ui-text:#e7edf7;--ui-border:#334155;--ui-surface:#172236}
 .dark .workspace-subpage .project-guide>section,.dark .workspace-subpage .project-guide>div>section{background:#172236;border-color:#334155}
 @media(max-width:760px){.workspace-subpage{padding:26px 17px}.workspace-subpage .project-guide-top{gap:12px}}
+
+/* Phase 5: actionable context in Dashboard upcoming tasks */
+.dashboard-next-task{display:flex;flex-direction:column;gap:4px;min-width:0;overflow-wrap:anywhere}
+.dashboard-next-task strong{font-weight:650}
+.dashboard-next-task small{font-size:11px;color:#64748b;font-weight:500}
+.dark .dashboard-next-task small{color:#a9b7ca}
