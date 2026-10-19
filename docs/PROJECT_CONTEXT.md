@@ -787,3 +787,8 @@ El usuario proporcionó una captura de Chrome Android en `hub.geocontrol.online/
 ## 71. Cierre de revisión visual Android de Continuidad (19/10/2026)
 
 Segunda captura real de Chrome Android aportada por el usuario: parte inferior del formulario Nuevo registro y sección Bitácora. Verificados campos de título y detalles, botón Registrar deshabilitado con título vacío, tarjeta Bitácora y estado vacío «No hay decisiones, hitos ni próximas acciones registrados». Alineación y legibilidad correctas; sin cortes ni desbordamiento horizontal apreciables. Con ambas capturas se completa la revisión visual de Continuidad en Android real, complementada por E2E aislado de acciones, historial y permisos. No se observaron defectos visuales que requieran corrección. Sin cambios de código ni despliegue.
+
+
+## 72. Inicio de Fase 5 — Dashboard de seguimiento (19/10/2026)
+
+El usuario autorizó iniciar Fase 5 de forma autónoma, manteniendo aprobación separada para despliegues. Se revisaron Dashboard existente y memoria canónica: ya existen progreso por proyecto, métricas, alertas y filtros; se evita duplicarlos. Primer avance: el bloque «Próximas tareas» selecciona primero vencidas, próximas (3 días), futuras y sin fecha; dentro de cada grupo ordena por prioridad, fecha e ID. Excluye completadas y no muta la lista original. Nuevo helper `dashboardNextTasks` en `src/lib/task-filters.mjs`, usado en `src/app/page.tsx`, con prueba en `tests/task-filters.test.mjs`. `tsc --noEmit` PASS; `npm test` 51 PASS, 18 SKIP, 0 FAIL. Commit `14fa38d` enviado a `feat/mysql-auth`. Solo desarrollo/GitHub, NO desplegado. Próximos pasos: revisión de seguimiento de Continuidad y permisos; compilar y validar en entorno aislado; solicitar autorización antes de publicar.
