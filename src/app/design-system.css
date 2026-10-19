@@ -452,3 +452,11 @@
 .shell .road-step-link:hover{border-top-color:#1686d7;background:rgba(22,134,215,.035)}
 .shell .road-step-link:focus-visible{outline:2px solid #1686d7;outline-offset:3px;border-radius:5px}
 .shell.dark .road-step-link:hover{background:rgba(80,166,237,.09)}
+
+/* Phase 5: direct roadmap-to-filtered-tasks navigation. */
+.shell .roadmap-item{min-width:0;display:flex;flex-direction:column;gap:5px}
+.shell .roadmap-item .road-step-link{flex:1;min-width:0}
+.shell .roadmap-task-link{appearance:none;background:transparent;border:0;padding:5px 0;text-align:left;color:#1686d7;font-size:12px;font-weight:650;cursor:pointer}
+.shell .roadmap-task-link:hover{text-decoration:underline}
+.shell .roadmap-task-link:focus-visible{outline:2px solid #1686d7;outline-offset:2px;border-radius:4px}
+.shell.dark .roadmap-task-link{color:#6ac0ff}
