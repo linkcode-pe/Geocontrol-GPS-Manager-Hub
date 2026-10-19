@@ -446,3 +446,9 @@
 .shell .vertical-chart-single .vertical-column em{grid-column:2/4;grid-row:2;white-space:normal}
 .shell.dark .vertical-chart-single .vertical-column{border-color:#33455f}
 @media(max-width:760px){.shell .vertical-chart-single{min-height:0}.shell .vertical-chart-single .vertical-column{padding:11px;column-gap:11px}.shell .roadmap{gap:10px}.shell .road-step{min-width:0}.shell .road-step b{overflow-wrap:anywhere}}
+
+/* Phase 5: keyboard-accessible roadmap cards that open their phase. */
+.shell .road-step-link{appearance:none;width:100%;border-left:0;border-right:0;border-bottom:0;border-radius:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.shell .road-step-link:hover{border-top-color:#1686d7;background:rgba(22,134,215,.035)}
+.shell .road-step-link:focus-visible{outline:2px solid #1686d7;outline-offset:3px;border-radius:5px}
+.shell.dark .road-step-link:hover{background:rgba(80,166,237,.09)}
