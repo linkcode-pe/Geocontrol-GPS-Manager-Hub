@@ -182,6 +182,18 @@ try{
   await page.evaluate(()=>[...document.querySelectorAll('a')].find(a=>a.innerText==='Abrir continuidad')?.click());
   await page.waitForFunction(()=>location.pathname==='/continuidad'&&new URLSearchParams(location.search).has('projectId'),{timeout:15000});
   assert.equal(new URL(page.url()).searchParams.get('projectId'),String(project.insertId));
+  await page.waitForSelector('a[href*="section=Tareas"][href*="projectId="]',{timeout:15000});
+  await page.goto(base+'/continuidad?projectId='+project.insertId,{waitUntil:'networkidle2'});
+  await page.waitForSelector('a[href*="section=Tareas"][href*="projectId="]',{timeout:15000});
+  await page.evaluate(()=>document.querySelector('a[href*="section=Tareas"][href*="projectId="]')?.click());
+  await page.waitForFunction(id=>location.pathname==='/'&&document.body.innerText.includes('Tareas · Isolated test project'),{timeout:20000},project.insertId);
+  assert.equal(new URL(page.url()).searchParams.get('projectId'),String(project.insertId));
+  assert.equal(new URL(page.url()).searchParams.get('section'),'Tareas');
+  await page.waitForFunction(name=>document.body.innerText.includes(name),{timeout:15000},marker+'-edited');
+  await readerPage.goto(base+'/continuidad?projectId='+project.insertId,{waitUntil:'networkidle2'});
+  await readerPage.waitForSelector('a[href*="section=Tareas"][href*="projectId="]',{timeout:15000});
+  assert.equal((await api('POST',continuityA,{kind:'decision',title:'Forbidden',details:''},readerCookie)).status,403);
+  assert.equal((await api('PATCH','/api/continuity/'+entriesA[0].id,{revision:2,status:'open'},readerCookie)).status,403);
   console.log('PASS: Stage4 continuity browser desktop/mobile, create/status/history, viewer read-only, deep link and dossier, no overflow');
   const memoryA='/api/projects/'+project.insertId+'/memory',memoryB='/api/projects/'+projectB.insertId+'/memory';
   assert.equal((await api('PUT',memoryA,{expectedRevision:0,content:'Memory Alpha'},cookie)).status,200);
