@@ -767,3 +767,8 @@ El usuario compartió capturas reales Android de Dashboard, Memoria del proyecto
 ## 67. Mejora de presentación de Expedientes — desarrollo (19/10/2026)
 
 A partir de captura Android del usuario se corrigieron exclusivamente las etiquetas visibles de `src/app/expedientes/page.tsx`: estados internos (`planning`, `active`, `paused`, `completed`, `archived`) se presentan en español; los contadores de tareas y completadas usan singular/plural correcto. No se alteraron API, datos, esquemas ni otras pantallas. `npx tsc --noEmit` PASS; `npm test`: 50 PASS, 18 SKIP, 0 FAIL. Commit `b20869d` enviado a `origin/feat/mysql-auth`. Producción permanece en `workspace-24994ef`: cambio NO publicado; requiere autorización explícita para desplegar. Captura Android de Continuidad aún pendiente.
+
+
+## 68. Publicación de mejora de Expedientes (19/10/2026)
+
+Con autorización explícita del usuario se publicó la mejora de etiquetas y singular/plural de Expedientes. Release aislado `dossier-b20869d` creado desde compilación Next.js exitosa en `/opt/geocontrol-hub-build-workspace`; `.next/BUILD_ID` comprobado. Servicio `geocontrol-hub` cambiado al release y confirmado `active`. Configuración anterior respaldada en `release.conf.pre-dossier-b20869d`; release `workspace-24994ef` conservado para reversión. `/login` HTTP 200 y 68/68 pruebas públicas PASS después del despliegue. Sin migraciones ni cambios en proyectos, tareas o bases Traccar. Pendiente: captura Android para confirmar etiquetas en Expedientes y captura de Continuidad.
