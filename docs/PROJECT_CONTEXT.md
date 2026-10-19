@@ -910,3 +910,7 @@ Con autorización expresa se publicó commit 9b18648: Dashboard → Hoja de ruta
 ## 99. Confirmación Android de fases sin tareas (19/10/2026)
 El usuario confirmó en Android que Dashboard → Hoja de ruta muestra «Sin tareas asignadas» en las fases vacías y conserva el contador de progreso para las fases con tareas. Mejora de Fase 5 validada y cerrada. Producción permanece activa en phase5-empty-phase-label-9b18648; sin cambios adicionales. Backup MySQL verificado geocontrol-hub-20261019T081526Z.sql.gz. Siguiente paso: continuar con la siguiente mejora pendiente de Fase 5, con pruebas y aprobación previa a publicar.
 
+
+## 100. Fase 5 — volver a la sección de origen desde tareas de fase (19/10/2026)
+En desarrollo se corrigió el botón de retorno en el banner de Tareas filtradas por fase: cuando el usuario entra desde Dashboard → Hoja de ruta aparece «← Volver a Hoja de ruta» y retorna al Dashboard; cuando entra desde Fases muestra «← Volver a fases» y retorna a Fases. Se conserva el proyecto y filtro de fase; no se alteran datos. Archivo src/app/page.tsx; commit 63c294a enviado a GitHub. TypeScript PASS, 51 pruebas PASS/18 SKIP/0 FAIL, build Next.js aislada PASS y E2E general navegador escritorio/móvil PASS. Backup MySQL verificado geocontrol-hub-20261019T081810Z.sql.gz. No publicado; producción continúa en phase5-empty-phase-label-9b18648. Pendiente: autorización expresa para publicar y validación funcional Android de ambos retornos.
+
