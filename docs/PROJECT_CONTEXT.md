@@ -902,3 +902,7 @@ El usuario aportó captura Android de Dashboard → Hoja de ruta y confirmó vis
 ## 97. Fase 5 — mensaje claro para fases sin tareas (19/10/2026)
 En desarrollo se mejoró el contador de Dashboard → Hoja de ruta: las fases con cero tareas muestran «Sin tareas asignadas» en vez de «0 de 0 tareas completadas»; las fases con tareas mantienen el resumen dinámico. No cambia navegación ni datos. Archivo src/app/page.tsx; commit 9b18648 enviado a GitHub. TypeScript PASS, 51 pruebas PASS/18 SKIP/0 FAIL, build Next.js aislada PASS y E2E general navegador escritorio/móvil PASS. Backup MySQL verificado geocontrol-hub-20261019T081249Z.sql.gz. No publicado; producción continúa en phase5-roadmap-progress-c15e3c1. Pendiente: autorización expresa para publicar y comprobación visual Android.
 
+
+## 98. Publicación autorizada de mensaje para fases sin tareas (19/10/2026)
+Con autorización expresa se publicó commit 9b18648: Dashboard → Hoja de ruta muestra «Sin tareas asignadas» cuando una fase tiene cero tareas; conserva contadores de fases con tareas. Previamente: TypeScript PASS, 51 pruebas PASS/18 SKIP/0 FAIL, build Next.js aislada PASS y E2E general escritorio/móvil PASS. Backup MySQL verificado geocontrol-hub-20261019T081411Z.sql.gz. Release activa /opt/geocontrol-hub-releases/phase5-empty-phase-label-9b18648; systemd active NRestarts=0; login local/público HTTP 200 y API sin sesión HTTP 401. Release anterior phase5-roadmap-progress-c15e3c1 conservada. Pendiente: confirmación visual Android de los mensajes para fases sin tareas.
+
