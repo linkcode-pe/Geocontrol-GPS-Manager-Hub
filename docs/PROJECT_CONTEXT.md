@@ -755,3 +755,10 @@ Verificación: `npx tsc --noEmit` PASS; `npm test` 50 PASS, 0 FAIL, 18 SKIP (sin
 ## 65. Publicación del Workspace (18/10/2026)
 
 Autorización explícita del usuario. Se activó `workspace-24994ef` en producción. Servicio `geocontrol-hub` activo; `/login` HTTP 200 y 68/68 pruebas públicas PASS después de publicar. Release anterior `navigation-90db1eb` conservado y configuración anterior respaldada como `release.conf.pre-workspace-24994ef`. No se realizaron migraciones ni cambios en datos de proyectos. Pendiente: comprobación visual autenticada de Expedientes y Continuidad. La revisión 54 contenía un encabezado histórico desactualizado, corregido sin eliminar contenido previo.
+
+
+## 66. Validación de navegador aislado y capturas Android (18/10/2026)
+
+Con el release publicado `workspace-24994ef`, se ejecutó `scripts/e2e-continuity-browser-isolated.mjs` en servidor de desarrollo aislado (puerto 3199 y base temporal desechable), reutilizando bibliotecas de Chromium disponibles. Resultado: PASS, salida 0 (80.69 s). Pruebas desktop/móvil de Continuidad y Expedientes: creación, estados, historial, permisos de lector, enlaces profundos y ausencia de overflow; Memorias y Documentos: edición, restauración, historial, permisos y auditoría. La base temporal fue eliminada. Servicio público `geocontrol-hub` continuó activo y `/login` HTTP 200; no se modificaron datos de producción.
+
+El usuario compartió capturas reales Android de Dashboard, Memoria del proyecto (revisión 57 visible) y Documentación, sin cortes evidentes. Se verificó en código que la leyenda «Gestión y seguimiento de Geocontrol GPS Manager» depende de `activeProject.title`, no es texto fijo. Pendiente: capturas reales Android de Expedientes y Continuidad para completar revisión visual autenticada; las pruebas aisladas no equivalen a validación visual en producción.
