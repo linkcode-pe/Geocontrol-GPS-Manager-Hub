@@ -841,3 +841,7 @@ A partir de las capturas Android enviadas por el usuario se detectó espacio ver
 
 ## 82. Publicación de gráfica compacta Fase 5 (19/10/2026)
 Con autorización expresa se publicó el cambio 2e8a39c: Avance vertical compacto cuando hay un proyecto y ajustes de Hoja de ruta móvil. Pruebas: TypeScript PASS, 51 PASS, 18 SKIP, 0 FAIL; compilación aislada PASS; navegador aislado escritorio/móvil PASS. Respaldo verificado geocontrol-hub-20261019T071517Z.sql.gz. Release activa phase5-compact-2e8a39c, systemd activo sin reinicios; login local y público HTTP 200; API sin sesión HTTP 401. Versión anterior phase5-dashboard-b4ee0df conservada. Pendiente: validación visual Android por usuario.
+
+
+## 83. Fase 5 — navegación directa desde Hoja de ruta (19/10/2026)
+Se implementó en desarrollo la apertura directa de cada fase desde Dashboard → Hoja de ruta, con botón accesible por teclado y selección de la fase en la sección Fases. Se conservan estados, orden y controles existentes. Se añadieron estilos de interacción para claro/oscuro. Archivos src/app/page.tsx y src/app/design-system.css. Commit 8e4714a enviado a GitHub. TypeScript PASS, npm test 51 PASS/18 SKIP/0 FAIL, Next.js build aislada PASS. Respaldo MySQL verificado geocontrol-hub-20261019T071939Z.sql.gz. No publicado; producción continúa en phase5-compact-2e8a39c. Pendiente: prueba de navegación en navegador aislado y autorización separada antes de publicar.
