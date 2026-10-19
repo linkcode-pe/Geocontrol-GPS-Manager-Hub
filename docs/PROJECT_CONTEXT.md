@@ -898,3 +898,7 @@ El primer intento de despliegue autorizado fue bloqueado por control de segurida
 ## 96. Validación Android de contadores en Hoja de ruta (19/10/2026)
 El usuario aportó captura Android de Dashboard → Hoja de ruta y confirmó visualmente los contadores: «Análisis y requisitos» 0 de 1 tarea completada; «Arquitectura», «Desarrollo», «Integración Traccar» y «Pruebas y producción» 0 de 0 tareas completadas. Se observan cinco fases, enlaces «Ver tareas →» y disposición móvil en dos columnas sin desbordamiento visible. Se cierra como validada esta mejora de Fase 5. Producción permanece activa en phase5-roadmap-progress-c15e3c1, sin cambios adicionales. Backup MySQL verificado geocontrol-hub-20261019T081005Z.sql.gz. Siguiente paso: continuar con la siguiente mejora pendiente de Fase 5.
 
+
+## 97. Fase 5 — mensaje claro para fases sin tareas (19/10/2026)
+En desarrollo se mejoró el contador de Dashboard → Hoja de ruta: las fases con cero tareas muestran «Sin tareas asignadas» en vez de «0 de 0 tareas completadas»; las fases con tareas mantienen el resumen dinámico. No cambia navegación ni datos. Archivo src/app/page.tsx; commit 9b18648 enviado a GitHub. TypeScript PASS, 51 pruebas PASS/18 SKIP/0 FAIL, build Next.js aislada PASS y E2E general navegador escritorio/móvil PASS. Backup MySQL verificado geocontrol-hub-20261019T081249Z.sql.gz. No publicado; producción continúa en phase5-roadmap-progress-c15e3c1. Pendiente: autorización expresa para publicar y comprobación visual Android.
+
