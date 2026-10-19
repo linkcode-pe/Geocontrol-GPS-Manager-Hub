@@ -877,3 +877,12 @@ El usuario confirmó en Android que al introducir una búsqueda en Tareas y desp
 
 ## 91. Fase 5 — resumen de tareas completadas por fase (19/10/2026)
 En desarrollo se añadió al banner de Tareas filtradas por fase un resumen dinámico «N de M tareas completadas» de la fase seleccionada, calculado desde tareas de dicha fase y no del proyecto entero; maneja singular y fase vacía. Archivo src/app/page.tsx, commit 4bab98c enviado a GitHub. TypeScript PASS, npm test 51 PASS/18 SKIP/0 FAIL, compilación Next.js aislada PASS y E2E general navegador escritorio/móvil PASS. Backup MySQL verificado geocontrol-hub-20261019T074930Z.sql.gz. No publicado; producción sigue en phase5-phase-filters-f8d33ad. Pendiente: autorización expresa para publicar y comprobación visual del resumen en Android.
+
+
+## 92. Publicación autorizada de resumen de avance por fase (19/10/2026)
+Con autorización expresa se publicó commit 4bab98c: banner de Tareas filtradas por fase muestra resumen dinámico «N de M tareas completadas» correspondiente exclusivamente a la fase seleccionada. Antes: TypeScript PASS, 51 pruebas PASS/18 SKIP/0 FAIL, build Next.js aislada PASS y E2E general navegador escritorio/móvil PASS. Backup MySQL verificado geocontrol-hub-20261019T075005Z.sql.gz. Release activa /opt/geocontrol-hub-releases/phase5-phase-summary-4bab98c; systemd active NRestarts=0; login local/público HTTP 200 y API sin sesión HTTP 401. Release anterior phase5-phase-filters-f8d33ad conservada. Pendiente: confirmación visual en Android de que el resumen refleja el progreso de la fase elegida.
+
+
+## 93. Validación visual Android del resumen de fase (19/10/2026)
+El usuario aportó captura Android de Tareas del proyecto Geocontrol GPS Manager, con filtro de fase «Análisis y requisitos» y resumen «0 de 1 tarea completada». La tarea visible «Prueba de tarea de la fase principal» aparece pendiente. Se confirma visualmente el resumen correcto y se cierra la mejora de Fase 5. Producción permanece en phase5-phase-summary-4bab98c, servicio activo y sin cambios adicionales. Backup MySQL verificado geocontrol-hub-20261019T075217Z.sql.gz. Pendiente administrativo: sincronizar en GitHub los apartados 92 y 93 de la memoria principal, tras bloqueo de seguridad anterior de la herramienta. Siguiente paso: continuar con nueva mejora de Fase 5.
+
