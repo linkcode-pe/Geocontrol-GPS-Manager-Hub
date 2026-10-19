@@ -782,3 +782,8 @@ Con autorización del usuario se capturaron y revisaron visualmente Expedientes 
 ## 70. Captura Android real de Continuidad (19/10/2026)
 
 El usuario proporcionó una captura de Chrome Android en `hub.geocontrol.online/continuidad`. Se validaron visualmente navegación Workspace/Continuidad, encabezado, botón de retorno, selector Geocontrol GPS Manager y parte superior del formulario Nuevo registro (tipo, fecha, título y detalles). No se aprecian cortes ni desbordamiento horizontal. El control de fecha muestra `dd/mm/aaaa` en Android, confirmando que el formato `mm/dd/yyyy` visto en Chromium aislado era dependiente del locale de pruebas. La captura no incluye la parte inferior del formulario ni la bitácora; esas zonas ya pasaron pruebas de navegador aislado, pero no han sido inspeccionadas en una captura Android real. Sin cambios de código ni producción.
+
+
+## 71. Cierre de revisión visual Android de Continuidad (19/10/2026)
+
+Segunda captura real de Chrome Android aportada por el usuario: parte inferior del formulario Nuevo registro y sección Bitácora. Verificados campos de título y detalles, botón Registrar deshabilitado con título vacío, tarjeta Bitácora y estado vacío «No hay decisiones, hitos ni próximas acciones registrados». Alineación y legibilidad correctas; sin cortes ni desbordamiento horizontal apreciables. Con ambas capturas se completa la revisión visual de Continuidad en Android real, complementada por E2E aislado de acciones, historial y permisos. No se observaron defectos visuales que requieran corrección. Sin cambios de código ni despliegue.
