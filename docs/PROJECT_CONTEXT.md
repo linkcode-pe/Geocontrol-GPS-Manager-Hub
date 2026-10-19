@@ -857,3 +857,7 @@ El usuario confirmó que la navegación Dashboard → Hoja de ruta → Fases fun
 
 ## 86. Publicación de acceso a tareas desde Hoja de ruta (19/10/2026)
 Con autorización expresa se publicó commit 5b8be1f: Dashboard → Hoja de ruta incorpora enlace «Ver tareas →» por fase para abrir Tareas con filtro por fase y conservar proyecto activo. Antes: TypeScript PASS, 51 pruebas PASS/18 SKIP/0 FAIL, compilación Next.js aislada PASS y E2E general navegador aislado PASS en escritorio/móvil. Backup MySQL verificado geocontrol-hub-20261019T072855Z.sql.gz. Release activa /opt/geocontrol-hub-releases/phase5-roadmap-tasks-5b8be1f, systemd active NRestarts=0, login local/público HTTP 200 y API sin sesión HTTP 401. Primer sondeo local durante reinicio falló por arranque transitorio; segundo sondeo PASS. Release anterior phase5-roadmap-8e4714a conservada. Pendiente: validación funcional específica de enlace «Ver tareas →» desde sesión autenticada y confirmación visual Android.
+
+
+## 87. Validación Android del acceso a tareas por fase (19/10/2026)
+El usuario confirmó desde Android que Dashboard → Hoja de ruta → «Ver tareas →» funciona y abre las tareas de la fase seleccionada. Se cierra como validada la mejora de navegación entre Hoja de ruta, Fases y Tareas de la Fase 5. Producción activa en phase5-roadmap-tasks-5b8be1f, sin nuevos cambios. Respaldo MySQL verificado geocontrol-hub-20261019T073714Z.sql.gz. Siguiente paso: continuar con la siguiente mejora de Fase 5 en desarrollo, probar, registrar en GitHub y solicitar aprobación antes de publicar.
