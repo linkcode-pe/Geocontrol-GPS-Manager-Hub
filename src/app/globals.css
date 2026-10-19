@@ -122,3 +122,10 @@
 .dark .task-list>.task-row .task-edit button:last-of-type{background:transparent;border-color:transparent;color:#a9bdd3}
 @media(max-width:760px){.task-list>.task-row .task-edit{gap:7px}.task-list>.task-row .task-edit button{padding:8px 13px}}
 
+/* Shared workspace navigation for dossier and continuity pages. */
+.workspace-subpage .project-guide{min-height:0;padding:0;background:transparent;color:inherit}
+.workspace-subpage .project-guide-top,.workspace-subpage .project-guide-toolbar{max-width:none}
+.workspace-subpage .project-guide>section,.workspace-subpage .project-guide>div>section{background:#fff;border:1px solid #e6ebf2;border-radius:13px}
+.dark .workspace-subpage .project-guide{--ui-bg:#0d1422;--ui-text:#e7edf7;--ui-border:#334155;--ui-surface:#172236}
+.dark .workspace-subpage .project-guide>section,.dark .workspace-subpage .project-guide>div>section{background:#172236;border-color:#334155}
+@media(max-width:760px){.workspace-subpage{padding:26px 17px}.workspace-subpage .project-guide-top{gap:12px}}

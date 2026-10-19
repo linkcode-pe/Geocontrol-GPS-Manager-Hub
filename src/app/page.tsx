@@ -29,6 +29,7 @@ const icons = { Dashboard:LayoutDashboard, Proyectos:FolderKanban, Fases:Workflo
 export default function Home() {
   const router=useRouter();
   const [section,setSection]=useState("Dashboard");
+  useEffect(()=>{const selected=new URLSearchParams(window.location.search).get('section');if(selected&&['Dashboard','Proyectos','Fases','Tareas','Documentación','Actividad'].includes(selected))setSection(selected);},[]);
   const [activity,setActivity]=useState<{id:number;action:string;entity_type:string;entity_id:number|null;metadata:unknown;created_at:string}[]>([]);
   const [activityPage,setActivityPage]=useState(1);
   const [activityAction,setActivityAction]=useState("all");
