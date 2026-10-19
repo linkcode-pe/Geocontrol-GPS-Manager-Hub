@@ -436,3 +436,13 @@
 .project-guide-toolbar input[type=checkbox]{width:17px;height:17px}
 .project-guide-toolbar select{max-width:min(70vw,420px)}
 @media(max-width:600px){.project-guide-toolbar label{width:100%;justify-content:space-between}.project-guide-toolbar select{max-width:65vw}.project-guide>section .project-guide-buttons button{max-width:100%;overflow-wrap:anywhere}}
+
+/* Phase 5: compact analytics when the portfolio contains one project. */
+.shell .vertical-chart-single{min-height:0;justify-content:flex-start;align-items:center;overflow:visible;padding:0}
+.shell .vertical-chart-single .vertical-column{display:grid;grid-template-columns:44px minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:13px;row-gap:3px;align-items:center;justify-items:start;max-width:none;min-width:0;width:100%;padding:12px 14px;border:1px solid #e7edf5;border-radius:10px;text-align:left}
+.shell .vertical-chart-single .vertical-column .vertical-track{grid-column:1;grid-row:1/3;width:44px;height:64px}
+.shell .vertical-chart-single .vertical-column strong{grid-column:3;grid-row:1;font-size:15px}
+.shell .vertical-chart-single .vertical-column small{grid-column:2;grid-row:1;max-width:none;min-height:0;text-align:left;font-size:12px;font-weight:650}
+.shell .vertical-chart-single .vertical-column em{grid-column:2/4;grid-row:2;white-space:normal}
+.shell.dark .vertical-chart-single .vertical-column{border-color:#33455f}
+@media(max-width:760px){.shell .vertical-chart-single{min-height:0}.shell .vertical-chart-single .vertical-column{padding:11px;column-gap:11px}.shell .roadmap{gap:10px}.shell .road-step{min-width:0}.shell .road-step b{overflow-wrap:anywhere}}
