@@ -873,3 +873,7 @@ Con autorización expresa se publicó commit f8d33ad: al navegar de Hoja de ruta
 
 ## 90. Confirmación Android de limpieza de filtros por fase (19/10/2026)
 El usuario confirmó en Android que al introducir una búsqueda en Tareas y después navegar Dashboard → Hoja de ruta → «Ver tareas» de una fase, se limpia la búsqueda anterior y se muestran las tareas correspondientes a la fase. Mejora Fase 5 cerrada y validada. Producción continúa activa en phase5-phase-filters-f8d33ad; no se realizaron cambios adicionales. Backup MySQL verificado geocontrol-hub-20261019T074658Z.sql.gz. Siguiente paso: continuar con la próxima mejora de Fase 5 en desarrollo, probar y pedir autorización antes de publicar.
+
+
+## 91. Fase 5 — resumen de tareas completadas por fase (19/10/2026)
+En desarrollo se añadió al banner de Tareas filtradas por fase un resumen dinámico «N de M tareas completadas» de la fase seleccionada, calculado desde tareas de dicha fase y no del proyecto entero; maneja singular y fase vacía. Archivo src/app/page.tsx, commit 4bab98c enviado a GitHub. TypeScript PASS, npm test 51 PASS/18 SKIP/0 FAIL, compilación Next.js aislada PASS y E2E general navegador escritorio/móvil PASS. Backup MySQL verificado geocontrol-hub-20261019T074930Z.sql.gz. No publicado; producción sigue en phase5-phase-filters-f8d33ad. Pendiente: autorización expresa para publicar y comprobación visual del resumen en Android.
