@@ -894,3 +894,7 @@ En desarrollo se añadió a cada fase de Dashboard → Hoja de ruta un contador 
 ## 95. Publicación de contadores por fase en Hoja de ruta (19/10/2026)
 El primer intento de despliegue autorizado fue bloqueado por control de seguridad y no modificó producción. A petición expresa del usuario se reintentó por vía regular y se publicó commit c15e3c1: cada fase de Dashboard → Hoja de ruta muestra «N de M tareas completadas». Build aislada, TypeScript, 51 pruebas y E2E general escritorio/móvil habían pasado. Backup MySQL verificado geocontrol-hub-20261019T080737Z.sql.gz. Release activa /opt/geocontrol-hub-releases/phase5-roadmap-progress-c15e3c1, systemd active NRestarts=0, login local/público HTTP 200, API sin sesión HTTP 401. Release anterior phase5-phase-summary-4bab98c conservada. Pendiente: confirmación visual Android de los contadores en Hoja de ruta.
 
+
+## 96. Validación Android de contadores en Hoja de ruta (19/10/2026)
+El usuario aportó captura Android de Dashboard → Hoja de ruta y confirmó visualmente los contadores: «Análisis y requisitos» 0 de 1 tarea completada; «Arquitectura», «Desarrollo», «Integración Traccar» y «Pruebas y producción» 0 de 0 tareas completadas. Se observan cinco fases, enlaces «Ver tareas →» y disposición móvil en dos columnas sin desbordamiento visible. Se cierra como validada esta mejora de Fase 5. Producción permanece activa en phase5-roadmap-progress-c15e3c1, sin cambios adicionales. Backup MySQL verificado geocontrol-hub-20261019T081005Z.sql.gz. Siguiente paso: continuar con la siguiente mejora pendiente de Fase 5.
+
