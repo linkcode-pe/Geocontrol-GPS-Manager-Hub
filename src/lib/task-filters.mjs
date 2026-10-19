@@ -20,3 +20,13 @@ export function taskAlertSummary(tasks,today){
  const open=tasks.filter(t=>t.status!=='done');
  return {overdue:open.filter(t=>taskDueState(t,today)==='overdue').length,soon:open.filter(t=>taskDueState(t,today)==='soon').length,urgent:open.filter(t=>t.priority==='urgent').length};
 }
+
+/** @template {FilterTask} T @param {T[]} tasks @param {string} today @param {number} [limit] */
+export function dashboardNextTasks(tasks,today,limit=4){
+ const dueRank={overdue:0,soon:1,later:2,none:3};
+ return tasks.filter(t=>t.status!=='done').sort((a,b)=>
+  (dueRank[taskDueState(a,today)]-dueRank[taskDueState(b,today)]) ||
+  ((priorityRank[a.priority]??2)-(priorityRank[b.priority]??2)) ||
+  (a.dueDate||'9999-12-31').localeCompare(b.dueDate||'9999-12-31') || b.id-a.id
+ ).slice(0,limit);
+}

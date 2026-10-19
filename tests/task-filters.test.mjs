@@ -11,3 +11,19 @@ test('dashboard alerts count only unfinished tasks',()=>{
  assert.deepEqual(taskAlertSummary(tasks,today),{overdue:1,soon:1,urgent:1});
  assert.deepEqual(taskAlertSummary([],today),{overdue:0,soon:0,urgent:0});
 });
+
+import {dashboardNextTasks} from '../src/lib/task-filters.mjs';
+test('dashboard next tasks prioritizes overdue, upcoming and urgency without completed tasks',()=>{
+ const list=[
+  {id:1,status:'todo',priority:'low',dueDate:null},
+  {id:2,status:'todo',priority:'normal',dueDate:'2026-10-14'},
+  {id:3,status:'todo',priority:'urgent',dueDate:'2026-10-10'},
+  {id:4,status:'done',priority:'urgent',dueDate:'2026-10-01'},
+  {id:5,status:'blocked',priority:'high',dueDate:'2026-10-12'},
+  {id:6,status:'todo',priority:'urgent',dueDate:null},
+ ];
+ assert.deepEqual(dashboardNextTasks(list,today).map(t=>t.id),[3,5,2,6]);
+ assert.deepEqual(dashboardNextTasks(list,today,2).map(t=>t.id),[3,5]);
+ assert.deepEqual(dashboardNextTasks([],today),[]);
+ assert.deepEqual(list.map(t=>t.id),[1,2,3,4,5,6]);
+});
