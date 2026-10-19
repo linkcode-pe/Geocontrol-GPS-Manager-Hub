@@ -26,3 +26,32 @@ export async function PATCH(req:Request,{params}:{params:Promise<{id:string}>}){
  }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
  return NextResponse.json({ok:true});
 }
+
+// Deletion is intentionally limited to empty projects: several relations use ON DELETE CASCADE.
+export async function DELETE(req:Request,{params}:{params:Promise<{id:string}>}){
+ const user=await currentUser();if(!user)return NextResponse.json({error:"No autorizado"},{status:401});
+ if(!["owner","admin"].includes(user.role))return NextResponse.json({error:"Solo un administrador puede eliminar proyectos"},{status:403});
+ if(!isAllowedOrigin(req))return NextResponse.json({error:"Origen no autorizado"},{status:403});
+ const id=Number((await params).id);if(!Number.isSafeInteger(id)||id<1)return NextResponse.json({error:"Proyecto inválido"},{status:400});
+ let body:unknown;try{body=await req.json();}catch{return NextResponse.json({error:"Confirmación inválida"},{status:400});}
+ const confirmation=(body&&typeof body==="object"&&"confirmTitle" in body)?(body as {confirmTitle:unknown}).confirmTitle:null;
+ if(typeof confirmation!=="string")return NextResponse.json({error:"Confirma el nombre exacto del proyecto"},{status:400});
+ const conn=await db().getConnection();
+ try{
+  await conn.beginTransaction();
+  const [projects]=await conn.execute<import("mysql2").RowDataPacket[]>("SELECT title FROM hub_projects WHERE id=? FOR UPDATE",[id]);
+  if(!projects.length){await conn.rollback();return NextResponse.json({error:"Proyecto no encontrado"},{status:404});}
+  if(confirmation!==projects[0].title){await conn.rollback();return NextResponse.json({error:"El nombre de confirmación no coincide"},{status:400});}
+  // Include version/history tables, even those without a direct foreign key.
+  const dependencies=["hub_phases","hub_tasks","hub_documents","hub_project_continuity","hub_project_memories","hub_project_memory_versions","hub_project_technical_sheets","hub_project_technical_sheet_versions"];
+  for(const table of dependencies){
+   const [rows]=await conn.execute<import("mysql2").RowDataPacket[]>(`SELECT 1 FROM ${table} WHERE project_id=? LIMIT 1`,[id]);
+   if(rows.length){await conn.rollback();return NextResponse.json({error:"No se puede eliminar: el proyecto contiene fases, tareas, documentos, memorias o historial. Solo se permiten proyectos completamente vacíos."},{status:409});}
+  }
+  const [result]=await conn.execute<ResultSetHeader>("DELETE FROM hub_projects WHERE id=?",[id]);
+  if(result.affectedRows!==1)throw new Error("No se pudo eliminar el proyecto");
+  await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'delete','project',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify({title:projects[0].title,empty:true})]);
+  await conn.commit();
+ }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
+ return NextResponse.json({ok:true});
+}
