@@ -918,3 +918,7 @@ En desarrollo se corrigió el botón de retorno en el banner de Tareas filtradas
 ## 101. Publicación autorizada del retorno al origen desde tareas de fase (19/10/2026)
 Con autorización expresa se publicó commit 63c294a: el botón del banner de Tareas filtradas por fase retorna al Dashboard/Hoja de ruta si se accedió desde allí, o a Fases si se accedió desde Fases. Previamente: TypeScript PASS, 51 pruebas PASS/18 SKIP/0 FAIL, build Next.js aislada PASS y E2E general navegador escritorio/móvil PASS. Backup MySQL verificado geocontrol-hub-20261019T082444Z.sql.gz. Release activa /opt/geocontrol-hub-releases/phase5-return-origin-63c294a; systemd active NRestarts=0; login local/público HTTP 200 y API sin sesión HTTP 401. Release anterior phase5-empty-phase-label-9b18648 conservada. Pendiente: confirmación funcional Android de ambos retornos.
 
+
+## 102. Confirmación Android del retorno a sección de origen (19/10/2026)
+El usuario confirmó que desde Tareas filtradas por fase el botón de retorno funciona correctamente en Android para ambos recorridos: Dashboard → Hoja de ruta → Ver tareas → volver a Dashboard; Fases → Ver tareas → volver a Fases. Mejora de Fase 5 validada y cerrada. Producción permanece activa en phase5-return-origin-63c294a, sin cambios adicionales. Backup MySQL verificado geocontrol-hub-20261019T082644Z.sql.gz. Siguiente paso: continuar con la siguiente mejora pendiente de Fase 5, previa comprobación del estado, pruebas y autorización expresa para producción.
+
