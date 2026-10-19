@@ -922,3 +922,7 @@ Con autorización expresa se publicó commit 63c294a: el botón del banner de Ta
 ## 102. Confirmación Android del retorno a sección de origen (19/10/2026)
 El usuario confirmó que desde Tareas filtradas por fase el botón de retorno funciona correctamente en Android para ambos recorridos: Dashboard → Hoja de ruta → Ver tareas → volver a Dashboard; Fases → Ver tareas → volver a Fases. Mejora de Fase 5 validada y cerrada. Producción permanece activa en phase5-return-origin-63c294a, sin cambios adicionales. Backup MySQL verificado geocontrol-hub-20261019T082644Z.sql.gz. Siguiente paso: continuar con la siguiente mejora pendiente de Fase 5, previa comprobación del estado, pruebas y autorización expresa para producción.
 
+
+## 103. Fase 5 — estado vacío específico de tareas por fase (19/10/2026)
+En desarrollo se mejoró el estado vacío de Tareas: al filtrar por una fase que no contiene tareas, muestra «Esta fase aún no tiene tareas» y «Crea la primera tarea de esta fase usando el formulario superior», incluso cuando el proyecto contiene tareas de otras fases. Evita el mensaje genérico engañoso de filtros. Conserva acciones existentes. Archivo src/app/page.tsx; commit a335724 enviado a GitHub. TypeScript PASS, 51 pruebas PASS/18 SKIP/0 FAIL, build Next.js aislada PASS y E2E general navegador escritorio/móvil PASS. Backup MySQL verificado geocontrol-hub-20261019T083928Z.sql.gz. No publicado; producción continúa en phase5-return-origin-63c294a. Pendiente: autorización expresa para publicar y comprobación visual Android de una fase sin tareas.
+
