@@ -215,6 +215,8 @@ try{
   await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.trim()==='Añadir')?.click());
   await page.waitForFunction(()=>[...document.querySelectorAll('[role="status"]')].some(el=>el.textContent.includes('No aparece en la vista filtrada actual.')),{timeout:15000});
   assert.equal(await page.$eval('select[aria-label="Fase de nueva tarea"]',el=>el.value),String(phaseId));
+  await page.select('select[aria-label="Prioridad de nueva tarea"]','high');
+  await page.waitForFunction(()=>![...document.querySelectorAll('[role="status"]')].some(el=>el.textContent.includes('No aparece en la vista filtrada actual.')),{timeout:10000});
   console.log('PASS: Task creation confirms success and explains tasks hidden by phase filter');
   await page.evaluate(()=>document.querySelector('button.task-clear-filters')?.click());
   await page.waitForFunction(()=>!document.querySelector('button.task-clear-filters'),{timeout:10000});
