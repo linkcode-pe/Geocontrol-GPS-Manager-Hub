@@ -204,6 +204,13 @@ try{
   await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.trim()==='Añadir')?.click());
   await page.waitForFunction(()=>document.querySelector('input[aria-label="Título de nueva tarea"]')?.value===''&&document.body.innerText.includes('Task in Arquitectura'),{timeout:15000});
   assert.equal(await page.$eval('select[aria-label="Fase de nueva tarea"]',el=>el.value),String(phaseId),'Phase selection should remain while phase filter is active');
+  await page.waitForFunction(()=>[...document.querySelectorAll('[role="status"]')].some(el=>el.textContent.includes('Tarea creada correctamente.')),{timeout:10000});
+  await page.select('select[aria-label="Fase de nueva tarea"]','');
+  await page.type('input[aria-label="Título de nueva tarea"]','Task without phase from Arquitectura');
+  await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.trim()==='Añadir')?.click());
+  await page.waitForFunction(()=>[...document.querySelectorAll('[role="status"]')].some(el=>el.textContent.includes('No aparece en la vista filtrada actual.')),{timeout:15000});
+  assert.equal(await page.$eval('select[aria-label="Fase de nueva tarea"]',el=>el.value),String(phaseId));
+  console.log('PASS: Task creation confirms success and explains tasks hidden by phase filter');
   await page.evaluate(()=>document.querySelector('button.task-clear-filters')?.click());
   await page.waitForFunction(()=>!document.querySelector('button.task-clear-filters'),{timeout:10000});
   await page.waitForFunction(()=>document.querySelector('select[aria-label="Fase de nueva tarea"]')?.value==='',{timeout:10000});
