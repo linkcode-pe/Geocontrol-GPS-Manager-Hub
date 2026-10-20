@@ -190,6 +190,21 @@ try{
   assert.equal(new URL(page.url()).searchParams.get('projectId'),String(project.insertId));
   assert.equal(new URL(page.url()).searchParams.get('section'),'Tareas');
   await page.waitForFunction(name=>document.body.innerText.includes(name),{timeout:15000},marker+'-edited');
+  // Regression: clearing a phase filter must reset the native new-task phase selector on mobile.
+  const phaseCreated=await api('POST','/api/phases',{projectId:project.insertId,title:'Arquitectura'},cookie);
+  assert.equal(phaseCreated.status,201);
+  const phaseId=phaseCreated.result.id;
+  await page.setViewport({width:375,height:812,isMobile:true,hasTouch:true});
+  await page.goto(base+'/?section=Fases&projectId='+project.insertId,{waitUntil:'networkidle2'});
+  await page.waitForSelector('button[aria-label="Ver tareas de Arquitectura"]',{timeout:15000});
+  await page.click('button[aria-label="Ver tareas de Arquitectura"]');
+  await page.waitForFunction(id=>document.querySelector('select[aria-label="Fase de nueva tarea"]')?.value===String(id),{},phaseId);
+  assert.equal(await page.$eval('select[aria-label="Fase de nueva tarea"]',el=>el.selectedOptions[0].textContent),'Arquitectura');
+  await page.evaluate(()=>document.querySelector('button.task-clear-filters')?.click());
+  await page.waitForFunction(()=>!document.querySelector('button.task-clear-filters'),{timeout:10000});
+  await page.waitForFunction(()=>document.querySelector('select[aria-label="Fase de nueva tarea"]')?.value==='',{timeout:10000});
+  assert.equal(await page.$eval('select[aria-label="Fase de nueva tarea"]',el=>el.selectedOptions[0].textContent),'Sin fase');
+  console.log('PASS: Mobile phase filter clear resets native new-task selector to Sin fase');
   await readerPage.goto(base+'/continuidad?projectId='+project.insertId,{waitUntil:'networkidle2'});
   await readerPage.waitForSelector('a[href*="section=Tareas"][href*="projectId="]',{timeout:15000});
   assert.equal((await api('POST',continuityA,{kind:'decision',title:'Forbidden',details:''},readerCookie)).status,403);
