@@ -200,6 +200,10 @@ try{
   await page.click('button[aria-label="Ver tareas de Arquitectura"]');
   await page.waitForFunction(id=>document.querySelector('select[aria-label="Fase de nueva tarea"]')?.value===String(id),{},phaseId);
   assert.equal(await page.$eval('select[aria-label="Fase de nueva tarea"]',el=>el.selectedOptions[0].textContent),'Arquitectura');
+  await page.type('input[aria-label="Título de nueva tarea"]','Task in Arquitectura');
+  await page.evaluate(()=>[...document.querySelectorAll('button')].find(b=>b.innerText.trim()==='Añadir')?.click());
+  await page.waitForFunction(()=>document.querySelector('input[aria-label="Título de nueva tarea"]')?.value===''&&document.body.innerText.includes('Task in Arquitectura'),{timeout:15000});
+  assert.equal(await page.$eval('select[aria-label="Fase de nueva tarea"]',el=>el.value),String(phaseId),'Phase selection should remain while phase filter is active');
   await page.evaluate(()=>document.querySelector('button.task-clear-filters')?.click());
   await page.waitForFunction(()=>!document.querySelector('button.task-clear-filters'),{timeout:10000});
   await page.waitForFunction(()=>document.querySelector('select[aria-label="Fase de nueva tarea"]')?.value==='',{timeout:10000});
