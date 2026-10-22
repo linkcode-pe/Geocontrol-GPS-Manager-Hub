@@ -94,6 +94,7 @@ export default function Home() {
   const [draft,setDraft]=useState("");
   const [savingTask,setSavingTask]=useState(false);
   const [taskCreatedNotice,setTaskCreatedNotice]=useState("");
+  useEffect(()=>{if(!taskCreatedNotice)return;const timer=window.setTimeout(()=>setTaskCreatedNotice(""),5000);return ()=>window.clearTimeout(timer);},[taskCreatedNotice]);
   const [updatingTaskIds,setUpdatingTaskIds]=useState<number[]>([]);
   const savingTaskIdsRef=useRef(new Set<number>());
   const [selectedDoc,setSelectedDoc]=useState(0);
