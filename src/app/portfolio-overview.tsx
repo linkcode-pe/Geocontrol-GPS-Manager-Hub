@@ -1,6 +1,6 @@
 'use client';
 import {useEffect,useState} from 'react';
-type Summary={id:number;title:string;status:string;phases:number;phasesCompleted:number;tasks:number;tasksCompleted:number;tasksInProgress:number;tasksBlocked:number;documents:number;continuity:number;continuityDone:number;activities:number};
+type Summary={id:number;title:string;status:string;phases:number;phasesCompleted:number;tasks:number;tasksCompleted:number;tasksInProgress:number;tasksBlocked:number;documents:number;technicalSheets:number;memories:number;continuity:number;continuityDone:number;activities:number};
 export default function PortfolioOverview({section,onSelect}:{section:string;onSelect:(id:number)=>void}){
  const [rows,setRows]=useState<Summary[]>([]),[error,setError]=useState(''),[loading,setLoading]=useState(true);
  useEffect(()=>{let live=true;fetch('/api/portfolio-summary').then(async r=>{if(!r.ok)throw Error('No se pudo cargar el resumen');return r.json();}).then(d=>{if(live)setRows(d.projects||[]);}).catch(e=>{if(live)setError(e.message);}).finally(()=>{if(live)setLoading(false);});return()=>{live=false;};},[section]);
@@ -24,9 +24,10 @@ export default function PortfolioOverview({section,onSelect}:{section:string;onS
     {section==='Actividad'&&<div><span>Eventos asociados a proyectos</span><strong>{sum('activities')}</strong></div>}
     {section==='Continuidad'&&<><div><span>Registros</span><strong>{sum('continuity')}</strong></div><div><span>Finalizados</span><strong>{sum('continuityDone')}</strong></div></>}
     {section==='Documentación'&&<div><span>Documentos activos</span><strong>{sum('documents')}</strong></div>}
+    {section==='Expedientes'&&<><div><span>Fichas técnicas</span><strong>{sum('technicalSheets')}</strong></div><div><span>Memorias de proyecto</span><strong>{sum('memories')}</strong></div><div><span>Registros de continuidad</span><strong>{sum('continuity')}</strong></div></>}
    </div>
    <h3>{compareByProject?"Proyectos disponibles":"Distribución por proyecto"}</h3>
-   <div className="portfolio-bars" role="list">{rows.map(p=><button type="button" role="listitem" key={p.id} onClick={()=>onSelect(p.id)} aria-label={`Abrir ${section} de ${p.title}`}><span className="portfolio-bar-head"><strong>{p.title}</strong><span>{compareByProject?"Abrir proyecto":`${value(p)} de ${total} · ${total?Math.round(value(p)/total*100):0}%`}</span></span><span className="portfolio-bar-track"><span style={{width:`${total?value(p)/total*100:0}%`}}/></span><small>{p.phases} fases · {p.tasks} tareas · {p.tasksCompleted} completadas · {p.documents} documentos</small></button>)}</div>
+   <div className="portfolio-bars" role="list">{rows.map(p=><button type="button" role="listitem" key={p.id} onClick={()=>onSelect(p.id)} aria-label={`Abrir ${section} de ${p.title}`}><span className="portfolio-bar-head"><strong>{p.title}</strong><span>{compareByProject?`${p.technicalSheets} fichas · ${p.memories} memorias · ${p.continuity} continuidad`:`${value(p)} de ${total} · ${total?Math.round(value(p)/total*100):0}%`}</span></span><span className="portfolio-bar-track"><span style={{width:`${total?value(p)/total*100:0}%`}}/></span><small>{p.phases} fases · {p.tasks} tareas · {p.tasksCompleted} completadas · {p.documents} documentos</small></button>)}</div>
    {!rows.length&&<p>Aún no hay proyectos. Crea uno desde la sección Proyectos.</p>}
    <p className="portfolio-help">{compareByProject?"Selecciona un proyecto para consultar su información. Los expedientes se organizan por proyecto.":"Las gráficas comparan cantidades por proyecto. Selecciona una barra para abrir sus datos."}</p>
   </>}

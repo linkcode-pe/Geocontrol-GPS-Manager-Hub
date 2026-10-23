@@ -12,6 +12,8 @@ export async function GET(){
  (SELECT COUNT(*) FROM hub_tasks t WHERE t.project_id=p.id AND t.status='in_progress') AS tasksInProgress,
  (SELECT COUNT(*) FROM hub_tasks t WHERE t.project_id=p.id AND t.status='blocked') AS tasksBlocked,
  (SELECT COUNT(*) FROM hub_documents d WHERE d.project_id=p.id AND d.archived_at IS NULL) AS documents,
+ (SELECT COUNT(*) FROM hub_project_technical_sheets s WHERE s.project_id=p.id) AS technicalSheets,
+ (SELECT COUNT(*) FROM hub_project_memories m WHERE m.project_id=p.id) AS memories,
  (SELECT COUNT(*) FROM hub_project_continuity c WHERE c.project_id=p.id) AS continuity,
  (SELECT COUNT(*) FROM hub_project_continuity c WHERE c.project_id=p.id AND c.status='done') AS continuityDone,
  (SELECT COUNT(*) FROM hub_audit_log a WHERE
