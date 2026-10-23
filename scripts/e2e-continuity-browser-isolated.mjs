@@ -257,6 +257,13 @@ try{
   assert.equal((await api('POST',continuityA,{kind:'decision',title:'Forbidden',details:''},readerCookie)).status,403);
   assert.equal((await api('PATCH','/api/continuity/'+entriesA[0].id,{revision:2,status:'open'},readerCookie)).status,403);
   console.log('PASS: Stage4 continuity browser desktop/mobile, create/status/history, viewer read-only, deep link and dossier, no overflow');
+  const scopedActivity=await api('GET','/api/activity?projectId='+project.insertId,undefined,cookie);
+  assert.equal(scopedActivity.status,200);
+  assert(scopedActivity.result.events.some(e=>e.entity_type==='task'&&e.entity_id===taskId),'Project activity must include own task');
+  assert(!scopedActivity.result.events.some(e=>e.entity_type==='project_guide'),'Global guide activity must be excluded');
+  assert.equal((await api('GET','/api/activity?projectId=invalid',undefined,cookie)).status,400);
+  assert.equal((await fetch(base+'/api/activity/export?projectId='+project.insertId,{headers:{Cookie:cookie}})).status,200);
+  console.log('PASS: Project-scoped activity and CSV export');
   const memoryA='/api/projects/'+project.insertId+'/memory',memoryB='/api/projects/'+projectB.insertId+'/memory';
   assert.equal((await api('PUT',memoryA,{expectedRevision:0,content:'Memory Alpha'},cookie)).status,200);
   assert.equal((await api('PUT',memoryB,{expectedRevision:0,content:'Memory Beta'},cookie)).status,200);
