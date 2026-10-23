@@ -1,5 +1,6 @@
 "use client";
 import PortfolioOverview from "./portfolio-overview";
+import {useWorkspaceTheme} from "@/lib/use-workspace-theme";
 import {requestedProjectId} from "@/lib/project-selection";
 import {activityDetails} from "@/lib/activity-details.mjs";
 import {groupTasksByDue} from "@/lib/task-groups.mjs";
@@ -33,7 +34,7 @@ export default function Home() {
   const router=useRouter();
   const [section,setSection]=useState("Dashboard");
   const [activeProjectId,setActiveProjectId]=useState<number|null>(null);
-  useEffect(()=>{const selected=new URLSearchParams(window.location.search).get('section');if(selected&&['Dashboard','Proyectos','Fases','Tareas','Documentación','Actividad'].includes(selected))setSection(selected);},[]);
+  useEffect(()=>{const selected=new URLSearchParams(window.location.search).get('section');if(selected&&['Dashboard','Proyectos','Fases','Tareas','Documentación','Actividad'].includes(selected))queueMicrotask(()=>setSection(selected));},[]);
   const [activity,setActivity]=useState<{id:number;action:string;entity_type:string;entity_id:number|null;metadata:unknown;created_at:string}[]>([]);
   const [activityPage,setActivityPage]=useState(1);
   const [activityAction,setActivityAction]=useState("all");
@@ -101,7 +102,7 @@ export default function Home() {
   const [updatingTaskIds,setUpdatingTaskIds]=useState<number[]>([]);
   const savingTaskIdsRef=useRef(new Set<number>());
   const [selectedDoc,setSelectedDoc]=useState(0);
-  const [dark,setDark]=useState(false);
+  const {dark,toggleTheme}=useWorkspaceTheme();
   const [mobile,setMobile]=useState(false);
   const [accountOpen,setAccountOpen]=useState(false);
   async function loadProjects(){const r=await fetch("/api/projects");if(!r.ok)throw new Error();const data=await r.json();setProjects(data.projects||[]);}
@@ -168,7 +169,7 @@ export default function Home() {
       <div className="side-bottom"><a className="sidebar-guide-link" href="/guia-proyecto">📄 Memoria del proyecto · Ver y editar</a><span className="status-dot"/> Entorno de planificación <small>Geocontrol · v0.1</small></div>
     </aside>
     <main className="main">
-      <header className="topbar"><div className="crumb"><button className="mobile-toggle" onClick={()=>setMobile(!mobile)}><Menu size={23}/></button>Workspace <span>/</span> <b>{section}</b></div><div className="top-actions"><span className="top-status"><i/> {activeProjectId?"Proyecto activo":"Vista general"}</span><button className="theme-button" onClick={()=>setDark(!dark)} aria-label="Cambiar tema">{dark?<Sun size={19}/>:<Moon size={19}/>}</button><div className="account-control"><button className="theme-button" onClick={()=>setAccountOpen(!accountOpen)} aria-label="Opciones de cuenta" aria-expanded={accountOpen}><UserRound size={17}/><span>Cuenta</span></button>{accountOpen&&<div className="account-menu"><button onClick={()=>{setAccountOpen(false);router.push("/change-password")}}><KeyRound size={17}/> Cambiar contraseña</button><button onClick={signOut}><LogOut size={17}/> Cerrar sesión</button></div>}</div><span className="avatar">GC</span></div></header>
+      <header className="topbar"><div className="crumb"><button className="mobile-toggle" aria-label="Abrir menú" aria-expanded={mobile} onClick={()=>setMobile(!mobile)}><Menu size={23}/></button>Workspace <span>/</span> <b>{section}</b></div><div className="top-actions"><span className="top-status"><i/> {activeProjectId?"Proyecto activo":"Vista general"}</span><button className="theme-button" onClick={toggleTheme} aria-label="Cambiar tema">{dark?<Sun size={19}/>:<Moon size={19}/>}</button><div className="account-control"><button className="theme-button" onClick={()=>setAccountOpen(!accountOpen)} aria-label="Opciones de cuenta" aria-expanded={accountOpen}><UserRound size={17}/><span>Cuenta</span></button>{accountOpen&&<div className="account-menu"><button onClick={()=>{setAccountOpen(false);router.push("/change-password")}}><KeyRound size={17}/> Cambiar contraseña</button><button onClick={signOut}><LogOut size={17}/> Cerrar sesión</button></div>}</div><span className="avatar">GC</span></div></header>
       <div className="content">
         <div className="heading"><div><div className="eyebrow">GEOCONTROL / PROJECT MANAGEMENT</div><h1>{section==="Dashboard"?"Centro de control":section}</h1><p>{section==="Dashboard"?"Una visión clara de cada decisión, fase y avance del proyecto.":`Gestión y seguimiento de ${activeProject?.title||"tus proyectos"}.`}</p></div><span className="date-label">● {activeProjectId===null?"VISTA GENERAL":activeProject?.status==="active"?"EN CURSO":activeProject?.status==="paused"?"PAUSADO":activeProject?.status==="completed"?"COMPLETADO":"EN PLANIFICACIÓN"}</span></div>
         {['Dashboard','Fases','Tareas','Documentación','Actividad'].includes(section)&&<div className="portfolio-selector"><label htmlFor="portfolio-project">Proyecto</label><select id="portfolio-project" value={activeProjectId??''} onChange={e=>{setActiveProjectId(e.target.value?Number(e.target.value):null);setTaskMenu(null);setTaskPhaseFilter(null);}}><option value="">Todos los proyectos · Vista general</option>{projects.map(p=><option key={p.id} value={p.id}>{p.title}</option>)}</select></div>}
