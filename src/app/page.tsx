@@ -91,6 +91,7 @@ export default function Home() {
   const [deletingTask,setDeletingTask]=useState<number|null>(null);
   const [taskError,setTaskError]=useState("");
   const [taskSavedNotice,setTaskSavedNotice]=useState("");
+  useEffect(()=>{if(!taskSavedNotice)return;const timer=window.setTimeout(()=>setTaskSavedNotice(""),5000);return ()=>window.clearTimeout(timer);},[taskSavedNotice]);
   const [draft,setDraft]=useState("");
   const [savingTask,setSavingTask]=useState(false);
   const [taskCreatedNotice,setTaskCreatedNotice]=useState("");
