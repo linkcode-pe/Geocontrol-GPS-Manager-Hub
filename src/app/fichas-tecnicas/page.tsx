@@ -1,6 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import Link from 'next/link';
+import SystemFeedback from '../system-feedback';
 import {initialProjectId} from '@/lib/project-selection';
 type Project={id:number;title:string};
 type Version={revision:number;created_at:string};
@@ -21,7 +22,7 @@ export default function TechnicalSheetsPage(){
  function selectProject(id:number){if(dirty&&!window.confirm('¿Descartar los cambios sin guardar?'))return;setProjectId(id);setSheet(null);setContent('');setVersions([]);setPreview(null);setCanEdit(false);setError('');setNotice('')}
  return <main className="project-guide"><div className="project-guide-top"><div><span className="project-guide-kicker">GEOCONTROL PROJECT HUB</span><h1>Fichas técnicas por proyecto</h1><p>Información técnica editable, historial y recuperación de versiones. No introduzcas contraseñas, tokens ni claves privadas.</p></div><Link href={"/expedientes?projectId="+projectId}>Volver al panel</Link></div>
  <div className="project-guide-toolbar"><label>Proyecto <select aria-label="Proyecto de ficha técnica" value={projectId} onChange={e=>selectProject(Number(e.target.value))}>{projects.map(p=><option key={p.id} value={p.id}>{p.title}</option>)}</select></label></div>
- {error&&<p role="alert" className="project-guide-error">{error}</p>}{notice&&<p role="status" className="project-guide-success">{notice}</p>}
+ {error&&<SystemFeedback kind="error">{error}</SystemFeedback>}{notice&&<SystemFeedback kind="success">{notice}</SystemFeedback>}
  {projectId>0&&<section aria-label="Ficha técnica"><h2>Ficha técnica {sheet?'· revisión '+sheet.revision:'· sin crear'}</h2><p>Registra lenguajes, frameworks, repositorios y ramas, servidores, bases de datos, entornos, despliegues, pruebas y recuperación. Utiliza referencias seguras para las credenciales.</p><label>Contenido técnico <textarea aria-label="Contenido técnico" rows={18} value={content} readOnly={!canEdit} onChange={e=>setContent(e.target.value)} placeholder="Lenguajes, frameworks, repositorios, infraestructura, despliegues y recuperación…"/></label>{canEdit&&<div className="project-guide-buttons"><button disabled={busy||!dirty} onClick={()=>void save()}>{busy?'Procesando…':'Guardar nueva revisión'}</button></div>}</section>}
  {projectId>0&&<section aria-label="Historial de ficha técnica"><h2>Historial de versiones</h2>{versions.length===0&&<p>Esta ficha todavía no tiene versiones guardadas.</p>}<div className="project-guide-buttons">{versions.map(v=><button key={v.revision} disabled={busy} onClick={()=>void showVersion(v.revision)}>v{v.revision} · {new Date(v.created_at).toLocaleString('es-PE')}</button>)}</div>{preview&&<div><h3>Versión {preview.revision}</h3><textarea aria-label="Vista previa histórica" readOnly rows={12} value={preview.content}/>{canEdit&&sheet&&<button disabled={busy||dirty||preview.revision===sheet.revision} onClick={()=>void restore()}>Recuperar como nueva revisión</button>}</div>}</section>}
  </main>;
