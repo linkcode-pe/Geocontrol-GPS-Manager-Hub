@@ -50,3 +50,9 @@ Commit `6031541` en `feat/mysql-auth`: corregido error `react-hooks/set-state-in
 - El árbol de código de desarrollo se sincronizó mediante rsync al workspace independiente `/opt/geocontrol-hub-build-workspace`, excluyendo `.next`, `node_modules`, secretos de producción y `.git`; `npm run build` finalizó con `BUILD_EXIT:0` en ese workspace.
 - Servicio público intacto: `geocontrol-hub` activo, 0 reinicios, trabajando desde `phase6-expedientes-metrics-7af386e`.
 - Pendientes: revisión visual autenticada en móvil/escritorio, diseño de confirmaciones accesibles sin debilitar borrados irreversibles, eventual consolidación del shell; no desplegar sin autorización.
+
+## Publicación autorizada de la etapa 1 (23/10/2026)
+- Commit `9fb220c` desplegado tras aprobación explícita, build aislada y respaldo MySQL validado.
+- Release activa `/opt/geocontrol-hub-releases/stage1-ux-9fb220c`; smoke HTTP 200/307/401 según autenticación; servicio activo, 0 reinicios.
+- Memoria principal MySQL actualizada de revisión 154 a 155 conservando el contenido anterior y creando historial; GitHub es copia auxiliar.
+- Pendiente revisión visual autenticada móvil/escritorio y corrección del límite de longitud de la API de memoria.
