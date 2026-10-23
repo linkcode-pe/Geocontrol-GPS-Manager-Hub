@@ -44,3 +44,9 @@ Commit `6031541` en `feat/mysql-auth`: corregido error `react-hooks/set-state-in
 - `6b5c047`: menú de ocho secciones centralizado en `src/lib/workspace-navigation.ts` y consumido desde Dashboard y ProjectWorkspace. TypeScript PASS; lint 0 errores/11 warnings; 54 pruebas PASS/18 SKIP/0 FAIL.
 - `621d6aa`: componente accesible `SystemFeedback` para error/éxito/carga, incorporado a Documentos, Fichas técnicas, Memorias y Continuidad. No altera las confirmaciones destructivas ni la lógica de guardado. TypeScript PASS; lint 0 errores/11 warnings; 54 pruebas PASS/18 SKIP/0 FAIL.
 - Pendiente de Etapa 1: consolidación física del shell, unificación del resto de alertas y confirmaciones, E2E visual con sesión en móvil/escritorio, build aislado y autorización explícita antes de producción. Memoria principal MySQL no editada aún; conservar revisión 154 como fuente prioritaria.
+
+## Verificación de Etapa 1 — compilación aislada
+- `072ee7f`: `SystemFeedback` ampliado a Memoria del proyecto, historial, Expedientes y Portafolio. TypeScript PASS; ESLint 0 errores/11 warnings; 54 pruebas PASS, 18 SKIP, 0 FAIL.
+- El árbol de código de desarrollo se sincronizó mediante rsync al workspace independiente `/opt/geocontrol-hub-build-workspace`, excluyendo `.next`, `node_modules`, secretos de producción y `.git`; `npm run build` finalizó con `BUILD_EXIT:0` en ese workspace.
+- Servicio público intacto: `geocontrol-hub` activo, 0 reinicios, trabajando desde `phase6-expedientes-metrics-7af386e`.
+- Pendientes: revisión visual autenticada en móvil/escritorio, diseño de confirmaciones accesibles sin debilitar borrados irreversibles, eventual consolidación del shell; no desplegar sin autorización.
