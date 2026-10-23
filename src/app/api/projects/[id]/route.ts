@@ -43,10 +43,22 @@ export async function DELETE(req:Request,{params}:{params:Promise<{id:string}>})
   if(!projects.length){await conn.rollback();return NextResponse.json({error:"Proyecto no encontrado"},{status:404});}
   if(confirmation!==projects[0].title){await conn.rollback();return NextResponse.json({error:"El nombre de confirmación no coincide"},{status:400});}
   // Include version/history tables, even those without a direct foreign key.
-  const dependencies=["hub_phases","hub_tasks","hub_documents","hub_project_continuity","hub_project_memories","hub_project_memory_versions","hub_project_technical_sheets","hub_project_technical_sheet_versions"];
-  for(const table of dependencies){
-   const [rows]=await conn.execute<import("mysql2").RowDataPacket[]>(`SELECT 1 FROM ${table} WHERE project_id=? LIMIT 1`,[id]);
-   if(rows.length){await conn.rollback();return NextResponse.json({error:"No se puede eliminar: el proyecto contiene fases, tareas, documentos, memorias o historial. Solo se permiten proyectos completamente vacíos."},{status:409});}
+  const dependencies=[
+   ["hub_phases","fases"],["hub_tasks","tareas"],["hub_documents","documentos"],
+   ["hub_project_continuity","registros de continuidad"],["hub_project_memories","memorias"],
+   ["hub_project_memory_versions","versiones de memorias"],
+   ["hub_project_technical_sheets","fichas técnicas"],
+   ["hub_project_technical_sheet_versions","versiones de fichas técnicas"]
+  ] as const;
+  const blockers:string[]=[];
+  for(const [table,label] of dependencies){
+   const [rows]=await conn.execute<import("mysql2").RowDataPacket[]>(`SELECT COUNT(*) AS total FROM ${table} WHERE project_id=?`,[id]);
+   const total=Number(rows[0]?.total||0);
+   if(total)blockers.push(`${total} ${label}`);
+  }
+  if(blockers.length){
+   await conn.rollback();
+   return NextResponse.json({error:`No se puede eliminar este proyecto porque conserva: ${blockers.join(", ")}. Revisa esa información antes de intentar eliminarlo.`,blockers},{status:409});
   }
   const [result]=await conn.execute<ResultSetHeader>("DELETE FROM hub_projects WHERE id=?",[id]);
   if(result.affectedRows!==1)throw new Error("No se pudo eliminar el proyecto");
