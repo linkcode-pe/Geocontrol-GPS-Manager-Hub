@@ -166,7 +166,7 @@ export default function Home() {
     <aside className={`sidebar ${mobile?"mobile-open":""}`}>
       <div className="brand"><span className="brand-icon">G</span><span><strong>GEOCONTROL</strong><small>PROJECT HUB</small></span><button className="sidebar-close" aria-label="Cerrar menú" onClick={()=>setMobile(false)}><X size={20}/></button></div>
       <div className="side-label">WORKSPACE</div>
-      <nav>{workspaceNavigation.map(({name:item,icon:Icon})=><button key={item} onClick={()=>navigateTo(item)} className={section===item?"active":""}><span className="nav-icon"><Icon size={18} strokeWidth={1.9}/></span>{item}{item==="Tareas"&&<em>{activeProjectId===null?totalTasks-totalDone:tasks.filter(t=>!t.done).length}</em>}</button>)}</nav>
+      <nav>{workspaceNavigation.map(({name:item,icon:Icon})=><button key={item} onClick={()=>navigateTo(item)} aria-current={section===item?"page":undefined} className={section===item?"active":""}><span className="nav-icon"><Icon size={18} strokeWidth={1.9}/></span>{item}{item==="Tareas"&&<em>{activeProjectId===null?totalTasks-totalDone:tasks.filter(t=>!t.done).length}</em>}</button>)}</nav>
       <div className="side-bottom"><a className="sidebar-guide-link" href="/guia-proyecto">📄 Memoria del proyecto · Ver y editar</a><span className="status-dot"/> Entorno de planificación <small>Geocontrol · v0.1</small></div>
     </aside>
     <main className="main">
