@@ -308,6 +308,12 @@ try{
   assert.equal(await readerPage.evaluate(()=>[...document.querySelectorAll('button')].some(b=>b.innerText.includes('Guardar nueva revisión'))),false);
   await page.goto(base+'/expedientes',{waitUntil:'networkidle2',timeout:30000});
   await page.waitForSelector('.portfolio-overview',{timeout:15000});
+  await page.waitForFunction(()=>document.querySelector('.portfolio-overview')?.innerText.includes('Fichas técnicas'),{timeout:15000});
+  const expedienteOverview=await page.$eval('.portfolio-overview',el=>el.innerText);
+  assert(expedienteOverview.includes('Memorias de proyecto')&&expedienteOverview.includes('Registros de continuidad'),'Expediente metrics missing');
+  const expedienteApi=await api('GET','/api/portfolio-summary',undefined,cookie);
+  assert.equal(expedienteApi.status,200);
+  assert(expedienteApi.result.projects.every(p=>Number.isInteger(Number(p.technicalSheets))&&Number.isInteger(Number(p.memories))),'Expediente counts missing');
   assert.equal(await page.$eval('select[aria-label="Proyecto del expediente"]',el=>el.value),'0');
   await page.select('select[aria-label="Proyecto del expediente"]',String(projectB.insertId));
   await page.waitForFunction(()=>document.body.innerText.includes('Expediente del proyecto'),{timeout:15000});
