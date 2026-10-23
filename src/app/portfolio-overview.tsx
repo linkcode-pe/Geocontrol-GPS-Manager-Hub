@@ -1,5 +1,6 @@
 'use client';
 import {useEffect,useState} from 'react';
+import SystemFeedback from './system-feedback';
 type Summary={id:number;title:string;status:string;phases:number;phasesCompleted:number;tasks:number;tasksCompleted:number;tasksInProgress:number;tasksBlocked:number;documents:number;technicalSheets:number;memories:number;continuity:number;continuityDone:number;activities:number};
 export default function PortfolioOverview({section,onSelect}:{section:string;onSelect:(id:number)=>void}){
  const [rows,setRows]=useState<Summary[]>([]),[error,setError]=useState(''),[loading,setLoading]=useState(true);
@@ -10,7 +11,7 @@ export default function PortfolioOverview({section,onSelect}:{section:string;onS
  const compareByProject=['Expedientes'].includes(section);const value=(p:Summary)=>compareByProject?1:Number(p[metric]);const total=compareByProject?rows.length:sum(metric);
  return <section className="panel portfolio-overview" aria-label={`Resumen general de ${section}`}>
   <div className="panel-head"><div><h2>{section==='Dashboard'?'Portafolio general':`Panel general de ${section.toLowerCase()}`}</h2><p>Todos los proyectos · selecciona uno para ver y administrar sus detalles.</p></div></div>
-  {loading?<p>Cargando indicadores…</p>:error?<p role="alert">{error}</p>:<>
+  {loading?<SystemFeedback kind="loading">Cargando indicadores…</SystemFeedback>:error?<p role="alert">{error}</p>:<>
    <div className="portfolio-kpis">
     <div><span>Proyectos</span><strong>{rows.length}</strong></div>
     <div><span>Fases</span><strong>{phases}</strong></div>
