@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { currentUser } from '@/lib/auth';
 import { isAllowedOrigin } from '@/lib/origin';
 import { db } from '@/lib/db';
+import {validProjectGuideContent} from '@/lib/project-guide-validation';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 type GuideRow=RowDataPacket & {content:string;revision:number;updated_at:Date;updated_by:number|null};
@@ -16,7 +17,7 @@ export async function PUT(req:Request){
  if(!['owner','admin'].includes(user.role))return NextResponse.json({error:'Sin permisos'},{status:403});
  if(!isAllowedOrigin(req))return NextResponse.json({error:'Origen no autorizado'},{status:403});
  let body;try{body=await req.json();}catch{return NextResponse.json({error:'Datos inválidos'},{status:400});}
- if(typeof body?.content!=='string'||body.content.trim().length<20||body.content.length>100000||!Number.isSafeInteger(body.revision)||body.revision<1)return NextResponse.json({error:'Contenido o versión inválida'},{status:400});
+ if(!validProjectGuideContent(body?.content)||!Number.isSafeInteger(body.revision)||body.revision<1)return NextResponse.json({error:'Contenido o versión inválida'},{status:400});
  const conn=await db().getConnection();
  try{
   await conn.beginTransaction();
