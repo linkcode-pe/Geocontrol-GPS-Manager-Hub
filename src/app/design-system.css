@@ -460,7 +460,3 @@
 .shell .roadmap-task-link:hover{text-decoration:underline}
 .shell .roadmap-task-link:focus-visible{outline:2px solid #1686d7;outline-offset:2px;border-radius:4px}
 .shell.dark .roadmap-task-link{color:#6ac0ff}
-
-.task-save-notice{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.task-save-notice button{border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:2px;white-space:nowrap;padding:4px}
-.task-save-notice button:focus-visible{outline:2px solid currentColor;outline-offset:2px;border-radius:4px}
