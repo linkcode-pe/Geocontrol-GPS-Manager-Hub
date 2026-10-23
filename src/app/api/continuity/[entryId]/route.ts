@@ -34,3 +34,29 @@ export async function PATCH(req:Request,{params}:{params:Promise<{entryId:string
   await conn.commit();return NextResponse.json({ok:true,revision:row.revision+1});
  }catch(e){try{await conn.rollback()}catch{}throw e}finally{conn.release()}
 }
+
+// Administrators may explicitly remove an obsolete continuity entry.
+// Its revision history is removed by the database FK cascade, after confirmation.
+export async function DELETE(req:Request,{params}:{params:Promise<{entryId:string}>}){
+ const user=await currentUser();if(!user)return err('No autorizado',401);
+ if(!['owner','admin'].includes(user.role))return err('Solo un administrador puede eliminar registros',403);
+ if(!isAllowedOrigin(req))return err('Origen no autorizado',403);
+ const {entryId}=await params;
+ if(!/^[1-9]\d*$/.test(entryId)||!Number.isSafeInteger(Number(entryId)))return err('ID inválido',400);
+ let body:unknown;try{body=await req.json()}catch{return err('Confirmación inválida',400)}
+ const input=body&&typeof body==='object'?body as Record<string,unknown>:{};
+ if(typeof input.confirmTitle!=='string'||!Number.isSafeInteger(input.revision)||Number(input.revision)<1)return err('Confirmación inválida',400);
+ const conn=await db().getConnection();
+ try{
+  await conn.beginTransaction();
+  const [rows]=await conn.execute<Entry[]>('SELECT id,project_id,kind,title,revision FROM hub_project_continuity WHERE id=? FOR UPDATE',[entryId]);
+  if(!rows.length){await conn.rollback();return err('Registro inexistente',404)}
+  const entry=rows[0];
+  if(input.confirmTitle!==entry.title){await conn.rollback();return err('El título de confirmación no coincide',400)}
+  if(input.revision!==entry.revision){await conn.rollback();return err('El registro cambió. Actualiza antes de eliminar.',409)}
+  const [result]=await conn.execute<ResultSetHeader>('DELETE FROM hub_project_continuity WHERE id=? AND revision=?',[entry.id,entry.revision]);
+  if(result.affectedRows!==1){await conn.rollback();return err('Conflicto al eliminar',409)}
+  await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'delete','project_continuity',?,JSON_OBJECT('projectId',?,'kind',?,'title',?,'revision',?))",[user.id,entry.id,entry.project_id,entry.kind,entry.title,entry.revision]);
+  await conn.commit();return NextResponse.json({ok:true});
+ }catch(e){try{await conn.rollback()}catch{}throw e}finally{conn.release()}
+}

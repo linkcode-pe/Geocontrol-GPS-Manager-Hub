@@ -12,7 +12,7 @@ export async function GET(req:Request,{params}:{params:Promise<{id:string}>}){
  const {id}=await params;if(!/^[1-9]\d*$/.test(id)||!validId(Number(id)))return err('Proyecto inválido',400);
  const [projects]=await db().execute<RowDataPacket[]>('SELECT id FROM hub_projects WHERE id=?',[id]);if(!projects.length)return err('Proyecto inexistente',404);
  const [entries]=await db().execute<RowDataPacket[]>("SELECT id,kind,title,details,status,due_date,revision,created_at,updated_at FROM hub_project_continuity WHERE project_id=? ORDER BY CASE WHEN status='open' THEN 0 ELSE 1 END, id DESC LIMIT 300",[id]);
- return NextResponse.json({entries,canEdit:canWrite(user.role)});
+ return NextResponse.json({entries,canEdit:canWrite(user.role),canDelete:['owner','admin'].includes(user.role)});
 }
 export async function POST(req:Request,{params}:{params:Promise<{id:string}>}){
  const user=await currentUser();if(!user)return err('No autorizado',401);
