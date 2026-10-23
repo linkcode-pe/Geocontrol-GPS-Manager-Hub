@@ -1,6 +1,7 @@
 "use client";
 import PortfolioOverview from "./portfolio-overview";
 import {useWorkspaceTheme} from "@/lib/use-workspace-theme";
+import {workspaceNavigation} from "@/lib/workspace-navigation";
 import {requestedProjectId} from "@/lib/project-selection";
 import {activityDetails} from "@/lib/activity-details.mjs";
 import {groupTasksByDue} from "@/lib/task-groups.mjs";
@@ -9,7 +10,7 @@ import {weeklyPlan,filterWeeklyTasks} from "@/lib/weekly-plan.mjs";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {filterSortTasks,taskDueState,taskAlertSummary,dashboardNextTasks} from "@/lib/task-filters.mjs";
-import { LayoutDashboard, FolderKanban, Workflow, ListTodo, FileText, Activity, Menu, Moon, Sun, UserRound, Building2, Layers3, ListChecks, TrendingUp, Plus, X, Settings, LogOut, KeyRound } from "lucide-react";
+import { FileText, Menu, Moon, Sun, UserRound, Building2, Layers3, ListChecks, TrendingUp, Plus, X, Settings, LogOut, KeyRound } from "lucide-react";
 
 type Task = { id: number; title: string; phase: number; done: boolean; status: string; priority: string; dueDate: string|null; dependsOnTaskId: number|null };
 const taskPriorityLabels:Record<string,string>={low:"Baja",normal:"Normal",high:"Alta",urgent:"Urgente"};
@@ -29,7 +30,7 @@ const docs = [
   { name: "Flujo de trabajo", type: "Operaciones", text: "ChatGPT → Codex → GitHub → Desktop Commander remoto → Producción. Todo cambio debe revisarse y probarse antes del despliegue." },
   { name: "Fases del proyecto", type: "Planificación", text: phases.map((p,i)=>`${i+1}. ${p.title}: ${p.detail}`).join("\n") },
 ];
-const icons = { Dashboard:LayoutDashboard, Proyectos:FolderKanban, Fases:Workflow, Tareas:ListTodo, Documentación:FileText, Actividad:Activity, Expedientes:FolderKanban, Continuidad:ListChecks };
+
 export default function Home() {
   const router=useRouter();
   const [section,setSection]=useState("Dashboard");
@@ -157,15 +158,15 @@ export default function Home() {
 
   async function saveTask(task:Task){const title=editTitle.trim();if(!title||title.length>255||updatingTaskIds.includes(task.id)||savingTaskIdsRef.current.has(task.id))return;savingTaskIdsRef.current.add(task.id);setTaskSavedNotice("");const phaseId=Object.prototype.hasOwnProperty.call(pendingPhases,task.id)?pendingPhases[task.id]:task.phase<0?null:phaseOptions[task.phase]?.id??null;setUpdatingTaskIds(ids=>[...ids,task.id]);setTaskError("");try{const r=await fetch(`/api/tasks/${task.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({title,phaseId,status:editStatus,priority:editPriority,dueDate:editDueDate||null,dependsOnTaskId:editDependsOn})});if(!r.ok){throw new Error(taskSaveErrorMessage(r.status));}setTasks(list=>list.map(t=>t.id===task.id?{...t,title,status:editStatus,priority:editPriority,dueDate:editDueDate||null,dependsOnTaskId:editDependsOn,done:editStatus==="done",phase:phaseId===null?-1:phaseOptions.findIndex(p=>p.id===phaseId)}:t));setTaskMenu(null);setTaskSavedNotice(`Cambios guardados: ${title}`);setPendingPhases(p=>{const next={...p};delete next[task.id];return next;});void loadProjects().catch(()=>setProjectError("No se pudieron actualizar los indicadores."));}catch(error){setTaskError(error instanceof Error&&error.message?error.message:taskSaveNetworkErrorMessage());}finally{savingTaskIdsRef.current.delete(task.id);setUpdatingTaskIds(ids=>ids.filter(id=>id!==task.id));}}
   async function deleteTask(task:Task){if(updatingTaskIds.includes(task.id))return;setUpdatingTaskIds(ids=>[...ids,task.id]);setTaskError("");try{const r=await fetch(`/api/tasks/${task.id}`,{method:"DELETE"});if(!r.ok)throw new Error();setTasks(list=>list.filter(t=>t.id!==task.id));setDeletingTask(null);setTaskMenu(null);void loadProjects().catch(()=>setProjectError("No se pudieron actualizar los indicadores."));}catch{setTaskError("No se pudo eliminar la tarea.");}finally{setUpdatingTaskIds(ids=>ids.filter(id=>id!==task.id));}}
-  const navigation=["Dashboard","Proyectos","Fases","Tareas","Documentación","Actividad","Expedientes","Continuidad"];
+
   function openPhaseTasks(phaseId:number){setPhaseTasksOrigin(section==="Dashboard"?"Dashboard":"Fases");setTaskPhaseFilter(phaseId);setDraftPhase(phaseId);setWeeklyFocus("");setTaskSearch("");setTaskPriorityFilter("all");setTaskDueFilter("all");setTaskMenu(null);setSection("Tareas");}
   function navigateTo(item:string){if(item!==section&&!confirmLeavingTaskEditor())return;if(item==="Expedientes"||item==="Continuidad"){router.push(`/${item==="Expedientes"?"expedientes":"continuidad"}${activeProjectId?`?projectId=${activeProjectId}`:""}`);setMobile(false);return;}setSection(item);setMobile(false);setTaskMenu(null);setTaskPhaseFilter(null);setDraftPhase(null);}
   return <div className={`shell ${dark?"dark":""}`}>
     {mobile&&<button className="mobile-backdrop" aria-label="Cerrar menú" onClick={()=>setMobile(false)}/>}
-    <aside className={`sidebar ${mobile?"mobile-open":""}`}> 
+    <aside className={`sidebar ${mobile?"mobile-open":""}`}>
       <div className="brand"><span className="brand-icon">G</span><span><strong>GEOCONTROL</strong><small>PROJECT HUB</small></span><button className="sidebar-close" aria-label="Cerrar menú" onClick={()=>setMobile(false)}><X size={20}/></button></div>
       <div className="side-label">WORKSPACE</div>
-      <nav>{navigation.map(item=><button key={item} onClick={()=>navigateTo(item)} className={section===item?"active":""}><span className="nav-icon">{(() => { const Icon=icons[item as keyof typeof icons];return <Icon size={18} strokeWidth={1.9}/>; })()}</span>{item}{item==="Tareas"&&<em>{activeProjectId===null?totalTasks-totalDone:tasks.filter(t=>!t.done).length}</em>}</button>)}</nav>
+      <nav>{workspaceNavigation.map(({name:item,icon:Icon})=><button key={item} onClick={()=>navigateTo(item)} className={section===item?"active":""}><span className="nav-icon"><Icon size={18} strokeWidth={1.9}/></span>{item}{item==="Tareas"&&<em>{activeProjectId===null?totalTasks-totalDone:tasks.filter(t=>!t.done).length}</em>}</button>)}</nav>
       <div className="side-bottom"><a className="sidebar-guide-link" href="/guia-proyecto">📄 Memoria del proyecto · Ver y editar</a><span className="status-dot"/> Entorno de planificación <small>Geocontrol · v0.1</small></div>
     </aside>
     <main className="main">
