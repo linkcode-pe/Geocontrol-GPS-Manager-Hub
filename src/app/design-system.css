@@ -494,3 +494,15 @@
     text-align:center;
   }
 }
+
+/* Los avisos flotantes necesitan fondos opacos para no mezclar el texto con la barra superior. */
+.task-save-notice{
+  background:#e9f8ee!important;
+  color:#14532d!important;
+  border:1px solid #86cba0!important;
+}
+.task-editor-error{
+  background:#fff1f2!important;
+  color:#9f1239!important;
+  border:1px solid #fecdd3!important;
+}
