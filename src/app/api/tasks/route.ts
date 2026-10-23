@@ -11,7 +11,7 @@ export async function GET(req:Request){
  const pagination=taskPagination(url.searchParams.get("page"),url.searchParams.get("limit"));
  if(!pagination)return NextResponse.json({error:"Paginación inválida"},{status:400});
  if(!Number.isSafeInteger(projectId)||projectId<1)return NextResponse.json({error:"Proyecto inválido"},{status:400});
- const [rows]=await db().execute<RowDataPacket[]>(`SELECT id,title,status,phase_id,priority,DATE_FORMAT(due_date,'%Y-%m-%d') AS due_date FROM hub_tasks WHERE project_id=? ORDER BY id DESC LIMIT ${pagination.limit} OFFSET ${pagination.offset}`,[projectId]);
+ const [rows]=await db().execute<RowDataPacket[]>(`SELECT id,title,status,phase_id,depends_on_task_id,priority,DATE_FORMAT(due_date,'%Y-%m-%d') AS due_date FROM hub_tasks WHERE project_id=? ORDER BY id DESC LIMIT ${pagination.limit} OFFSET ${pagination.offset}`,[projectId]);
  const [phaseRows]=await db().execute<RowDataPacket[]>("SELECT id,title FROM hub_phases WHERE project_id=? ORDER BY position,id",[projectId]);
  return NextResponse.json({tasks:rows,phases:phaseRows,page:pagination.page,limit:pagination.limit,hasMore:rows.length===pagination.limit});
 }

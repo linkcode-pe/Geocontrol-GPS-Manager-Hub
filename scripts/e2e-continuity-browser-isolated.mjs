@@ -41,6 +41,9 @@ try{
   await testDb.query(rows[0]['Create Table']);
  }
  await testDb.query('SET FOREIGN_KEY_CHECKS=1');
+ const taskDependencyMigration=fs.readFileSync('/opt/geocontrol-project-hub/database/migrations/20261022_task_dependencies.sql','utf8');
+ const [dependencyColumns]=await testDb.query("SHOW COLUMNS FROM hub_tasks LIKE 'depends_on_task_id'");
+ if(!dependencyColumns.length)await testDb.query(taskDependencyMigration.replace(/^--.*$/gm,'').trim());
  const technicalSql=fs.readFileSync('/opt/geocontrol-project-hub/database/migrations/20261018_technical_sheets.sql','utf8');
  for(const statement of technicalSql.replace(/--[^\n]*/g,'').split(';').map(x=>x.trim()).filter(x=>x.includes('CREATE TABLE')))await testDb.query(statement);
 
@@ -76,6 +79,17 @@ try{
  const list=await api('GET','/api/tasks?projectId='+project.insertId+'&limit=100',undefined,cookie);assert.equal(list.status,200);assert(list.result.tasks.some(t=>t.id===taskId&&t.title===marker));
  const update=await api('PATCH','/api/tasks/'+taskId,{title:marker+'-edited',status:'in_progress'},cookie);assert.equal(update.status,200,JSON.stringify(update.result));
  const reread=await api('GET','/api/tasks?projectId='+project.insertId+'&limit=100',undefined,cookie);assert.equal(reread.status,200);assert(reread.result.tasks.some(t=>t.id===taskId&&t.title===marker+'-edited'&&t.status==='in_progress'));
+ const dependencyTask=await api('POST','/api/tasks',{projectId:project.insertId,title:marker+'-dependent'},cookie);
+ assert.equal(dependencyTask.status,201);
+ const dependentId=dependencyTask.result.result.insertId;
+ const linked=await api('PATCH','/api/tasks/'+dependentId,{dependsOnTaskId:taskId},cookie);
+ assert.equal(linked.status,200,JSON.stringify(linked.result));
+ const linkedRead=await api('GET','/api/tasks?projectId='+project.insertId+'&limit=100',undefined,cookie);
+ assert(linkedRead.result.tasks.some(t=>t.id===dependentId&&t.depends_on_task_id===taskId));
+ assert.equal((await api('PATCH','/api/tasks/'+taskId,{dependsOnTaskId:dependentId},cookie)).status,400,'Cycle must be rejected');
+ assert.equal((await api('PATCH','/api/tasks/'+dependentId,{dependsOnTaskId:dependentId},cookie)).status,400,'Self-dependency must be rejected');
+ assert.equal((await api('PATCH','/api/tasks/'+dependentId,{dependsOnTaskId:null},cookie)).status,200);
+ console.log('PASS: Task dependency create, read, cycle validation and unlink');
  const guide=await api('GET','/api/project-guide',undefined,cookie);assert.equal(guide.status,200);
  const saved=await api('PUT','/api/project-guide',{content:'Isolated guide saved and read successfully '+marker,revision:guide.result.revision},cookie);assert.equal(saved.status,200,JSON.stringify(saved.result));
  const guideRead=await api('GET','/api/project-guide',undefined,cookie);assert.equal(guideRead.result.revision,saved.result.revision);assert(guideRead.result.content.includes(marker));
