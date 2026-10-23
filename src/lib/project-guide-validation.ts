@@ -2,6 +2,11 @@
 export const PROJECT_GUIDE_MAX_CHARACTERS=500_000;
 export const PROJECT_GUIDE_MAX_BYTES=1_000_000;
 
+/** Browser-safe size check for the memory editor. */
+export function projectGuideFitsSize(content:string){
+ return content.length<=PROJECT_GUIDE_MAX_CHARACTERS&&new TextEncoder().encode(content).length<=PROJECT_GUIDE_MAX_BYTES;
+}
+
 /** Reject oversized text before attempting a database transaction. */
 export function validProjectGuideContent(content:unknown):content is string{
  return typeof content==='string'&&content.trim().length>=20&&content.length<=PROJECT_GUIDE_MAX_CHARACTERS&&Buffer.byteLength(content,'utf8')<=PROJECT_GUIDE_MAX_BYTES;
