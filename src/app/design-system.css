@@ -460,3 +460,37 @@
 .shell .roadmap-task-link:hover{text-decoration:underline}
 .shell .roadmap-task-link:focus-visible{outline:2px solid #1686d7;outline-offset:2px;border-radius:4px}
 .shell.dark .roadmap-task-link{color:#6ac0ff}
+
+/* Avisos de acciones: flotantes, siempre visibles sobre la interfaz.
+   Los estados de carga y contadores permanecen en su ubicación normal. */
+:where(.task-save-notice,.project-guide-success,.project-guide-error,.task-editor-error,[role="alert"]){
+  position:fixed!important;
+  top:calc(16px + env(safe-area-inset-top,0px))!important;
+  right:20px!important;
+  left:auto!important;
+  bottom:auto!important;
+  z-index:2147483000!important;
+  width:max-content!important;
+  max-width:min(420px,calc(100vw - 32px))!important;
+  margin:0!important;
+  padding:12px 16px!important;
+  border-radius:10px!important;
+  box-shadow:0 12px 35px rgba(0,0,0,.24)!important;
+  overflow-wrap:anywhere;
+  pointer-events:none;
+}
+:where([role="alert"]:not(.project-guide-error):not(.task-editor-error)){
+  background:#fff1f2;
+  color:#9f1239;
+  border:1px solid #fecdd3;
+}
+@media(max-width:650px){
+  :where(.task-save-notice,.project-guide-success,.project-guide-error,.task-editor-error,[role="alert"]){
+    right:auto!important;
+    left:50%!important;
+    transform:translateX(-50%)!important;
+    width:max-content!important;
+    max-width:calc(100vw - 32px)!important;
+    text-align:center;
+  }
+}
