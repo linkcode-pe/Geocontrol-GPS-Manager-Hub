@@ -39,3 +39,8 @@ No se modificó producción ni datos de negocio durante la auditoría. No se han
 
 ## Avance Etapa 1 — 23/10/2026
 Commit `6031541` en `feat/mysql-auth`: corregido error `react-hooks/set-state-in-effect` en inicialización de sección, eliminado estado sin lectura en Expedientes, creado `useWorkspaceTheme` compartido para conservar la preferencia claro/oscuro entre Dashboard, Expedientes y Continuidad mediante almacenamiento local (con fallback), y añadida semántica accesible al botón de menú móvil. Validación: TypeScript PASS, ESLint 0 errores/11 advertencias (scripts E2E), `npm test` 54 PASS/18 SKIP/0 FAIL, `git diff --check` PASS. Producción sin cambios. Pendiente: E2E visual del tema, unificación del shell de navegación, avisos y confirmaciones; aprobación explícita para desplegar. La memoria principal MySQL sigue en revisión 154 y no fue modificada porque el trabajo de esta etapa aún no se ha publicado.
+
+## Avances posteriores de Etapa 1 — navegación y feedback
+- `6b5c047`: menú de ocho secciones centralizado en `src/lib/workspace-navigation.ts` y consumido desde Dashboard y ProjectWorkspace. TypeScript PASS; lint 0 errores/11 warnings; 54 pruebas PASS/18 SKIP/0 FAIL.
+- `621d6aa`: componente accesible `SystemFeedback` para error/éxito/carga, incorporado a Documentos, Fichas técnicas, Memorias y Continuidad. No altera las confirmaciones destructivas ni la lógica de guardado. TypeScript PASS; lint 0 errores/11 warnings; 54 pruebas PASS/18 SKIP/0 FAIL.
+- Pendiente de Etapa 1: consolidación física del shell, unificación del resto de alertas y confirmaciones, E2E visual con sesión en móvil/escritorio, build aislado y autorización explícita antes de producción. Memoria principal MySQL no editada aún; conservar revisión 154 como fuente prioritaria.
