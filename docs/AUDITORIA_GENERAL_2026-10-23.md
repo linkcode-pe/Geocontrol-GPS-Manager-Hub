@@ -36,3 +36,6 @@ Fecha: 23/10/2026. Alcance: inspección estática de código, rutas, estilos, pe
 
 ## Límites y decisiones
 No se modificó producción ni datos de negocio durante la auditoría. No se han comprobado métricas Lighthouse ni auditoría visual autenticada completa; las recomendaciones estéticas son hipótesis fundadas en estructura/CSS que requieren validación visual. Antes de desplegar mejoras, mantener release aislada, E2E, backup y aprobación del usuario.
+
+## Avance Etapa 1 — 23/10/2026
+Commit `6031541` en `feat/mysql-auth`: corregido error `react-hooks/set-state-in-effect` en inicialización de sección, eliminado estado sin lectura en Expedientes, creado `useWorkspaceTheme` compartido para conservar la preferencia claro/oscuro entre Dashboard, Expedientes y Continuidad mediante almacenamiento local (con fallback), y añadida semántica accesible al botón de menú móvil. Validación: TypeScript PASS, ESLint 0 errores/11 advertencias (scripts E2E), `npm test` 54 PASS/18 SKIP/0 FAIL, `git diff --check` PASS. Producción sin cambios. Pendiente: E2E visual del tema, unificación del shell de navegación, avisos y confirmaciones; aprobación explícita para desplegar. La memoria principal MySQL sigue en revisión 154 y no fue modificada porque el trabajo de esta etapa aún no se ha publicado.
