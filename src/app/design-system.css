@@ -506,3 +506,13 @@
   color:#9f1239!important;
   border:1px solid #fecdd3!important;
 }
+
+/* Situar los avisos por debajo de la barra de navegación, nunca encima de sus controles. */
+:where(.task-save-notice,.project-guide-success,.project-guide-error,.task-editor-error,[role="alert"]){
+  top:calc(75px + 12px)!important;
+}
+@media(max-width:760px){
+  :where(.task-save-notice,.project-guide-success,.project-guide-error,.task-editor-error,[role="alert"]){
+    top:calc(65px + 12px)!important;
+  }
+}
