@@ -554,29 +554,39 @@
 .archived-task-card button:focus-visible{outline:3px solid var(--ui-focus);outline-offset:2px}
 .archived-empty-state{padding:16px;border:1px dashed var(--ui-border);border-radius:var(--ui-radius);background:var(--ui-surface)}
 
-/* Task list table: shared tracks keep every task field aligned. */
-.shell .task-columns-header,.shell .task-due-group>.task-row{display:grid;grid-template-columns:28px minmax(150px,2.1fr) minmax(86px,1fr) minmax(72px,.85fr) minmax(110px,1.15fr) minmax(110px,1.25fr) minmax(145px,1.55fr) 40px;column-gap:8px;align-items:center}
-.shell .task-columns-header{padding:10px 0;border-bottom:1px solid var(--ui-border,#cbd5e1);color:var(--ui-muted,#64748b);font-size:10px;font-weight:750;letter-spacing:.045em;text-transform:uppercase}
+/* Task list remains a shared-column table at every viewport width. */
+.shell .task-table-hint{display:none;margin:6px 0;color:var(--ui-muted,#64748b);font-size:11px}
+.shell .task-list.task-table-scroll{display:block;min-width:0;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+.shell .task-columns-header,.shell .task-due-group>.task-row{display:grid;width:100%;min-width:980px;grid-template-columns:32px minmax(220px,2.4fr) minmax(90px,1fr) minmax(78px,.85fr) minmax(120px,1.15fr) minmax(120px,1.25fr) minmax(190px,1.55fr) 48px;column-gap:10px;align-items:center}
+.shell .task-columns-header{padding:10px 0;border-bottom:2px solid var(--ui-border,#cbd5e1);color:var(--ui-muted,#64748b);font-size:10px;font-weight:750;letter-spacing:.045em;text-transform:uppercase}
 .shell .task-columns-header span{min-width:0;overflow-wrap:anywhere}
-.shell .task-due-group>.task-row{min-width:0;gap:8px;padding:12px 0;cursor:default}
-.shell .task-due-group>.task-row>input[type="checkbox"]{grid-column:1;margin:0;justify-self:center}
+.shell .task-due-group{min-width:980px}
+.shell .task-due-group>.task-row{gap:10px;padding:12px 0;border-bottom:1px solid var(--ui-border,#e2e8f0);border-radius:0;background:transparent;cursor:default}
+.shell .task-due-group>.task-row>input[type="checkbox"]{grid-column:1;grid-row:auto;margin:0;justify-self:center}
 .shell .task-due-group>.task-row>span:not(.task-unified-editor){min-width:0;max-width:100%;margin:0;flex:none;white-space:normal;overflow-wrap:anywhere}
-.shell .task-due-group>.task-row>span[data-label="Nombre"]{grid-column:2;font-weight:600;line-height:1.4}
-.shell .task-due-group>.task-row>.task-status-chip{grid-column:3;justify-self:start}
-.shell .task-due-group>.task-row>.task-priority-label{grid-column:4}
-.shell .task-due-group>.task-row>.task-due-date{grid-column:5}
-.shell .task-due-group>.task-row>.task-phase-label:not(.task-dependency-label){grid-column:6}
-.shell .task-due-group>.task-row>.task-dependency-label{grid-column:7}
-.shell .task-due-group>.task-row>.task-gear{grid-column:8;justify-self:end;margin:0}
+.shell .task-due-group>.task-row>span[data-label="Nombre"]{grid-column:2;grid-row:auto;font-weight:600;line-height:1.4}
+.shell .task-due-group>.task-row>.task-status-chip{grid-column:3;grid-row:auto;justify-self:start}
+.shell .task-due-group>.task-row>.task-priority-label{grid-column:4;grid-row:auto}
+.shell .task-due-group>.task-row>.task-due-date{grid-column:5;grid-row:auto}
+.shell .task-due-group>.task-row>.task-phase-label:not(.task-dependency-label){grid-column:6;grid-row:auto}
+.shell .task-due-group>.task-row>.task-dependency-label{grid-column:7;grid-row:auto}
+.shell .task-due-group>.task-row>.task-gear{grid-column:8;grid-row:auto;justify-self:end;margin:0}
 .shell .task-due-group>.task-row>.task-unified-editor,.shell .task-due-group>.task-row>.task-options,.shell .task-due-group>.task-row>.task-phase-editor{grid-column:1/-1;grid-row:auto;min-width:0;max-width:100%;box-sizing:border-box}
 .shell .task-due-group>.task-row>.task-unified-editor{margin:6px 0 0}
+.shell .task-due-group>h3{min-width:980px}
 @media(max-width:1100px){
- .shell .task-columns-header{display:none}
- .shell .task-due-group>.task-row{grid-template-columns:24px minmax(0,1fr) 44px;gap:7px 10px;align-items:center;padding:13px 12px;margin:9px 0;border:1px solid var(--ui-border,#cbd5e1);border-radius:12px;background:var(--ui-surface,#fff)}
- .shell .task-due-group>.task-row>input[type="checkbox"]{grid-column:1;grid-row:1;justify-self:center;width:19px;height:19px}
- .shell .task-due-group>.task-row>span[data-label="Nombre"]{grid-column:2;grid-row:1;font-size:15px;line-height:1.45;font-weight:650}
- .shell .task-due-group>.task-row>.task-gear{grid-column:3;grid-row:1;width:44px;height:44px;min-width:44px;justify-self:end}
- .shell .task-due-group>.task-row>.task-status-chip,.shell .task-due-group>.task-row>.task-priority-label,.shell .task-due-group>.task-row>.task-due-date,.shell .task-due-group>.task-row>.task-phase-label{grid-column:2/4;grid-row:auto;justify-self:stretch;min-width:0;max-width:100%;font-size:12px;white-space:normal;overflow-wrap:anywhere}
- .shell .task-due-group>.task-row>span[data-label]:not([data-label="Nombre"])::before{content:attr(data-label) ": ";display:inline;font-weight:700;color:var(--ui-muted,#64748b)}
+ .shell .task-table-hint{display:block}
+ .shell .task-columns-header{display:grid}
+ .shell .task-due-group>.task-row{display:grid;grid-template-columns:32px minmax(220px,2.4fr) minmax(90px,1fr) minmax(78px,.85fr) minmax(120px,1.15fr) minmax(120px,1.25fr) minmax(190px,1.55fr) 48px;min-width:980px;width:100%;gap:10px;padding:12px 0;margin:0;border:0;border-bottom:1px solid var(--ui-border,#e2e8f0);border-radius:0;background:transparent}
+ .shell .task-due-group>.task-row>input[type="checkbox"]{grid-column:1;grid-row:auto;width:18px;height:18px}
+ .shell .task-due-group>.task-row>span[data-label="Nombre"]{grid-column:2;grid-row:auto;font-size:12px;line-height:1.4;font-weight:600}
+ .shell .task-due-group>.task-row>.task-status-chip{grid-column:3;grid-row:auto;min-height:28px;padding:4px 7px;font-size:11px;white-space:normal}
+ .shell .task-due-group>.task-row>.task-priority-label{grid-column:4;grid-row:auto;min-height:28px;padding:4px 7px;font-size:11px;white-space:normal}
+ .shell .task-due-group>.task-row>.task-due-date{grid-column:5;grid-row:auto;min-height:28px;padding:4px 7px;font-size:11px;white-space:normal}
+ .shell .task-due-group>.task-row>.task-phase-label:not(.task-dependency-label){grid-column:6;grid-row:auto}
+ .shell .task-due-group>.task-row>.task-dependency-label{grid-column:7;grid-row:auto}
+ .shell .task-due-group>.task-row>.task-phase-label{font-size:11px;white-space:normal}
+ .shell .task-due-group>.task-row>.task-gear{grid-column:8;grid-row:auto;width:40px;height:40px;min-width:40px;justify-self:end}
  .shell .task-due-group>.task-row>.task-unified-editor,.shell .task-due-group>.task-row>.task-options,.shell .task-due-group>.task-row>.task-phase-editor{grid-column:1/-1;grid-row:auto;width:100%}
+ .shell .task-due-group>.task-row>span[data-label]::before{content:none}
 }
