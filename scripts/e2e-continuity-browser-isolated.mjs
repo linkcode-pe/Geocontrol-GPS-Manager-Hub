@@ -228,9 +228,9 @@ try{
   await page.waitForSelector('.task-unified-editor .task-save',{timeout:10000});
   assert.equal(await page.$eval('.task-unified-editor .task-save',button=>button.disabled),true,'Save must be disabled when the task editor has no changes');
   const taskNameSelector='#task-name-'+taskId;
-  await page.click(taskNameSelector);await page.keyboard.press('Control+A');await page.type(taskNameSelector,marker+'-edited temporary');
+  await page.click(taskNameSelector);await page.keyboard.down('Control');await page.keyboard.press('A');await page.keyboard.up('Control');await page.type(taskNameSelector,marker+'-edited temporary');
   assert.equal(await page.$eval('.task-unified-editor .task-save',button=>button.disabled),false,'Save must enable after an actual change');
-  await page.click(taskNameSelector);await page.keyboard.press('Control+A');await page.type(taskNameSelector,marker+'-edited');
+  await page.click(taskNameSelector);await page.keyboard.down('Control');await page.keyboard.press('A');await page.keyboard.up('Control');await page.type(taskNameSelector,marker+'-edited');
   assert.equal(await page.$eval('.task-unified-editor .task-save',button=>button.disabled),true,'Save must disable again when changes are reverted');
   await page.click('.task-unified-editor .task-cancel');
   console.log('PASS: Task editor save button tracks actual unsaved changes');
