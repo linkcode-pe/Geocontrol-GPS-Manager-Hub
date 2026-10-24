@@ -1349,3 +1349,11 @@ Commit 86e0d37 enviado a feat/mysql-auth. Memoria principal MySQL actualizada a 
 ## 188. Sincronización documental y verificación final (24/10/2026)
 
 La copia docs/PROJECT_CONTEXT.md se sincronizó después de actualizar la memoria MySQL revisión 187; commit documental 0694a8c en feat/mysql-auth. El commit de código correspondiente es 86e0d37. Verificación remota final: GitHub apunta a 0694a8c7ff81; el repositorio local está en 0694a8c y solo conserva el directorio scripts/__pycache__/ sin rastrear, preexistente. El servicio geocontrol-hub sigue active/running, NRestarts=0, WorkingDirectory /opt/geocontrol-hub-releases/responsive-nav-11475c2; /login público devuelve HTTP 200. No hubo despliegue ni cambio del release. La nota 187 y sus versiones anteriores permanecen en el historial MySQL.
+
+## 189. E2E de navegador aislado completado (24/10/2026)
+
+Se localizó el runtime Chromium de Puppeteer y se ejecutó scripts/e2e-continuity-browser-isolated.mjs con las bibliotecas portables existentes y Chrome 155; no se instalaron paquetes. La primera ejecución pasó el dashboard desktop/móvil y limpió su esquema, pero detectó un error del arnés: Puppeteer rechazaba Control+A como una sola tecla. Se corrigió con keydown/press/keyup separados y la repetición completa pasó con código 0.
+
+Verificados: botón Guardar deshabilitado sin cambios, habilitado al editar y deshabilitado al revertir; carga de fases demorada sin falso estado vacío; filtros/selector móvil; dependencias; dashboard adaptable sin overflow (1280x900 y 375x812); actividad/CSV; Continuidad; Memorias con historial/restauración y aislamiento A/B; Expediente; documentos con permisos, historial y recuperación no destructiva; login, API y persistencia/reread aislados. Esquema temporal eliminado. Suite general: 59 PASS, 18 SKIP, 0 FAIL; lint 0 errores/11 advertencias; TypeScript y build aislada PASS.
+
+El arnés corregido quedó en 5ed31b2; código de producto 86e0d37; documentación previa d43c8b0; rama feat/mysql-auth. Esta revisión ocurrió antes de publicar; producción seguía en /opt/geocontrol-hub-releases/responsive-nav-11475c2. No se modificaron proyectos reales ni bases Traccar.
