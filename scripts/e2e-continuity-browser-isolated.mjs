@@ -217,6 +217,8 @@ try{
   await page.waitForFunction(()=>location.pathname==='/continuidad'&&new URLSearchParams(location.search).has('projectId'),{timeout:15000});
   assert.equal(new URL(page.url()).searchParams.get('projectId'),String(project.insertId));
   await page.waitForSelector('a[href*="section=Tareas"][href*="projectId="]',{timeout:15000});
+  // Normalize Puppeteer's device emulation before opening task state; switching isMobile later reloads the document.
+  await page.setViewport({width:1280,height:900,isMobile:false,hasTouch:false});
   await page.goto(base+'/continuidad?projectId='+project.insertId,{waitUntil:'networkidle2'});
   await page.waitForSelector('a[href*="section=Tareas"][href*="projectId="]',{timeout:15000});
   await page.evaluate(()=>document.querySelector('a[href*="section=Tareas"][href*="projectId="]')?.click());
@@ -226,6 +228,10 @@ try{
   await page.waitForFunction(name=>document.body.innerText.includes(name),{timeout:15000},marker+'-edited');
   await page.evaluate(title=>[...document.querySelectorAll('.task-row')].find(row=>row.innerText.includes(title))?.querySelector('.task-gear')?.click(),marker+'-edited');
   await page.waitForSelector('.task-unified-editor .task-save',{timeout:10000});
+  const measureEditorSelects=async width=>{await page.setViewport({width,height:900,isMobile:false,hasTouch:false});if(!await page.$('.task-unified-editor')){await page.evaluate(id=>document.querySelector('#task-row-'+id+' .task-gear')?.click(),taskId);await page.waitForSelector('.task-unified-editor',{timeout:10000});}return page.$eval('.task-unified-editor',editor=>{const r=editor.getBoundingClientRect(),s=getComputedStyle(editor),innerLeft=r.left+parseFloat(s.borderLeftWidth)+parseFloat(s.paddingLeft),innerRight=r.right-parseFloat(s.borderRightWidth)-parseFloat(s.paddingRight);return{viewport:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,selects:[...editor.querySelectorAll('select')].map(el=>{const x=el.getBoundingClientRect();return{left:x.left,right:x.right,innerLeft,innerRight}})}})};
+  for(const width of [375,691]){const bounds=await measureEditorSelects(width);assert(bounds.scroll<=bounds.viewport+1,'Task editor causes horizontal page overflow: '+JSON.stringify({width,bounds}));assert(bounds.selects.every(x=>x.left>=x.innerLeft-1&&x.right<=x.innerRight+1),'Task editor select exceeds its content box: '+JSON.stringify({width,bounds}));}
+  await page.setViewport({width:1280,height:900,isMobile:false,hasTouch:false});
+  console.log('PASS: Task editor selects fit mobile widths 375px and 691px without horizontal overflow');
   assert.equal(await page.$eval('.task-unified-editor .task-save',button=>button.disabled),true,'Save must be disabled when the task editor has no changes');
   const taskNameSelector='#task-name-'+taskId;
   await page.click(taskNameSelector);await page.keyboard.down('Control');await page.keyboard.press('A');await page.keyboard.up('Control');await page.type(taskNameSelector,marker+'-edited temporary');
