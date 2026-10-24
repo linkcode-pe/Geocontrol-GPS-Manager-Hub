@@ -1369,3 +1369,7 @@ Siguiente paso: validación del usuario en https://hub.geocontrol.online, secci�
 ## 191. Validación visual móvil del botón Guardar de tareas (24/10/2026)
 
 Tras publicar phase7-task-phase-ux-86e0d37, el usuario compartió una captura móvil del editor de «Revisar resultados y preparar aprobación de lanzamiento». Los campos visibles conservan sus valores originales y «Guardar cambios» aparece deshabilitado; queda confirmada visualmente en producción la condición sin cambios. No se guardó ni modificó la tarea. La activación al editar y desactivación al revertir se verificaron en el E2E aislado de la revisión 189; la captura acredita el estado inicial sin cambios. Release activa: /opt/geocontrol-hub-releases/phase7-task-phase-ux-86e0d37. No se modificaron proyectos ni bases Traccar.
+
+## 192–193. Corrección de formato de las notas recientes de memoria (24/10/2026)
+
+Se detectó que los separadores de las entradas 187–191 en la memoria MySQL se habían guardado como texto literal «\\n», lo que impedía que algunos encabezados se reconocieran como secciones. Se normalizó únicamente el tramo desde la entrada 187 y el separador que la precedía. La revisión 191 y la 192 previas se conservaron en el historial. Verificación actual en MySQL: encabezados 187–193 separados correctamente; las secciones y el texto histórico anterior a 187 no se reemplazaron ni editaron. No hubo cambios de código, datos de proyectos ni release; producción continúa en phase7-task-phase-ux-86e0d37.
