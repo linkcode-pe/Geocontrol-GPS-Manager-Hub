@@ -135,3 +135,14 @@
 .dashboard-next-task strong{font-weight:650}
 .dashboard-next-task small{font-size:11px;color:#64748b;font-weight:500}
 .dark .dashboard-next-task small{color:#a9b7ca}
+
+/* Tablet and narrow desktop: keep navigation reachable without compressing the workspace. */
+@media(max-width:1024px){
+  .sidebar{position:fixed;left:-100%;z-index:101;width:min(300px,84vw);height:100dvh;min-height:0;overflow-y:auto;padding:24px 15px;transition:left .2s}
+  .sidebar.mobile-open{left:0}
+  .sidebar-close{display:inline-flex}
+  .mobile-backdrop{display:block;position:fixed;inset:0;z-index:100;background:rgba(9,20,38,.52);border:0;width:100%;height:100dvh;cursor:pointer}
+  .mobile-toggle{display:inline-flex;align-items:center;justify-content:center;margin-right:4px;padding:5px}
+  .main{min-width:0}
+  .weekly-overview{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
