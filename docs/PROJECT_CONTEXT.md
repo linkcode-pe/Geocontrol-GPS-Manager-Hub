@@ -1373,3 +1373,19 @@ Tras publicar phase7-task-phase-ux-86e0d37, el usuario compartió una captura m�
 ## 192–193. Corrección de formato de las notas recientes de memoria (24/10/2026)
 
 Se detectó que los separadores de las entradas 187–191 en la memoria MySQL se habían guardado como texto literal «\\n», lo que impedía que algunos encabezados se reconocieran como secciones. Se normalizó únicamente el tramo desde la entrada 187 y el separador que la precedía. La revisión 191 y la 192 previas se conservaron en el historial. Verificación actual en MySQL: encabezados 187–193 separados correctamente; las secciones y el texto histórico anterior a 187 no se reemplazaron ni editaron. No hubo cambios de código, datos de proyectos ni release; producción continúa en phase7-task-phase-ux-86e0d37.
+
+## 194. Corrección adaptable de controles del editor de tareas (24/10/2026)
+
+La captura móvil mostraba los selectores del editor de tareas desplazados dentro de la fila agrupada por vencimiento. La regla genérica .task-row select heredaba margen y flex propios de la fila; se añadió una regla específica para .task-due-group > .task-row > .task-unified-editor select que restablece ancho completo, margen 0, flex:none y box-sizing:border-box. Solo cambia CSS; no modifica tareas ni otros datos.
+
+La regresión de navegador comprueba que los selectores queden dentro del contenido del editor y que no exista desbordamiento horizontal a 375 y 691 px. Se normalizó la emulación del dispositivo antes de abrir el editor para que el cambio de viewport no recargue la página. E2E aislado completo: PASS, incluyendo editor, dashboard, continuidad, memorias, documentos, historial, actividad y permisos; esquema temporal eliminado. Suite: 59 PASS, 18 SKIP, 0 FAIL; lint: 0 errores y 11 advertencias existentes; TypeScript, node --check, git diff --check y build Next aislada PASS.
+
+Commit de código 992fb77 enviado a feat/mysql-auth. La compilación se ejecutó en un workspace aislado. La release activa anterior permaneció en /opt/geocontrol-hub-releases/phase7-task-phase-ux-86e0d37 hasta la revisión 195. No se accedió ni modificó bases de Traccar.
+
+## 195. Publicación del ajuste responsive del editor de tareas (24/10/2026)
+
+Se publicó el commit 992fb77 de feat/mysql-auth en la release aislada /opt/geocontrol-hub-releases/task-editor-responsive-992fb77. El build optimizado se generó dentro de esa carpeta candidata, sin compilar ni reemplazar archivos dentro de la release activa anterior. La configuración systemd previa quedó respaldada en /opt/geocontrol/backups/hub/release.conf.pre-task-editor-responsive-992fb77; las releases anteriores se conservan.
+
+Verificación posterior: geocontrol-hub active/running, NRestarts=0 y WorkingDirectory apuntando a task-editor-responsive-992fb77; /login local y público HTTP 200; /api/projects sin sesión HTTP 401; nueve assets CSS/JS de la página pública respondieron 200 y el CSS publicado contiene la regla task-due-group. E2E aislado verificó editor a 375 y 691 px sin overflow; suite 59 PASS, 18 SKIP, 0 FAIL; build Next aislada PASS. No se modificaron datos de proyectos ni bases Traccar.
+
+Antes de actualizar la memoria principal a revisión 195 se generó respaldo exclusivo de geocontrol_hub: /opt/geocontrol/backups/hub/geocontrol-hub-20261024T223500Z.sql.gz (6.492.305 bytes, gzip válido, modo 600). La memoria MySQL conserva las revisiones 193 y 194 en historial; esta documentación es solo una copia de referencia.
