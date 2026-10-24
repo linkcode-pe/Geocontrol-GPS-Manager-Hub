@@ -6,7 +6,7 @@ import type { RowDataPacket, ResultSetHeader } from "mysql2";
 
 export async function GET(){
  const user=await currentUser();if(!user)return NextResponse.json({error:"No autorizado"},{status:401});
- const [projects]=await db().execute<RowDataPacket[]>(`SELECT p.id,p.slug,p.title,p.summary,p.status,COUNT(DISTINCT ph.id) AS phaseCount,COUNT(DISTINCT t.id) AS taskCount,COUNT(DISTINCT CASE WHEN t.status='done' THEN t.id END) AS doneCount FROM hub_projects p LEFT JOIN hub_phases ph ON ph.project_id=p.id LEFT JOIN hub_tasks t ON t.project_id=p.id GROUP BY p.id ORDER BY p.id DESC`);
+ const [projects]=await db().execute<RowDataPacket[]>(`SELECT p.id,p.slug,p.title,p.summary,p.status,COUNT(DISTINCT ph.id) AS phaseCount,COUNT(DISTINCT t.id) AS taskCount,COUNT(DISTINCT CASE WHEN t.status='done' THEN t.id END) AS doneCount FROM hub_projects p LEFT JOIN hub_phases ph ON ph.project_id=p.id LEFT JOIN hub_tasks t ON t.project_id=p.id AND t.archived_at IS NULL GROUP BY p.id ORDER BY p.id DESC`);
  return NextResponse.json({projects});
 }
 export async function POST(req:Request){

@@ -39,6 +39,9 @@ try{
   await testDb.query(rows[0]['Create Table']);
  }
  await testDb.query('SET FOREIGN_KEY_CHECKS=1');
+ const taskArchiveSql=fs.readFileSync('/opt/geocontrol-project-hub/database/migrations/20261024_task_archive_restore.sql','utf8');
+ const [archiveColumn]=await testDb.query("SHOW COLUMNS FROM hub_tasks LIKE 'archived_at'");
+ if(!archiveColumn.length){for(const statement of taskArchiveSql.replace(/--[^\n]*/g,'').split(';').map(x=>x.trim()).filter(Boolean))await testDb.query(statement)}
  await testDb.query('CREATE TABLE hub_project_guide_versions (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,guide_id TINYINT UNSIGNED NOT NULL,revision INT UNSIGNED NOT NULL,content MEDIUMTEXT NOT NULL,updated_by BIGINT UNSIGNED NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uq_guide_revision(guide_id,revision)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
  const email='stage1-'+randomUUID()+'@example.invalid';
  const password=randomBytes(24).toString('hex');

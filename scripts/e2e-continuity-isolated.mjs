@@ -39,6 +39,9 @@ try{
   await testDb.query(rows[0]['Create Table']);
  }
  await testDb.query('SET FOREIGN_KEY_CHECKS=1');
+ const taskArchiveSql=fs.readFileSync('/opt/geocontrol-project-hub/database/migrations/20261024_task_archive_restore.sql','utf8');
+ const [archiveColumn]=await testDb.query("SHOW COLUMNS FROM hub_tasks LIKE 'archived_at'");
+ if(!archiveColumn.length){for(const statement of taskArchiveSql.replace(/--[^\n]*/g,'').split(';').map(x=>x.trim()).filter(Boolean))await testDb.query(statement)}
  const technicalSql=fs.readFileSync('/opt/geocontrol-project-hub/database/migrations/20261018_technical_sheets.sql','utf8');
  for(const statement of technicalSql.replace(/--[^\n]*/g,'').split(';').map(x=>x.trim()).filter(x=>x.includes('CREATE TABLE'))){
   const clean=statement.replace(/^--[^\n]*\n/gm,'').trim();await testDb.query(clean);

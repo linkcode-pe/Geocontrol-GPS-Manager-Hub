@@ -5,7 +5,7 @@ import {useWorkspaceTheme} from '@/lib/use-workspace-theme';
 import {workspaceNavigation} from '@/lib/workspace-navigation';
 import {useRouter} from 'next/navigation';
 import {Menu,X,Moon,Sun,UserRound,KeyRound,LogOut} from 'lucide-react';
-export default function ProjectWorkspace({section,projectId,children,onNavigate}: {section:'Expedientes'|'Continuidad';projectId:number;children:ReactNode;onNavigate?:()=>boolean}){
+export default function ProjectWorkspace({section,projectId,children,onNavigate}: {section:'Expedientes'|'Continuidad'|'Tareas';projectId:number;children:ReactNode;onNavigate?:()=>boolean}){
  const [mobile,setMobile]=useState(false),[account,setAccount]=useState(false);
  const {dark,toggleTheme}=useWorkspaceTheme();
  const router=useRouter();

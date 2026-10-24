@@ -9,6 +9,19 @@ export async function PATCH(req:Request,{params}:{params:Promise<{id:string}>}){
  if(!isAllowedOrigin(req))return NextResponse.json({error:"Origen no autorizado"},{status:403});
  const {id}=await params;if(!/^[1-9][0-9]*$/.test(id))return NextResponse.json({error:"ID inválido"},{status:400});
  let body;try{body=await req.json();}catch{return NextResponse.json({error:"JSON inválido"},{status:400});}
+ if(body?.action==='restore'){
+  const conn=await db().getConnection();
+  try{
+   await conn.beginTransaction();
+   const [rows]=await conn.execute<RowDataPacket[]>("SELECT id,title,archived_at FROM hub_tasks WHERE id=? FOR UPDATE",[id]);
+   if(!rows.length){await conn.rollback();return NextResponse.json({error:"Tarea no encontrada"},{status:404});}
+   if(!rows[0].archived_at){await conn.rollback();return NextResponse.json({error:"La tarea no está archivada"},{status:409});}
+   const [result]=await conn.execute<ResultSetHeader>("UPDATE hub_tasks SET archived_at=NULL,archived_by=NULL WHERE id=? AND archived_at IS NOT NULL",[id]);
+   if(result.affectedRows!==1){await conn.rollback();return NextResponse.json({error:"No se pudo restaurar la tarea"},{status:409});}
+   await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'restore','task',?,JSON_OBJECT('title',?))",[user.id,id,rows[0].title]);
+   await conn.commit();return NextResponse.json({ok:true});
+  }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
+ }
  const hasPriority=body!==null&&typeof body==='object'&&Object.hasOwn(body,'priority');
  if(hasPriority&&!['low','normal','high','urgent'].includes(body.priority))return NextResponse.json({error:'Prioridad inválida'},{status:400});
  const hasDueDate=body!==null&&typeof body==='object'&&Object.hasOwn(body,'dueDate');
@@ -23,13 +36,13 @@ export async function PATCH(req:Request,{params}:{params:Promise<{id:string}>}){
  if(!hasDone&&!hasStatus&&!hasPhase&&!hasTitle&&!hasPriority&&!hasDueDate&&!Object.hasOwn(body??{},"dependsOnTaskId"))return NextResponse.json({error:"Datos inválidos"},{status:400});
  if(hasPhase){
   if(body.phaseId!==null&&(!Number.isSafeInteger(body.phaseId)||body.phaseId<1))return NextResponse.json({error:"Fase inválida"},{status:400});
-  if(body.phaseId!==null){const [valid]=await db().execute<RowDataPacket[]>("SELECT p.id FROM hub_phases p JOIN hub_tasks t ON t.project_id=p.project_id WHERE p.id=? AND t.id=? LIMIT 1",[body.phaseId,id]);if(!valid.length)return NextResponse.json({error:"Fase no pertenece al proyecto"},{status:400});}
+  if(body.phaseId!==null){const [valid]=await db().execute<RowDataPacket[]>("SELECT p.id FROM hub_phases p JOIN hub_tasks t ON t.project_id=p.project_id WHERE p.id=? AND t.id=? AND t.archived_at IS NULL LIMIT 1",[body.phaseId,id]);if(!valid.length)return NextResponse.json({error:"Fase no pertenece al proyecto"},{status:400});}
  }
  const hasDependency=body!==null&&typeof body==='object'&&Object.hasOwn(body,'dependsOnTaskId');
  if(hasDependency&&body.dependsOnTaskId!==null&&(!Number.isSafeInteger(body.dependsOnTaskId)||body.dependsOnTaskId<1))return NextResponse.json({error:"Dependencia inválida"},{status:400});
  if(hasDependency&&body.dependsOnTaskId===Number(id))return NextResponse.json({error:"Una tarea no puede depender de sí misma"},{status:400});
  if(hasDependency&&body.dependsOnTaskId!==null){
-  const [target]=await db().execute<RowDataPacket[]>("SELECT predecessor.project_id FROM hub_tasks predecessor JOIN hub_tasks current ON current.project_id=predecessor.project_id WHERE predecessor.id=? AND current.id=?",[body.dependsOnTaskId,id]);
+  const [target]=await db().execute<RowDataPacket[]>("SELECT predecessor.project_id FROM hub_tasks predecessor JOIN hub_tasks current ON current.project_id=predecessor.project_id WHERE predecessor.id=? AND current.id=? AND predecessor.archived_at IS NULL AND current.archived_at IS NULL",[body.dependsOnTaskId,id]);
   if(!target.length)return NextResponse.json({error:"La dependencia debe pertenecer al mismo proyecto"},{status:400});
   // A single-predecessor chain must never contain a cycle.
   const [chain]=await db().execute<RowDataPacket[]>(`WITH RECURSIVE ancestors AS (
@@ -43,7 +56,7 @@ export async function PATCH(req:Request,{params}:{params:Promise<{id:string}>}){
  const conn=await db().getConnection();
  try{
   await conn.beginTransaction();
-  const [result]=await conn.execute<ResultSetHeader>(`UPDATE hub_tasks SET ${updates.join(", ")} WHERE id=?`,values);
+  const [result]=await conn.execute<ResultSetHeader>(`UPDATE hub_tasks SET ${updates.join(", ")} WHERE id=? AND archived_at IS NULL`,values);
   if(result.affectedRows===0){await conn.rollback();return NextResponse.json({error:"Tarea no encontrada"},{status:404});}
   await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'update','task',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify({...hasTitle?{title:body.title.trim()}: {},...hasDependency?{dependsOnTaskId:body.dependsOnTaskId}:{},...hasPhase?{phaseId:body.phaseId}:{},...hasPriority?{priority:body.priority}:{},...hasDueDate?{dueDate:body.dueDate}:{},...hasStatus?{status:body.status}:hasDone?{done:body.done}:{}})]);
   await conn.commit();
@@ -58,12 +71,15 @@ export async function DELETE(req:Request,{params}:{params:Promise<{id:string}>})
  const conn=await db().getConnection();
  try{
   await conn.beginTransaction();
-  const [existing]=await conn.execute<RowDataPacket[]>("SELECT title FROM hub_tasks WHERE id=? FOR UPDATE",[id]);
+  const [existing]=await conn.execute<RowDataPacket[]>("SELECT title,archived_at FROM hub_tasks WHERE id=? FOR UPDATE",[id]);
   if(!existing.length){await conn.rollback();return NextResponse.json({error:"Tarea no encontrada"},{status:404});}
-  const [result]=await conn.execute<ResultSetHeader>("DELETE FROM hub_tasks WHERE id=?",[id]);
-  if(!result.affectedRows){await conn.rollback();return NextResponse.json({error:"Tarea no encontrada"},{status:404});}
-  await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'delete','task',?,JSON_OBJECT('change',?))",[user.id,id,JSON.stringify({title:existing[0].title})]);
+  if(existing[0].archived_at){await conn.rollback();return NextResponse.json({error:"La tarea ya está archivada"},{status:409});}
+  const [dependents]=await conn.execute<RowDataPacket[]>("SELECT id FROM hub_tasks WHERE depends_on_task_id=? AND id<>? LIMIT 1",[id,id]);
+  if(dependents.length){await conn.rollback();return NextResponse.json({error:"No se puede archivar: otra tarea depende de esta. Cambia primero esa dependencia."},{status:409});}
+  const [result]=await conn.execute<ResultSetHeader>("UPDATE hub_tasks SET archived_at=CURRENT_TIMESTAMP,archived_by=? WHERE id=? AND archived_at IS NULL",[user.id,id]);
+  if(result.affectedRows!==1){await conn.rollback();return NextResponse.json({error:"No se pudo archivar la tarea"},{status:409});}
+  await conn.execute("INSERT INTO hub_audit_log(actor_id,action,entity_type,entity_id,metadata) VALUES(?,'archive','task',?,JSON_OBJECT('title',?))",[user.id,id,existing[0].title]);
   await conn.commit();
  }catch(error){try{await conn.rollback();}catch{}throw error;}finally{conn.release();}
- return NextResponse.json({ok:true});
+ return NextResponse.json({ok:true,archived:true});
 }

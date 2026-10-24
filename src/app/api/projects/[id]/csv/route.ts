@@ -11,7 +11,7 @@ export async function GET(_req:Request,{params}:{params:Promise<{id:string}>}){
  const [projects]=await db().execute<RowDataPacket[]>("SELECT id,title,summary,status FROM hub_projects WHERE id=? LIMIT 1",[id]);
  if(!projects.length)return NextResponse.json({error:"Proyecto inexistente"},{status:404});
  const [phases]=await db().execute<RowDataPacket[]>("SELECT id,title,description,status,position FROM hub_phases WHERE project_id=? ORDER BY position,id",[id]);
- const [tasks]=await db().execute<RowDataPacket[]>("SELECT id,title,status,phase_id FROM hub_tasks WHERE project_id=? ORDER BY id",[id]);
+ const [tasks]=await db().execute<RowDataPacket[]>("SELECT id,title,status,phase_id FROM hub_tasks WHERE project_id=? AND archived_at IS NULL ORDER BY id",[id]);
  const project=projects[0];const lines:unknown[][]=[
   ["Proyecto","Descripción del proyecto","Estado del proyecto","Fase","Descripción de fase","Estado de fase","Tarea","Estado de tarea","Avance de fase (%)"],
  ];

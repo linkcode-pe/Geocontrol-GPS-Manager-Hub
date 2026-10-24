@@ -2,7 +2,7 @@ export function parseActivityFilters(params){
  const pageRaw=params.get('page')??'1';
  if(!/^[1-9]\d*$/.test(pageRaw)||Number(pageRaw)>10000)return null;
  const action=params.get('action')??'all';
- if(!['all','create','update','delete'].includes(action))return null;
+ if(!['all','create','update','delete','archive','restore'].includes(action))return null;
  const from=params.get('from')??'',to=params.get('to')??'';
  const validDate=v=>!v||(/^\d{4}-\d{2}-\d{2}$/.test(v)&&!Number.isNaN(Date.parse(v))&&new Date(v).toISOString().slice(0,10)===v);
  if(!validDate(from)||!validDate(to)||(from&&to&&from>to))return null;

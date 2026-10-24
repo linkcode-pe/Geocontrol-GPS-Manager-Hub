@@ -8,12 +8,13 @@ export async function GET(req:Request){
  const user=await currentUser();if(!user)return NextResponse.json({error:"No autorizado"},{status:401});
  const url=new URL(req.url);
  const projectId=Number(url.searchParams.get("projectId"));
+ const archived=url.searchParams.get("archived")==='1';
  const pagination=taskPagination(url.searchParams.get("page"),url.searchParams.get("limit"));
  if(!pagination)return NextResponse.json({error:"Paginación inválida"},{status:400});
  if(!Number.isSafeInteger(projectId)||projectId<1)return NextResponse.json({error:"Proyecto inválido"},{status:400});
- const [rows]=await db().execute<RowDataPacket[]>(`SELECT id,title,status,phase_id,depends_on_task_id,priority,DATE_FORMAT(due_date,'%Y-%m-%d') AS due_date FROM hub_tasks WHERE project_id=? ORDER BY id DESC LIMIT ${pagination.limit} OFFSET ${pagination.offset}`,[projectId]);
+ const [rows]=await db().execute<RowDataPacket[]>(`SELECT id,title,status,phase_id,depends_on_task_id,priority,DATE_FORMAT(due_date,'%Y-%m-%d') AS due_date,DATE_FORMAT(archived_at,'%Y-%m-%d %H:%i:%s') AS archived_at FROM hub_tasks WHERE project_id=? AND ${archived?'archived_at IS NOT NULL':'archived_at IS NULL'} ORDER BY id DESC LIMIT ${pagination.limit} OFFSET ${pagination.offset}`,[projectId]);
  const [phaseRows]=await db().execute<RowDataPacket[]>("SELECT id,title FROM hub_phases WHERE project_id=? ORDER BY position,id",[projectId]);
- return NextResponse.json({tasks:rows,phases:phaseRows,page:pagination.page,limit:pagination.limit,hasMore:rows.length===pagination.limit});
+ return NextResponse.json({tasks:rows,phases:phaseRows,page:pagination.page,limit:pagination.limit,hasMore:rows.length===pagination.limit,archived,canRestore:['owner','admin','editor'].includes(user.role)});
 }
 export async function POST(req:Request){
  const user=await currentUser();if(!user)return NextResponse.json({error:"No autorizado"},{status:401});
