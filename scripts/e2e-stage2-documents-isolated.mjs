@@ -42,7 +42,13 @@ try{
  const taskArchiveSql=fs.readFileSync('/opt/geocontrol-project-hub/database/migrations/20261024_task_archive_restore.sql','utf8');
  const [archiveColumn]=await testDb.query("SHOW COLUMNS FROM hub_tasks LIKE 'archived_at'");
  if(!archiveColumn.length){for(const statement of taskArchiveSql.replace(/--[^\n]*/g,'').split(';').map(x=>x.trim()).filter(Boolean))await testDb.query(statement)}
- await testDb.query('ALTER TABLE hub_documents ADD COLUMN revision INT UNSIGNED NOT NULL DEFAULT 1, ADD COLUMN archived_at TIMESTAMP NULL DEFAULT NULL, ADD COLUMN archived_by BIGINT UNSIGNED NULL');
+ const [documentColumns]=await testDb.query('SHOW COLUMNS FROM hub_documents');
+ const existingDocumentColumns=new Set(documentColumns.map(column=>column.Field));
+ for(const [column,statement] of [
+  ['revision','ALTER TABLE hub_documents ADD COLUMN revision INT UNSIGNED NOT NULL DEFAULT 1'],
+  ['archived_at','ALTER TABLE hub_documents ADD COLUMN archived_at TIMESTAMP NULL DEFAULT NULL'],
+  ['archived_by','ALTER TABLE hub_documents ADD COLUMN archived_by BIGINT UNSIGNED NULL'],
+ ])if(!existingDocumentColumns.has(column))await testDb.query(statement);
  await testDb.query('CREATE TABLE hub_document_versions (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,document_id BIGINT UNSIGNED NOT NULL,revision INT UNSIGNED NOT NULL,title VARCHAR(255) NOT NULL,body LONGTEXT NOT NULL,archived_at TIMESTAMP NULL DEFAULT NULL,updated_by BIGINT UNSIGNED NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uq_document_revision(document_id,revision)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
  await testDb.query('CREATE TABLE hub_project_guide_versions (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,guide_id TINYINT UNSIGNED NOT NULL,revision INT UNSIGNED NOT NULL,content MEDIUMTEXT NOT NULL,updated_by BIGINT UNSIGNED NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uq_guide_revision(guide_id,revision)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci');
  const email='stage1-'+randomUUID()+'@example.invalid';
