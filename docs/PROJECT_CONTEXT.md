@@ -1246,3 +1246,9 @@ En la auditoría autenticada se corrigieron dos detalles en desarrollo: el conta
 Commit de código 91678cd enviado a feat/mysql-auth. Verificación en el servidor: npm test 58 PASS, 18 SKIP, 0 FAIL; lint 0 errores y 11 advertencias ya existentes; TypeScript PASS; build Next PASS en /opt/geocontrol-hub-build-workspace, aislada de /opt/geocontrol-hub-releases/dashboard-visual-db26e9a. Una primera formulación del estado de carga falló lint por setState dentro del efecto; se reestructuró y la verificación final pasó.
 
 Memoria viva MySQL geocontrol_hub.hub_project_guide actualizada desde la web a revisión 169. Los ajustes no se publicaron: cualquier despliegue requiere autorización específica. Pendiente: validar la nueva interfaz en navegador, hacer una pasada real de móvil en producción después de su eventual publicación y completar revisión de tema claro/oscuro y exportaciones. No se modificaron datos de negocio ni bases Traccar.
+
+## 176. Revisión de menú de cuenta y tema claro/oscuro (24/10/2026)
+
+Se comprobó en producción que el menú Cuenta abre y presenta «Cambiar contraseña» y «Cerrar sesión»; no se ejecutó ninguna opción. El botón de tema cambia entre el shell claro (#f5f7fb) y el oscuro (#071426); se restauró el tema claro original. La navegación se revisó en Chrome autenticado.
+
+Memoria viva MySQL geocontrol_hub.hub_project_guide: revisión 170. Producción permanece en dashboard-visual-db26e9a. Los ajustes de interfaz 91678cd siguen en desarrollo, con pruebas y build aislada PASS, sin autorización de publicación específica para ese commit. No se alteraron datos de negocio ni bases Traccar.
