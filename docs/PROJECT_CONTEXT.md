@@ -1306,3 +1306,13 @@ La prueba de memoria se hizo con respaldo previo verificado: /opt/geocontrol/bac
 No hubo cambio de código, build, migración ni despliegue; producción continúa en responsive-nav-11475c2. El navegador en la nube no expone ajuste de viewport; se contrastó con las capturas del usuario. Siguiente paso: probar formularios CRUD en una base aislada restaurable e informar hallazgos concretos. Sin acceso a bases Traccar.
 
 Corrección de precisión de la revisión 182: Expedientes muestra siete tarjetas/resúmenes para WhatsApp bot, con 5 fases, 10 tareas y 1 documento; no hay fichas adicionales de expediente. Continuidad sí está vacía. La navegación y el contenido del proyecto no se modificaron.
+
+## 183. CRUD autenticado y recorridos de navegador aislados (24/10/2026)
+
+Suite: 77 pruebas, 59 PASS, 18 SKIP, 0 FAIL. Cinco E2E API autenticados terminaron con código 0, cubriendo tareas, dependencias, archivado/restauración, historial de memoria, documentos/versiones, continuidad, ficha técnica, permisos, CSRF, conflictos y auditoría. Los esquemas de prueba y usuarios temporales se limpiaron; el esquema fuente geocontrol_hub solo se consultó para leer su DDL. Sin escrituras en producción ni acceso a Traccar.
+
+E2E de navegador aislado e2e-continuity-browser-isolated.mjs: PASS, código 0. Dashboard adaptable en 1280 y 375 px sin overflow; tareas, filtros de fases, actividad/CSV, continuidad, memoria, documentos, historial y permisos viewer comprobados. Chromium usó bibliotecas ya extraídas en /tmp/hub-browser-libs, sin instalar paquetes. Esquema temporal limpio.
+
+Pendiente de Expediente técnico: API E2E PASS. El navegador falló con timeout de protocolo Puppeteer en Runtime.callFunctionOn; el diagnóstico observó la vista histórica v1 renderizada, sin confirmar un defecto funcional del producto. Queda pendiente repetir esta verificación con un guion estable. Los esquemas se limpiaron. CRUD visual de Proyectos y alta/edición visual de Fases también requieren recorrido específico.
+
+Estado final: geocontrol-hub active/running, NRestarts=0, WorkingDirectory /opt/geocontrol-hub-releases/responsive-nav-11475c2; puerto E2E 3199 cerrado. Rama feat/mysql-auth en 031bc368, solo pycache previo sin rastrear. Sin código productivo, build de producción, migración o despliegue. Siguiente paso: cubrir formularios UI de Proyectos y Fases y repetir Expediente técnico de forma estable.
