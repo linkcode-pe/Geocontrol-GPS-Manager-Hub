@@ -8,7 +8,9 @@ export default function PortfolioOverview({section,onSelect}:{section:string;onS
  const sum=(key:keyof Summary)=>rows.reduce((n,p)=>n+Number(p[key]||0),0);
  const phases=sum('phases'),tasks=sum('tasks'),done=sum('tasksCompleted');
  const metric=section==='Fases'?'phases':section==='Tareas'?'tasks':section==='Documentación'?'documents':section==='Actividad'?'activities':section==='Continuidad'?'continuity':'tasks';
- const compareByProject=['Expedientes'].includes(section);const value=(p:Summary)=>compareByProject?1:Number(p[metric]);const total=compareByProject?rows.length:sum(metric);
+ const compareByProject=['Expedientes'].includes(section);const value=(p:Summary)=>compareByProject?1:Number(p[metric]);
+ const unit=section==='Fases'?'fase':section==='Documentación'?'documento':section==='Actividad'?'evento':'tarea';
+ const maxValue=rows.reduce((maximum,p)=>Math.max(maximum,value(p)),0);
  return <section className="panel portfolio-overview" aria-label={`Resumen general de ${section}`}>
   <div className="panel-head"><div><h2>{section==='Dashboard'?'Portafolio general':`Panel general de ${section.toLowerCase()}`}</h2><p>Todos los proyectos · selecciona uno para ver y administrar sus detalles.</p></div></div>
   {loading?<SystemFeedback kind="loading">Cargando indicadores…</SystemFeedback>:error?<p role="alert">{error}</p>:<>
@@ -28,7 +30,7 @@ export default function PortfolioOverview({section,onSelect}:{section:string;onS
     {section==='Expedientes'&&<><div><span>Fichas técnicas</span><strong>{sum('technicalSheets')}</strong></div><div><span>Memorias de proyecto</span><strong>{sum('memories')}</strong></div><div><span>Registros de continuidad</span><strong>{sum('continuity')}</strong></div></>}
    </div>
    <h3>{compareByProject?"Proyectos disponibles":"Distribución por proyecto"}</h3>
-   <div className="portfolio-bars" role="list">{rows.map(p=><button type="button" role="listitem" key={p.id} onClick={()=>onSelect(p.id)} aria-label={`Abrir ${section} de ${p.title}`}><span className="portfolio-bar-head"><strong>{p.title}</strong><span>{compareByProject?`${p.technicalSheets} fichas · ${p.memories} memorias · ${p.continuity} continuidad`:`${value(p)} de ${total} · ${total?Math.round(value(p)/total*100):0}%`}</span></span><span className="portfolio-bar-track"><span style={{width:`${total?value(p)/total*100:0}%`}}/></span><small>{p.phases} fases · {p.tasks} tareas · {p.tasksCompleted} completadas · {p.documents} documentos</small></button>)}</div>
+   <div className="portfolio-bars" role="list">{rows.map(p=><button type="button" role="listitem" key={p.id} onClick={()=>onSelect(p.id)} aria-label={`Abrir ${section} de ${p.title}`}><span className="portfolio-bar-head"><strong>{p.title}</strong><span>{compareByProject?`${p.technicalSheets} fichas · ${p.memories} memorias · ${p.continuity} continuidad`:`${value(p)} ${unit}${value(p)===1?"":"s"}`}</span></span><span className="portfolio-bar-track"><span style={{width:`${maxValue?value(p)/maxValue*100:0}%`}}/></span><small>{p.phases} fases · {p.tasks} tareas · {p.tasksCompleted} completadas · {p.documents} documentos</small></button>)}</div>
    {!rows.length&&<p>Aún no hay proyectos. Crea uno desde la sección Proyectos.</p>}
    <p className="portfolio-help">{compareByProject?"Selecciona un proyecto para consultar su información. Los expedientes se organizan por proyecto.":"Las gráficas comparan cantidades por proyecto. Selecciona una barra para abrir sus datos."}</p>
   </>}
