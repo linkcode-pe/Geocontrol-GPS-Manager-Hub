@@ -557,10 +557,10 @@
 /* Task list remains a shared-column table at every viewport width. */
 .shell .task-table-hint{display:none;margin:6px 0;color:var(--ui-muted,#64748b);font-size:11px}
 .shell .task-list.task-table-scroll{display:block;min-width:0;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
-.shell .task-columns-header,.shell .task-due-group>.task-row{display:grid;width:100%;min-width:980px;grid-template-columns:32px minmax(220px,2.4fr) minmax(90px,1fr) minmax(78px,.85fr) minmax(120px,1.15fr) minmax(120px,1.25fr) minmax(190px,1.55fr) 48px;column-gap:10px;align-items:center}
+.shell .task-columns-header,.shell .task-due-group>.task-row{display:grid;width:100%;min-width:1000px;grid-template-columns:32px minmax(220px,2.4fr) minmax(90px,1fr) minmax(78px,.85fr) minmax(120px,1.15fr) minmax(120px,1.25fr) minmax(190px,1.55fr) 64px;column-gap:10px;align-items:center}
 .shell .task-columns-header{padding:10px 0;border-bottom:2px solid var(--ui-border,#cbd5e1);color:var(--ui-muted,#64748b);font-size:10px;font-weight:750;letter-spacing:.045em;text-transform:uppercase}
 .shell .task-columns-header span{min-width:0;overflow-wrap:anywhere}
-.shell .task-due-group{min-width:980px}
+.shell .task-due-group{min-width:1000px}
 .shell .task-due-group>.task-row{gap:10px;padding:12px 0;border-bottom:1px solid var(--ui-border,#e2e8f0);border-radius:0;background:transparent;cursor:default}
 .shell .task-due-group>.task-row>input[type="checkbox"]{grid-column:1;grid-row:auto;margin:0;justify-self:center}
 .shell .task-due-group>.task-row>span:not(.task-unified-editor){min-width:0;max-width:100%;margin:0;flex:none;white-space:normal;overflow-wrap:anywhere}
@@ -573,11 +573,13 @@
 .shell .task-due-group>.task-row>.task-gear{grid-column:8;grid-row:auto;justify-self:end;margin:0}
 .shell .task-due-group>.task-row>.task-unified-editor,.shell .task-due-group>.task-row>.task-options,.shell .task-due-group>.task-row>.task-phase-editor{grid-column:1/-1;grid-row:auto;min-width:0;max-width:100%;box-sizing:border-box}
 .shell .task-due-group>.task-row>.task-unified-editor{margin:6px 0 0}
-.shell .task-due-group>h3{min-width:980px}
+.shell .task-due-group>h3{min-width:1000px}
 @media(max-width:1100px){
- .shell .task-table-hint{display:block}
+ .shell .task-table-hint{display:block;font-size:12px}
+ .shell .task-columns-header>span:first-child,.shell .task-due-group>.task-row>input[type="checkbox"]{position:sticky;left:0;z-index:5;background:var(--ui-surface,#fff);box-shadow:1px 0 0 var(--ui-border,#cbd5e1)}
+ .shell .task-columns-header>span:nth-child(2),.shell .task-due-group>.task-row>span[data-label="Nombre"]{position:sticky;left:42px;z-index:4;background:var(--ui-surface,#fff);box-shadow:1px 0 0 var(--ui-border,#cbd5e1)}
  .shell .task-columns-header{display:grid}
- .shell .task-due-group>.task-row{display:grid;grid-template-columns:32px minmax(220px,2.4fr) minmax(90px,1fr) minmax(78px,.85fr) minmax(120px,1.15fr) minmax(120px,1.25fr) minmax(190px,1.55fr) 48px;min-width:980px;width:100%;gap:10px;padding:12px 0;margin:0;border:0;border-bottom:1px solid var(--ui-border,#e2e8f0);border-radius:0;background:transparent}
+ .shell .task-due-group>.task-row{display:grid;grid-template-columns:32px minmax(220px,2.4fr) minmax(90px,1fr) minmax(78px,.85fr) minmax(120px,1.15fr) minmax(120px,1.25fr) minmax(190px,1.55fr) 64px;min-width:1000px;width:100%;gap:10px;padding:12px 0;margin:0;border:0;border-bottom:1px solid var(--ui-border,#e2e8f0);border-radius:0;background:transparent}
  .shell .task-due-group>.task-row>input[type="checkbox"]{grid-column:1;grid-row:auto;width:18px;height:18px}
  .shell .task-due-group>.task-row>span[data-label="Nombre"]{grid-column:2;grid-row:auto;font-size:12px;line-height:1.4;font-weight:600}
  .shell .task-due-group>.task-row>.task-status-chip{grid-column:3;grid-row:auto;min-height:28px;padding:4px 7px;font-size:11px;white-space:normal}
