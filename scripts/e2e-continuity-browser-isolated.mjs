@@ -224,6 +224,16 @@ try{
   assert.equal(new URL(page.url()).searchParams.get('projectId'),String(project.insertId));
   assert.equal(new URL(page.url()).searchParams.get('section'),'Tareas');
   await page.waitForFunction(name=>document.body.innerText.includes(name),{timeout:15000},marker+'-edited');
+  await page.evaluate(title=>[...document.querySelectorAll('.task-row')].find(row=>row.innerText.includes(title))?.querySelector('.task-gear')?.click(),marker+'-edited');
+  await page.waitForSelector('.task-unified-editor .task-save',{timeout:10000});
+  assert.equal(await page.$eval('.task-unified-editor .task-save',button=>button.disabled),true,'Save must be disabled when the task editor has no changes');
+  const taskNameSelector='#task-name-'+taskId;
+  await page.click(taskNameSelector);await page.keyboard.press('Control+A');await page.type(taskNameSelector,marker+'-edited temporary');
+  assert.equal(await page.$eval('.task-unified-editor .task-save',button=>button.disabled),false,'Save must enable after an actual change');
+  await page.click(taskNameSelector);await page.keyboard.press('Control+A');await page.type(taskNameSelector,marker+'-edited');
+  assert.equal(await page.$eval('.task-unified-editor .task-save',button=>button.disabled),true,'Save must disable again when changes are reverted');
+  await page.click('.task-unified-editor .task-cancel');
+  console.log('PASS: Task editor save button tracks actual unsaved changes');
   // Regression: clearing a phase filter must reset the native new-task phase selector on mobile.
   const phaseCreated=await api('POST','/api/phases',{projectId:project.insertId,title:'Arquitectura'},cookie);
   assert.equal(phaseCreated.status,201);
@@ -242,8 +252,17 @@ try{
   await page.waitForSelector('.portfolio-overview');
   assert.equal(await page.$eval('#portfolio-project',el=>el.value),'','Tareas must default to all projects');
   console.log('PASS: General Fases/Tareas dashboards without automatic project selection');
-  await page.goto(base+'/?section=Fases&projectId='+project.insertId,{waitUntil:'networkidle2'});
+  await page.setViewport({width:1280,height:900,isMobile:false,hasTouch:false});
+  let delayPhaseResponse=true;
+  await page.setRequestInterception(true);
+  const delayPhaseRequest=request=>{const url=new URL(request.url());if(delayPhaseResponse&&url.pathname==='/api/phases'&&url.searchParams.get('projectId')===String(project.insertId)){delayPhaseResponse=false;setTimeout(()=>request.continue(),600);return;}request.continue();};
+  page.on('request',delayPhaseRequest);
+  await page.goto(base+'/?section=Fases&projectId='+project.insertId,{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>document.querySelector('.phase-list [role="status"]')?.textContent.includes('Cargando fases'),{timeout:15000});
+  assert.equal(await page.evaluate(()=>document.querySelector('.phase-list')?.innerText.includes('Este proyecto todavía no tiene fases')),false,'Empty phase message must not appear while loading');
+  assert.equal(delayPhaseResponse,false,'Phase API request should be delayed to exercise loading state');
   await page.waitForSelector('button[aria-label="Ver tareas de Arquitectura"]',{timeout:15000});
+  page.off('request',delayPhaseRequest);await page.setRequestInterception(false);
   await page.click('button[aria-label="Ver tareas de Arquitectura"]');
   await page.waitForFunction(id=>document.querySelector('select[aria-label="Fase de nueva tarea"]')?.value===String(id),{},phaseId);
   assert.equal(await page.$eval('select[aria-label="Fase de nueva tarea"]',el=>el.selectedOptions[0].textContent),'Arquitectura');
