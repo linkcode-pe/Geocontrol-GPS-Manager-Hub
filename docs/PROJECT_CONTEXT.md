@@ -1252,3 +1252,13 @@ Memoria viva MySQL geocontrol_hub.hub_project_guide actualizada desde la web a r
 Se comprobó en producción que el menú Cuenta abre y presenta «Cambiar contraseña» y «Cerrar sesión»; no se ejecutó ninguna opción. El botón de tema cambia entre el shell claro (#f5f7fb) y el oscuro (#071426); se restauró el tema claro original. La navegación se revisó en Chrome autenticado.
 
 Memoria viva MySQL geocontrol_hub.hub_project_guide: revisión 170. Producción permanece en dashboard-visual-db26e9a. Los ajustes de interfaz 91678cd siguen en desarrollo, con pruebas y build aislada PASS, sin autorización de publicación específica para ese commit. No se alteraron datos de negocio ni bases Traccar.
+
+## 177. Publicación de correcciones verificadas en producción (24/10/2026)
+
+El usuario autorizó publicar las modificaciones para probarlas en producción. Se publicó el commit de código 91678cd en la release aislada /opt/geocontrol-hub-releases/audit-fixes-91678cd: contador singular de Proyectos y estado accesible de carga de Documentación que no muestra un falso estado vacío mientras consulta. Se conservó la release previa dashboard-visual-db26e9a y la configuración anterior en /opt/geocontrol/backups/hub/release.conf.pre-audit-fixes-91678cd para reversión.
+
+Respaldo verificado de la única base permitida, geocontrol_hub: /opt/geocontrol/backups/hub/geocontrol-hub-20261024T162318Z-pre-release.sql.gz, 5.095.045 bytes, modo 600; gzip -t, tablas del Hub y fila de memoria PASS. SHA-256 af5d07b51ff004161e3cf6f6edf4163ba290d11832f6847a2ddffa5bc9322600. Antes del despliegue, memoria revisión 170 con 206.848 caracteres.
+
+Postdespliegue: servicio active/running, NRestarts=0 y WorkingDirectory de la nueva release; login local y público HTTP 200, recursos CSS/JS HTTP 200 y API privada sin sesión HTTP 401. Chrome autenticado confirmó Dashboard con datos existentes, “1 proyecto” y carga explícita en Documentación antes de mostrar el documento v1. Menú de cuenta y tema claro/oscuro funcionan; se restauró el tema claro. Sin overflow horizontal en las pantallas de escritorio revisadas. No se alteraron datos de negocio ni bases Traccar.
+
+Validación antes de publicar: 58 pruebas PASS, 18 SKIP, 0 FAIL; lint 0 errores y 11 advertencias preexistentes; TypeScript y build aislada PASS. Memoria viva MySQL actualizada a revisión 171. Pendiente completar una pasada móvil directa de producción; E2E aislado previo validó 375×812 sin overflow.
