@@ -1238,3 +1238,11 @@ El expediente muestra siete tarjetas, un documento, y cero fichas técnicas, mem
 La memoria MySQL geocontrol_hub.hub_project_guide estaba en revisión 167 con 202.989 caracteres. Se abrió el editor con el documento íntegro, se canceló sin cambios y luego se añadió únicamente esta nota de auditoría desde la web. El guardado confirmó la revisión 168 y 204.875 caracteres. El historial mantiene las revisiones anteriores. No se enviaron formularios de negocio ni se alteraron proyectos, fases, tareas, documentos o continuidad.
 
 No se observó desbordamiento horizontal en escritorio en las pantallas visitadas. La auditoría móvil real en producción sigue pendiente; la prueba E2E aislada ya registrada verificó 375×812 sin overflow. No se detectaron errores de la aplicación en consola durante la navegación; Chrome mostró un aviso de su extensión de metadatos, sin relación aparente con Hub. No se accedió a bases Traccar. Producción continúa en el release dashboard-visual-db26e9a; no se publicó código en este avance.
+
+## 175. Correcciones de carga y singular en Proyectos (24/10/2026)
+
+En la auditoría autenticada se corrigieron dos detalles en desarrollo: el contador de Proyectos usa singular cuando solo hay uno; Documentación muestra un estado accesible de carga mientras espera la consulta y evita adelantar el mensaje de lista vacía. Los errores de consulta se siguen mostrando sin quedar ocultos por el estado vacío.
+
+Commit de código 91678cd enviado a feat/mysql-auth. Verificación en el servidor: npm test 58 PASS, 18 SKIP, 0 FAIL; lint 0 errores y 11 advertencias ya existentes; TypeScript PASS; build Next PASS en /opt/geocontrol-hub-build-workspace, aislada de /opt/geocontrol-hub-releases/dashboard-visual-db26e9a. Una primera formulación del estado de carga falló lint por setState dentro del efecto; se reestructuró y la verificación final pasó.
+
+Memoria viva MySQL geocontrol_hub.hub_project_guide actualizada desde la web a revisión 169. Los ajustes no se publicaron: cualquier despliegue requiere autorización específica. Pendiente: validar la nueva interfaz en navegador, hacer una pasada real de móvil en producción después de su eventual publicación y completar revisión de tema claro/oscuro y exportaciones. No se modificaron datos de negocio ni bases Traccar.
