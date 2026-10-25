@@ -1436,3 +1436,12 @@ Commit 1eb752c en `feat/mysql-auth`, release activa `/opt/geocontrol-hub-release
 El usuario precisó que quiere todas las columnas moviéndose juntas. Se eliminaron los estilos sticky de «Hecha», casillas y «Nombre»; la tabla conserva el scroll horizontal para recorrer sus columnas alineadas. Esta regla sustituye la preferencia anterior de mantener casillas/nombre fijos.
 
 Commit `efbdc0d` en `feat/mysql-auth`; release activa `/opt/geocontrol-hub-releases/task-table-all-columns-efbdc0d`. Build aislada PASS; lint 0 errores/11 advertencias existentes; pruebas 59 PASS, 18 SKIP, 0 FAIL; TypeScript PASS. Smoke público: `/login` 200, CSS 200 sin sticky de tabla y con scroll horizontal, API anónima 401; servicio active, `NRestarts=0`. Memoria principal MySQL: revisión 202. Respaldo Hub-only: `/opt/geocontrol/backups/hub/geocontrol-hub-20261025T003234Z.sql.gz` (6.934.636 bytes, verificado). Sin cambios de datos de tareas ni bases Traccar.
+
+
+## 203. Estándar de tablas aplicado a las vistas del Hub (25/10/2026)
+
+Se estableció `HubTable` como presentación predeterminada para colecciones de registros, incluyendo datos existentes y filas futuras. Encabezados y celdas quedan alineados en tablas semánticas; en móvil el contenedor desplaza todas las columnas juntas, sin columnas pegadas. Formularios, métricas y gráficos mantienen su presentación apropiada. La especificación de uso está en `docs/UI_TABLE_STANDARD.md`.
+
+El estándar se aplicó a proyectos, fases, actividad, cartera y hoja de ruta del dashboard, próximas tareas, papelera, documentos e historiales, fichas técnicas, memorias, continuidad y resumen del expediente. Las tareas mantienen su grid tabular propio para soportar agrupación y editor expandido; usa un único scroller y desplaza todas las columnas en conjunto. No se modificaron registros de proyectos ni tareas.
+
+Commit `e39e738` enviado a `feat/mysql-auth`; release activa `/opt/geocontrol-hub-releases/project-tables-e39e738`. Lint: 0 errores y 11 advertencias existentes en scripts; pruebas: 59 PASS, 18 SKIP, 0 FAIL; TypeScript y build Next aislada PASS. Smoke posterior: `/login` local y público 200, CSS 200 con estilos compartidos, API sin sesión 401; servicio active, `NRestarts=0`. Se generó respaldo exclusivo de `geocontrol_hub`: `/opt/geocontrol/backups/hub/geocontrol-hub-20261025T034637Z.sql.gz` (6.998.847 bytes, verificado). No se accedió ni modificó bases de Traccar.
