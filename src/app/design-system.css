@@ -621,6 +621,8 @@
 .hub-table-versions{min-width:520px}
 .hub-table-summary{min-width:760px}
 .hub-table-dashboard-tasks{min-width:760px}
+.hub-table-attention{min-width:980px}
+.hub-data-table input[type="date"]{min-height:34px;padding:5px 8px;border:1px solid var(--ui-border,#dce4ed);border-radius:7px;background:var(--ui-surface,#fff);color:var(--ui-text,#172338);font:inherit;color-scheme:light dark}
 .hub-data-table select{max-width:100%;min-height:34px;padding:5px 28px 5px 9px;border:1px solid var(--ui-border,#dce4ed);border-radius:7px;background:var(--ui-surface,#fff);color:var(--ui-text,#172338);font:inherit}
 .hub-data-table input[type="checkbox"]{width:17px;height:17px;accent-color:var(--ui-accent,#1686d7)}
 @media(max-width:1100px){.hub-table-hint{display:block}}
