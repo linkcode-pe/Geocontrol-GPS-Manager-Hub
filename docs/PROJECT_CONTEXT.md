@@ -1430,3 +1430,9 @@ Validación: `npm run lint` sin errores (11 advertencias existentes); `npm test`
 A partir del video del usuario, se corrigió el offset sticky de las casillas: ahora quedan centradas desde el inicio dentro de la primera columna (52 px), junto a «Nombre» fijo en 62 px. Se aplica a todas las filas dinámicas.
 
 Commit 1eb752c en `feat/mysql-auth`, release activa `/opt/geocontrol-hub-releases/task-table-checkbox-sticky-1eb752c`. Build aislada PASS; lint 0 errores/11 advertencias existentes; pruebas 59 PASS, 18 SKIP, 0 FAIL; TypeScript PASS. Smoke público: `/login` 200, CSS 200 con offsets 17/62 px y track 52 px, API anónima 401; servicio active, `NRestarts=0`. Memoria MySQL actualizada a revisión 201. Respaldo Hub-only: `/opt/geocontrol/backups/hub/geocontrol-hub-20261025T002828Z.sql.gz` (6.870.546 bytes, verificado). No se modificaron datos de tareas ni bases Traccar.
+
+## 2026-10-24 — Desplazamiento horizontal de todas las columnas
+
+El usuario precisó que quiere todas las columnas moviéndose juntas. Se eliminaron los estilos sticky de «Hecha», casillas y «Nombre»; la tabla conserva el scroll horizontal para recorrer sus columnas alineadas. Esta regla sustituye la preferencia anterior de mantener casillas/nombre fijos.
+
+Commit `efbdc0d` en `feat/mysql-auth`; release activa `/opt/geocontrol-hub-releases/task-table-all-columns-efbdc0d`. Build aislada PASS; lint 0 errores/11 advertencias existentes; pruebas 59 PASS, 18 SKIP, 0 FAIL; TypeScript PASS. Smoke público: `/login` 200, CSS 200 sin sticky de tabla y con scroll horizontal, API anónima 401; servicio active, `NRestarts=0`. Memoria principal MySQL: revisión 202. Respaldo Hub-only: `/opt/geocontrol/backups/hub/geocontrol-hub-20261025T003234Z.sql.gz` (6.934.636 bytes, verificado). Sin cambios de datos de tareas ni bases Traccar.
