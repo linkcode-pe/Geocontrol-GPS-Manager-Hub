@@ -1474,3 +1474,14 @@ Respaldo previo exclusivo de `geocontrol_hub`: `/opt/geocontrol/backups/hub/geoc
 Build Next aislada PASS con TypeScript; pruebas 59 PASS, 18 pruebas HTTP SKIP por no configurar `HUB_SMOKE_URL`, 0 FAIL; ESLint 0 errores y 11 advertencias previas. La rama GitHub quedó sincronizada en `a0121dfe`. La memoria principal MySQL se actualizó atómicamente a revisión 206 (251.515 caracteres, SHA-256 `046e7087e5a4e337ad072aaeafaa13926f6305086a3e1c99455d101c64b8b06a`), con snapshot e historial de auditoría. No se modificaron proyectos, fases, tareas, documentos ni registros de continuidad; tampoco se tocaron bases o servicios de Traccar.
 
 Pendiente: continuar auditoría visual móvil y revisar pantallas restantes en viewport estrecho; el navegador de esta verificación estaba en viewport de escritorio.
+
+
+## 207. Concordancia de cantidades en los paneles (25/10/2026)
+
+Se corrigieron los contadores del portafolio para que usen singular y plural según el valor. El resumen por proyecto ahora presenta «1 documento» y «0 tareas completadas»; las comparaciones de fichas técnicas, memorias y continuidad también nombran correctamente cada unidad. En el Dashboard, las descripciones accesibles y los porcentajes por proyecto siguen la misma concordancia. No se cambiaron datos del proyecto.
+
+Commit funcional `59cf785` en `feat/mysql-auth`, sincronizado con GitHub. Pruebas: 59 PASS, 18 SKIP (pruebas HTTP que requieren `HUB_SMOKE_URL`), 0 FAIL; ESLint 0 errores y 11 advertencias existentes en scripts de pruebas; `git diff --check` PASS. Build Next y TypeScript PASS en `/opt/geocontrol-hub-build-audit-20261025`, separado de producción. SHA-256 de los dos componentes compilados coincide con el commit.
+
+Con autorización del usuario se publicó la release `/opt/geocontrol-hub-releases/portfolio-count-labels-59cf785`; se guardó la configuración previa en `/opt/geocontrol/backups/hub/release.conf.pre-portfolio-count-labels-59cf785`. El servicio está active/running con `NRestarts=0`; login local y público responden HTTP 200, API anónima HTTP 401. Chrome autenticado muestra el panel WhatsApp bot con «5 fases · 10 tareas · 0 tareas completadas · 1 documento». Respaldo anterior exclusivo de `geocontrol_hub`: `/opt/geocontrol/backups/hub/geocontrol-hub-20261025T134905Z.sql.gz` (7.261.394 bytes; script y `gzip -t` PASS). La memoria principal MySQL se mantiene en revisión 206 mientras se registra este avance. No se modificaron proyectos, fases, tareas, documentos ni bases Traccar.
+
+Pendiente: completar revisión visual en viewport móvil cuando haya un navegador con control de tamaño. El Chrome en la nube disponible no ofrece esa función y no se considera que la prueba móvil esté hecha.
