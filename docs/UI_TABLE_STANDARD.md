@@ -10,7 +10,7 @@ Usar `HubTable` para presentar colecciones de registros del proyecto: proyectos,
 - Nombrar la región desplazable con `label` accesible en `HubTable`.
 - Definir las columnas en el encabezado; no insertar campos como tarjetas dentro de cada registro.
 - Aplicar una clase de ancho mínimo según la densidad de columnas. El desplazamiento horizontal ocurre dentro de la tabla y mueve encabezados y todas las columnas juntas; no fijar columnas individuales.
-- Mantener el texto de ayuda de desplazamiento en vistas estrechas, foco visible de teclado, colores de tema claro/oscuro y estados hover coherentes.
+- Mostrar una indicación breve de desplazamiento junto a las tablas para que las columnas fuera de vista se descubran también en paneles estrechos de escritorio; conservar foco visible de teclado, colores de tema claro/oscuro y estados hover coherentes.
 - Mantener datos extensos legibles con saltos de línea; fechas, estados, acciones y valores vacíos deben conservar una columna identificable.
 - Insertar editores expandidos como filas de detalle con `colSpan`, preservando las acciones existentes.
 

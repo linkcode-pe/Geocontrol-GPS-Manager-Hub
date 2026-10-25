@@ -9,7 +9,7 @@ type HubTableProps = {
 export default function HubTable({ label, className, children }: HubTableProps) {
   return (
     <div className="hub-table-wrap">
-      <p className="hub-table-hint">Desliza horizontalmente para ver todas las columnas →</p>
+      <p className="hub-table-hint">Si alguna columna no aparece, desliza horizontalmente →</p>
       <div className="hub-table-scroll" role="region" aria-label={label} tabIndex={0}>
         <table className={`hub-data-table ${className}`}>{children}</table>
       </div>
