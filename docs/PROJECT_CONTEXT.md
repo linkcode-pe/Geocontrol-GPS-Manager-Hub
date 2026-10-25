@@ -1464,3 +1464,13 @@ Commit funcional `d58948e` en `feat/mysql-auth`. Validación: 59 pruebas PASS, 1
 Se verificó respaldo previo exclusivo de `geocontrol_hub`: `/opt/geocontrol/backups/hub/geocontrol-hub-20261025T120447Z.sql.gz` (7.128.663 bytes, `backup-hub.py` exit code 0). Después se actualizó la memoria principal MySQL atómicamente a revisión 205 (249.624 caracteres, SHA-256 `268d5568f0ad6a2e9451a6d3770e37232640f69298439288137ca53488c76376`), con snapshot en `hub_project_guide_versions` y evento de auditoría. Este documento permanece como copia de referencia. No se modificaron bases ni servicios de Traccar.
 
 Siguiente paso: continuar auditoría móvil y de las pantallas restantes; solicitar autorización específica antes de publicar esta corrección.
+
+## 206. Publicación de la corrección de concordancia del expediente (25/10/2026)
+
+Con autorización expresa del usuario se publicó el commit funcional `d58948e` de `feat/mysql-auth`. Se utilizó la build verificada en el workspace aislado `/opt/geocontrol-hub-build-audit-20261025`; el SHA-256 de `src/app/expedientes/page.tsx` coincidía con la rama. No se compiló dentro de la release activa. Release nueva: `/opt/geocontrol-hub-releases/project-dossier-counts-d58948e`. Configuración anterior respaldada en `/opt/geocontrol/backups/hub/release.conf.pre-project-dossier-counts-d58948e`; release previa `/opt/geocontrol-hub-releases/project-tables-complete-4056f1c` conservada para rollback.
+
+Respaldo previo exclusivo de `geocontrol_hub`: `/opt/geocontrol/backups/hub/geocontrol-hub-20261025T120910Z.sql.gz` (7.194.992 bytes; `backup-hub.py` y `gzip -t` PASS). Pospublicación: servicio `geocontrol-hub` active/running, `NRestarts=0`, `WorkingDirectory` en la release nueva; login local y público HTTP 200, API de proyectos sin sesión HTTP 401. Chrome autenticado mostró en el expediente de WhatsApp bot «1 documento», 5 fases y 10 tareas.
+
+Build Next aislada PASS con TypeScript; pruebas 59 PASS, 18 pruebas HTTP SKIP por no configurar `HUB_SMOKE_URL`, 0 FAIL; ESLint 0 errores y 11 advertencias previas. La rama GitHub quedó sincronizada en `a0121dfe`. La memoria principal MySQL se actualizó atómicamente a revisión 206 (251.515 caracteres, SHA-256 `046e7087e5a4e337ad072aaeafaa13926f6305086a3e1c99455d101c64b8b06a`), con snapshot e historial de auditoría. No se modificaron proyectos, fases, tareas, documentos ni registros de continuidad; tampoco se tocaron bases o servicios de Traccar.
+
+Pendiente: continuar auditoría visual móvil y revisar pantallas restantes en viewport estrecho; el navegador de esta verificación estaba en viewport de escritorio.
