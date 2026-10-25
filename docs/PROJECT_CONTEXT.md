@@ -1417,3 +1417,10 @@ Respaldo exclusivo de geocontrol_hub previo a esta nota: /opt/geocontrol/backups
 ## 199. Regla permanente para todas las filas de tareas (24/10/2026)
 
 La tabla con columnas compartidas es el formato estándar para toda la lista de tareas, no únicamente para las tareas que ya existían cuando se hizo el ajuste. Se confirmó que la vista renderiza dinámicamente group.tasks desde visibleTasks y que cada tarea nueva usa el mismo marcado y las mismas reglas de CSS. La regla aplica a tareas existentes y futuras, sin importar proyecto, filtro o agrupación: encabezados y anchos alineados, columnas Hecha y Nombre fijas al deslizar, desplazamiento horizontal en móvil y texto “No cuenta con dependencia” cuando corresponda. No se requiere un componente especial para tareas nuevas ni se modifican filas existentes. No hubo cambio de código ni release en esta decisión.
+
+
+## 2026-10-24 — Ajuste del encabezado de la tabla de tareas
+
+A partir de una captura móvil se detectó que el encabezado «Hecha» se partía como «HECH / A». La primera columna medía 32 px y el texto podía dividirse por caracteres. Se amplió a 52 px, se impidió el quiebre del encabezado y se desplazó «Nombre» de 42 px a 62 px en el modo sticky para mantener su alineación. Se aplica a las filas actuales y futuras porque comparten la misma plantilla dinámica. No se modificaron datos de tareas.
+
+Validación: `npm run lint` sin errores (11 advertencias existentes); `npm test`: 59 PASS, 18 SKIP, 0 FAIL; `npx tsc --noEmit` PASS. Pendiente de publicación verificada.
