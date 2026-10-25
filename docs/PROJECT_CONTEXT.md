@@ -1452,3 +1452,9 @@ Commit `e39e738` enviado a `feat/mysql-auth`; release activa `/opt/geocontrol-hu
 La revisión completa detectó dos listas más que debían seguir el estándar: el bloque de tareas que requieren atención dentro de Tareas y el catálogo de documentos base. Ambos ahora usan `HubTable`, columnas explícitas y desplazamiento horizontal conjunto. Los controles rápidos para estado, prioridad, vencimiento y completar siguen disponibles; el catálogo mantiene su selección de contenido. El estándar de `docs/UI_TABLE_STANDARD.md` incluye estas vistas.
 
 Commit `4056f1c` publicado en `feat/mysql-auth`; release activa `/opt/geocontrol-hub-releases/project-tables-complete-4056f1c`. Build Next aislada PASS; TypeScript PASS; suite 59 PASS, 18 SKIP, 0 FAIL; lint 0 errores y 11 advertencias existentes. Smoke: login local y público 200, CSS 200 con tabla común y estilos del panel de atención, API anónima 401; servicio activo, `NRestarts=0`. Respaldo anterior de la memoria principal corresponde a la revisión 203; se generará un nuevo respaldo exclusivo de `geocontrol_hub` antes de registrar la revisión 204. No se alteraron filas de proyectos o tareas ni bases Traccar.
+
+## 205. Ajuste de concordancia en el expediente del proyecto (25/10/2026)
+
+La auditoría autenticada encontró rótulos con plural fijo en el resumen del expediente, por ejemplo «1 documentos». Fases, documentos y registros de continuidad ahora usan el helper singular/plural existente, para mostrar «1 fase», «1 documento» y «1 registro» cuando corresponde. No se modificaron datos.
+
+Verificación de la vista en producción: el expediente de WhatsApp bot mostró 5 fases, 10 tareas y 1 documento; se confirmó el error de texto. Corrección aplicada solo a la rama de desarrollo; no publicada. La memoria MySQL continúa en revisión 204 y no se editó durante esta corrección.
