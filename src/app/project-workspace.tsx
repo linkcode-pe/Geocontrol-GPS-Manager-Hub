@@ -1,6 +1,7 @@
 'use client';
 import {useState,type ReactNode} from 'react';
 import Link from 'next/link';
+import {AppearanceSelect} from './appearance-controls';
 import {useWorkspaceTheme} from '@/lib/use-workspace-theme';
 import {workspaceNavigation} from '@/lib/workspace-navigation';
 import {useRouter} from 'next/navigation';
@@ -19,6 +20,6 @@ export default function ProjectWorkspace({section,projectId,children,onNavigate}
  <nav>{workspaceNavigation.map(({name,href,icon:Icon})=><button key={name} className={name===section?'active':''} aria-current={name===section?'page':undefined} onClick={()=>go(href)}><span className="nav-icon"><Icon size={18} strokeWidth={1.9}/></span>{name}</button>)}</nav>
  <div className="side-bottom"><Link className="sidebar-guide-link" href="/guia-proyecto">📄 Memoria del proyecto · Ver y editar</Link><span className="status-dot"/> Entorno de planificación <small>Geocontrol · v0.1</small></div>
  </aside>
- <main className="main"><header className="topbar"><div className="crumb"><button className="mobile-toggle" aria-label="Abrir menú" aria-expanded={mobile} onClick={()=>setMobile(!mobile)}><Menu size={23}/></button>Workspace <span>/</span><b>{section}</b></div><div className="top-actions"><button className="theme-button" onClick={toggleTheme} aria-label="Cambiar tema">{dark?<Sun size={19}/>:<Moon size={19}/>}</button><div className="account-control"><button className="theme-button" aria-label="Opciones de cuenta" aria-expanded={account} onClick={()=>setAccount(!account)}><UserRound size={17}/><span>Cuenta</span></button>{account&&<div className="account-menu"><button onClick={()=>router.push('/change-password')}><KeyRound size={17}/> Cambiar contraseña</button><button onClick={()=>void logout()}><LogOut size={17}/> Cerrar sesión</button></div>}</div><span className="avatar">GC</span></div></header><div className="content workspace-subpage">{children}</div></main>
+ <main className="main"><header className="topbar"><div className="crumb"><button className="mobile-toggle" aria-label="Abrir menú" aria-expanded={mobile} onClick={()=>setMobile(!mobile)}><Menu size={23}/></button>Workspace <span>/</span><b>{section}</b></div><div className="top-actions"><AppearanceSelect/><button className="theme-button" onClick={toggleTheme} aria-label="Cambiar tema">{dark?<Sun size={19}/>:<Moon size={19}/>}</button><div className="account-control"><button className="theme-button" aria-label="Opciones de cuenta" aria-expanded={account} onClick={()=>setAccount(!account)}><UserRound size={17}/><span>Cuenta</span></button>{account&&<div className="account-menu"><button onClick={()=>router.push('/change-password')}><KeyRound size={17}/> Cambiar contraseña</button><button onClick={()=>void logout()}><LogOut size={17}/> Cerrar sesión</button></div>}</div><span className="avatar">GC</span></div></header><div className="content workspace-subpage">{children}</div></main>
  </div>;
 }
