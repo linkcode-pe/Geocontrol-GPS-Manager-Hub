@@ -1529,3 +1529,11 @@ Se eliminó el límite de ancho de los paneles de Expedientes y Continuidad en l
 Con aprobación expresa se publicó la release `/opt/geocontrol-hub-releases/workspace-width-828c3c0`. Servicio active/running, NRestarts=0; login local y público 200; CSS público 200 con la regla esperada; API anónima 401. Respaldo previo exclusivo `geocontrol_hub`: `/opt/geocontrol/backups/hub/geocontrol-hub-20261026T232916Z.sql.gz`, verificado. Release anterior conservada y configuración previa respaldada en `/opt/geocontrol/backups/hub/release.conf.pre-workspace-width-828c3c0`. Memoria principal MySQL actualizada a revisión 213 con historial y auditoría. No se modificaron datos de proyectos ni bases de Traccar.
 
 Pendiente: verificación visual de las dos páginas autenticadas reales; la prueba de geometría fue representativa y no sustituye esa comprobación.
+
+## 214–215. Propuesta visual adaptable y revisión de componentes (26/10/2026)
+
+Se preparó un prototipo inspirado en la referencia del usuario: paleta violeta, tarjetas, navegación y acceso adaptables. Rama `design/violet-responsive`, commits funcionales `3e7959b` y `2df4a40`; sin publicar. El segundo corrige el contraste de botones principales en modo oscuro. Build y TypeScript aislados PASS; lint 0 errores y 11 advertencias previas; pruebas 59 PASS, 18 SKIP y 0 FAIL.
+
+El acceso aislado se comprobó en 1440 y 390 px. Se revisó una maqueta representativa con las hojas y clases reales en modos claro y oscuro, a 320, 390, 768 y 1440 px: sin desbordamiento global, con scroll tabular en pantallas estrechas y contraste 6,66:1 en los dos botones medidos. Esta maqueta no sustituye la revisión de las pantallas reales autenticadas, que sigue pendiente por falta de sesión para el prototipo aislado.
+
+Memoria principal actualizada a revisión 215 con historial y auditoría, tras respaldo exclusivo `geocontrol-hub-20261026T234150Z.sql.gz` verificado. Producción y datos de proyectos sin cambios.
