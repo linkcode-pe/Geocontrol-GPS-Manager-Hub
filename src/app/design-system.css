@@ -733,3 +733,26 @@
  .hub-login{padding:18px;background:linear-gradient(155deg,#6e74da 0%,#a865c8 38%,#f5f5fb 38%,#f5f5fb 100%)}
  .hub-login-card{padding:26px}
 }
+
+/* Primary controls need a dark surface behind white labels in both themes. */
+.shell .task-unified-editor .task-save,
+.shell .project-create button,
+.shell .project-open,
+.shell .project-card-edit button,
+.shell .project-empty-state button{
+  background:#6746b9;color:#fff;border-color:#6746b9
+}
+.shell .add-task button:hover:not(:disabled),
+.shell .phase-actions button:hover:not(:disabled),
+.shell .task-list>.task-row .task-edit button:first-of-type:hover:not(:disabled),
+.shell .task-unified-editor .task-save:hover:not(:disabled),
+.shell .project-create button:hover:not(:disabled),
+.shell .project-open:hover:not(:disabled),
+.shell .project-card-edit button:hover:not(:disabled),
+.shell .project-empty-state button:hover:not(:disabled){
+  background:#50358e;color:#fff;border-color:#50358e
+}
+.dark .add-task button,.dark .phase-actions button,
+.dark .task-list>.task-row .task-edit button:first-of-type{
+  background:#6746b9;color:#fff;border-color:#6746b9
+}
