@@ -5,7 +5,7 @@
   --ui-border:#dce5ef;--ui-accent:#173554;--ui-accent-hover:#244a70;
   --ui-accent-soft:#e8edf3;--ui-danger:#ba3939;--ui-focus:rgba(23,53,84,.18);
   --ui-radius:12px;--ui-radius-sm:9px;--ui-shadow:0 3px 16px rgba(21,43,72,.05);
-  --ui-font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--ui-body:14px;--ui-small:12px;--ui-control:14px;
+  --ui-font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--ui-body:15px;--ui-small:14px;--ui-control:16px;
 }
 .dark{
   color-scheme:dark;
@@ -54,7 +54,7 @@
 .shell .road-step b,.shell .doc-menu button b,.shell .phase-card small,.shell .section-progress,.shell .metric-top,.shell .pill{font-size:var(--ui-small)}
 .shell .task-list>.task-row .task-edit input{font-size:var(--ui-control)}
 @media(max-width:760px){
- :root{--ui-body:15px;--ui-small:13px;--ui-control:16px}
+ :root{--ui-body:16px;--ui-small:14px;--ui-control:16px}
  .shell h1{font-size:27px}
  .shell .heading p,.shell p{font-size:var(--ui-body);line-height:1.6}
  .shell .eyebrow{font-size:11px}
@@ -633,3 +633,43 @@
 .shell .task-list.task-table-scroll::-webkit-scrollbar,.hub-table-scroll::-webkit-scrollbar{height:8px}
 .shell .task-list.task-table-scroll::-webkit-scrollbar-track,.hub-table-scroll::-webkit-scrollbar-track{background:var(--ui-surface-alt,#f4f7fb);border-radius:99px}
 .shell .task-list.task-table-scroll::-webkit-scrollbar-thumb,.hub-table-scroll::-webkit-scrollbar-thumb{background:var(--ui-border,#cbd5e1);border:2px solid var(--ui-surface-alt,#f4f7fb);border-radius:99px}
+
+
+/* Legibility scale inspired by Google Drive: clear navigation, table and form text. */
+.shell .sidebar nav button{font-size:var(--ui-small)}
+.shell .crumb{font-size:14px}
+.shell .eyebrow{font-size:11px}
+.shell .heading p{font-size:var(--ui-body);line-height:1.55}
+.shell .panel h2{font-size:20px}
+.shell .panel-head p{font-size:var(--ui-small);line-height:1.5}
+.shell .pill{font-size:12px}
+.shell label{font-size:14px}
+.shell footer{font-size:13px}
+.shell .task-table-hint,.hub-table-hint{font-size:14px;line-height:1.45}
+.shell .task-columns-header{font-size:12px}
+.shell .task-due-group>.task-row>span[data-label="Nombre"]{font-size:15px;line-height:1.45}
+.shell .task-status-chip{font-size:13px}
+.task-priority-label,.task-due-date{font-size:13px}
+.task-planning-toolbar label,.activity-filters label{font-size:14px}
+.task-filter-count,.task-filter-toolbar span,.activity-feed .activity-item p{font-size:14px}
+.activity-export a,.activity-pagination button{font-size:14px}
+.activity-feed .activity-detail{font-size:14px;line-height:1.5}
+.task-due-group h3{font-size:15px}
+.weekly-overview span,.weekly-attention span,.weekly-attention button,.dashboard-alerts button span{font-size:14px}
+.hub-data-table{font-size:15px;line-height:1.5}
+.hub-data-table th{font-size:12px}
+.hub-data-table .hub-table-secondary{font-size:13px}
+.hub-data-table .hub-table-action{font-size:14px}
+.hub-data-table .hub-table-status{font-size:13px}
+@media(max-width:1100px){
+ .shell .task-due-group>.task-row>span[data-label="Nombre"]{font-size:14px}
+ .shell .task-due-group>.task-row>.task-status-chip,.shell .task-due-group>.task-row>.task-priority-label,.shell .task-due-group>.task-row>.task-due-date,.shell .task-due-group>.task-row>.task-phase-label{font-size:13px}
+ .shell .task-columns-header{font-size:12px}
+}
+@media(max-width:760px){
+ .shell .crumb{font-size:13px}
+ .shell .panel h2{font-size:20px}
+ .shell .eyebrow{font-size:12px}
+ .hub-data-table{font-size:15px}
+ .hub-data-table th{font-size:12px}
+}
