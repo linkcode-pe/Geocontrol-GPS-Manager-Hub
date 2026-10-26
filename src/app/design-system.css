@@ -776,3 +776,47 @@ html.theme-violet .dark .add-task button,html.theme-violet .dark .phase-actions 
  .shell .crumb span{display:none}
  .shell .crumb b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 }
+
+/* Consistent informational colors in both workspace designs. */
+.shell{
+ --state-pending:#0b713d;--state-active:#176eaa;--state-done:#3159bd;
+ --state-paused:#9b5a00;--state-blocked:#b3263e;
+ --state-pending-bg:#e5f6ec;--state-active-bg:#e5f2fb;--state-done-bg:#eaf0ff;
+ --state-paused-bg:#fff3da;--state-blocked-bg:#ffe9ec;
+}
+.shell.dark{
+ --state-pending:#70daa0;--state-active:#8bcfff;--state-done:#aebfff;
+ --state-paused:#ffd08a;--state-blocked:#ff9cae;
+ --state-pending-bg:#153e2c;--state-active-bg:#15344a;--state-done-bg:#262f55;
+ --state-paused-bg:#47331a;--state-blocked-bg:#4a222c;
+}
+.shell .metric{border-top:4px solid var(--metric-color,var(--ui-border))}
+.shell .metric-projects{--metric-color:var(--state-done)}
+.shell .metric-phases{--metric-color:var(--state-active)}
+.shell .metric-pending{--metric-color:var(--state-pending)}
+.shell .metric-progress{--metric-color:var(--state-paused)}
+.shell .metric-top span{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:color-mix(in srgb,var(--metric-color) 14%,var(--ui-surface));color:var(--metric-color)}
+.shell .metric strong{color:var(--metric-color)}
+.shell .legend-dot.complete{background:var(--state-done)}
+.shell .legend-dot.pending{background:var(--state-pending)}
+.shell .project-progress-track>span{background:var(--state-done)}
+.shell .status-bar-row.status-planning .status-track>span{background:var(--state-pending)}
+.shell .status-bar-row.status-active .status-track>span{background:var(--state-active)}
+.shell .status-bar-row.status-paused .status-track>span{background:var(--state-paused)}
+.shell .status-bar-row.status-completed .status-track>span{background:var(--state-done)}
+.shell .state-badge,.shell .task-status-chip,.shell select.state-select{
+ display:inline-flex;align-items:center;border:1px solid currentColor;border-radius:8px;
+ padding:5px 9px;font-size:13px;font-weight:650;line-height:1.35;
+}
+.shell .state-badge.status-planning,.shell .state-badge.status-pending,.shell .state-badge.status-todo,.shell select.state-select.status-planning,.shell select.state-select.status-pending,.shell .task-status-chip.status-todo,.shell select.state-select.status-todo{color:var(--state-pending);background:var(--state-pending-bg);border-color:var(--state-pending)}
+.shell .state-badge.status-active,.shell select.state-select.status-active,.shell .task-status-chip.status-in_progress,.shell select.state-select.status-in_progress{color:var(--state-active);background:var(--state-active-bg);border-color:var(--state-active)}
+.shell .state-badge.status-completed,.shell select.state-select.status-completed,.shell .task-status-chip.status-done,.shell select.state-select.status-done{color:var(--state-done);background:var(--state-done-bg);border-color:var(--state-done)}
+.shell .state-badge.status-paused,.shell select.state-select.status-paused{color:var(--state-paused);background:var(--state-paused-bg);border-color:var(--state-paused)}
+.shell .task-status-chip.status-blocked,.shell select.state-select.status-blocked{color:var(--state-blocked);background:var(--state-blocked-bg);border-color:var(--state-blocked)}
+.shell select.state-select option{background:var(--ui-surface);color:var(--ui-text)}
+
+/* Task row typography must not override the status colors. */
+.shell .task-list span.task-status-chip.status-todo{color:var(--state-pending)}
+.shell .task-list span.task-status-chip.status-in_progress{color:var(--state-active)}
+.shell .task-list span.task-status-chip.status-done{color:var(--state-done)}
+.shell .task-list span.task-status-chip.status-blocked{color:var(--state-blocked)}
