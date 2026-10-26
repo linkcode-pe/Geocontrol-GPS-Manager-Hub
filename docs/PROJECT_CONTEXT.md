@@ -1551,3 +1551,9 @@ Memoria principal actualizada a revisión 216 con historial y auditoría, tras r
 Con autorización expresa se publicó el commit funcional `2d443e1`. Release activa `/opt/geocontrol-hub-releases/design-selector-2d443e1`; la anterior `workspace-width-828c3c0` y la configuración `/opt/geocontrol/backups/hub/release.conf.pre-design-selector-2d443e1` se conservaron para rollback. Respaldo exclusivo previo `geocontrol-hub-20261026T234926Z.sql.gz` verificado.
 
 Servicio active/running, NRestarts=0; login local 200, API anónima 401. Chromium comprobó en el acceso público selección Actual/Violeta, persistencia tras recarga, sincronización entre pestañas, independencia de la preferencia claro/oscuro y ancho móvil. Las vistas internas reales autenticadas siguen pendientes de revisión visual. Memoria principal MySQL actualizada a revisión 217 con historial y auditoría. Sin cambios en datos de proyectos ni bases Traccar.
+
+## 218. Colores informativos en tarjetas y estados (26/10/2026)
+
+En respuesta a las capturas del usuario se preparó `8a855b5` en `design/status-colors`: tarjetas y barras diferenciadas, gráfico con pendientes verdes y completadas azules, y estados con verde para pendiente, celeste para en curso, azul para completado, ámbar para pausado y rojo para bloqueado. Las etiquetas siguen visibles y se contemplan los dos diseños y modos claro/oscuro.
+
+Build y TypeScript aislados PASS; pruebas 59 PASS, 18 SKIP y 0 FAIL; lint 0 errores y 11 advertencias previas. Chromium con una maqueta representativa y CSS real comprobó los estados en ambos diseños y modos a 390 y 1440 px, con contraste mínimo 4,78:1 para los estados medidos. Falta revisión de vistas reales autenticadas. Cambio no publicado; requiere aprobación expresa. Memoria principal en revisión 218 tras respaldo exclusivo `geocontrol-hub-20261026T235837Z.sql.gz` verificado. Sin cambios en datos del proyecto ni bases Traccar.
