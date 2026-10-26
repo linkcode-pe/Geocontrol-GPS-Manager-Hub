@@ -1545,3 +1545,9 @@ Se incorporó un selector en el acceso y la cabecera de las vistas principales. 
 Chromium en acceso aislado comprobó cambio de estilo, persistencia tras recarga, sincronización entre pestañas y conservación de la preferencia de modo oscuro; la cabecera representativa se comprobó entre 320 y 1440 px. Build y TypeScript aislados PASS; lint 0 errores y 11 advertencias previas; pruebas 59 PASS, 18 SKIP, 0 FAIL. Pendiente revisar las vistas reales autenticadas y obtener aprobación específica antes de publicar.
 
 Memoria principal actualizada a revisión 216 con historial y auditoría, tras respaldo exclusivo `geocontrol-hub-20261026T234749Z.sql.gz` verificado. Datos y producción sin cambios.
+
+## 217. Publicación del selector de diseño (26/10/2026)
+
+Con autorización expresa se publicó el commit funcional `2d443e1`. Release activa `/opt/geocontrol-hub-releases/design-selector-2d443e1`; la anterior `workspace-width-828c3c0` y la configuración `/opt/geocontrol/backups/hub/release.conf.pre-design-selector-2d443e1` se conservaron para rollback. Respaldo exclusivo previo `geocontrol-hub-20261026T234926Z.sql.gz` verificado.
+
+Servicio active/running, NRestarts=0; login local 200, API anónima 401. Chromium comprobó en el acceso público selección Actual/Violeta, persistencia tras recarga, sincronización entre pestañas, independencia de la preferencia claro/oscuro y ancho móvil. Las vistas internas reales autenticadas siguen pendientes de revisión visual. Memoria principal MySQL actualizada a revisión 217 con historial y auditoría. Sin cambios en datos de proyectos ni bases Traccar.
