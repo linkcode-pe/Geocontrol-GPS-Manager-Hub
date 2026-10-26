@@ -1521,3 +1521,11 @@ Commit funcional `1f9e318` publicado en `feat/mysql-auth`; release activa `/opt/
 Respaldo exclusivo anterior de `geocontrol_hub`: `/opt/geocontrol/backups/hub/geocontrol-hub-20261026T151842Z.sql.gz` (7.531.708 bytes, verificado por `backup-hub.py`). Configuración previa y release anterior conservadas para rollback. Memoria principal MySQL actualizada a revisión 211 con snapshot e historial de auditoría. Las bases de Traccar no fueron consultadas ni modificadas.
 
 Pendiente: revisar en viewport móvil real o emulado. El navegador cloud disponible solo ofrece la ventana de escritorio y no expone un control soportado de tamaño/emulación.
+
+## 212–213. Ancho de Expedientes y Continuidad (26/10/2026)
+
+Se eliminó el límite de ancho de los paneles de Expedientes y Continuidad en la vista general y en las secciones por proyecto. Commit funcional `828c3c0` en `fix/workspace-fullwidth`. Compilación Next y TypeScript aislados PASS; lint 0 errores y 11 advertencias previas; pruebas 59 PASS, 18 SKIP, 0 FAIL. Chromium con estructura representativa confirmó paneles al ancho disponible a 1600 y 390 px, sin desbordamiento del documento.
+
+Con aprobación expresa se publicó la release `/opt/geocontrol-hub-releases/workspace-width-828c3c0`. Servicio active/running, NRestarts=0; login local y público 200; CSS público 200 con la regla esperada; API anónima 401. Respaldo previo exclusivo `geocontrol_hub`: `/opt/geocontrol/backups/hub/geocontrol-hub-20261026T232916Z.sql.gz`, verificado. Release anterior conservada y configuración previa respaldada en `/opt/geocontrol/backups/hub/release.conf.pre-workspace-width-828c3c0`. Memoria principal MySQL actualizada a revisión 213 con historial y auditoría. No se modificaron datos de proyectos ni bases de Traccar.
+
+Pendiente: verificación visual de las dos páginas autenticadas reales; la prueba de geometría fue representativa y no sustituye esa comprobación.
