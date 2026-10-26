@@ -19,3 +19,5 @@ Usar `HubTable` para presentar colecciones de registros del proyecto: proyectos,
 El estándar compartido está implementado por `src/app/hub-table.tsx` y `src/app/design-system.css`. Las tareas conservan el grid tabular propio con un único contenedor de desplazamiento para soportar la agrupación por vencimiento y el editor expandible; sus columnas también se desplazan juntas.
 
 Se aplica a proyectos, fases, actividad, cartera, hoja de ruta, próximas tareas y tareas que requieren atención del dashboard, catálogo de documentos base, papelera, documentos e historiales, fichas técnicas e historial, memorias e historial, continuidad y su historial, además del resumen del expediente. Formularios, métricas y gráficos conservan su presentación especializada cuando no representan registros tabulares.
+
+- Los encabezados cortos y los valores identificadores de columnas densas deben permanecer en una sola línea; asignarles ancho mínimo suficiente. Los textos de detalle sí pueden ajustarse en varias líneas. En tablas más anchas que el panel, conservar el desplazamiento horizontal de todas las columnas juntas.
