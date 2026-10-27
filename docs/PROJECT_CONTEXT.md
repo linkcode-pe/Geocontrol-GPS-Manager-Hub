@@ -1587,3 +1587,11 @@ Se pasó de 1,4 GB disponibles y 99% de uso a aproximadamente 8,6 GB disponibles
 Se conservaron código, archivos de usuario, respaldos y versiones de la aplicación. Inventario: 71 releases ocupan aproximadamente 56 GB; respaldos del Hub 129 MB, diario del sistema 365 MB y Chromium de pruebas 668 MB. Debe definirse una política de retención antes de eliminar releases históricos.
 
 Servicio active/running con NRestarts=0, login público 200, API anónima 401 y timer de respaldo activo. Memoria principal actualizada a revisión 222 con historial y auditoría, tras respaldo exclusivo `geocontrol-hub-20261027T004909Z.sql.gz` verificado. No se modificaron bases ni servicios Traccar.
+
+## 223. Retención de cinco versiones anteriores (26/10/2026)
+
+Por instrucción expresa del usuario se conservaron la release activa `project-dashboard-c9b54c9` y las cinco inmediatamente anteriores: `status-colors-8a855b5`, `design-selector-2d443e1`, `workspace-width-828c3c0`, `task-table-legibility-1f9e318` y `drive-typography-82e8a84`. La cadena se comprobó con las configuraciones previas de despliegue; se confirmó que solo la activa estaba en uso y que dos worktrees Git antiguos no tenían cambios. Se eliminaron 65 releases antiguos y se registró el inventario en `/opt/geocontrol/backups/hub/release-prune-20261027-project-dashboard.json`.
+
+Las configuraciones de rollback anteriores a las versiones conservadas permanecen como referencia, pero apuntan a releases eliminados y no deben utilizarse sin reconstruirlos. Se comprobaron BUILD_ID y dependencias en las seis versiones conservadas. Servicio active/running, NRestarts=0; login público 200, API anónima 401 y timer de respaldos activo. Disco: aproximadamente 7,8 GB libres antes y 59 GB después; 22% de uso.
+
+Memoria principal actualizada a revisión 223 con historial y auditoría, tras respaldo exclusivo `geocontrol-hub-20261027T005529Z.sql.gz` verificado. No se eliminaron respaldos MySQL ni se modificaron datos o servicios Traccar. La política acordada es conservar la release activa y cinco anteriores; no hay limpieza automática configurada.
