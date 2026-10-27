@@ -1579,3 +1579,11 @@ Con autorización expresa se publicó el commit funcional `c9b54c9`. Release act
 Servicio active/running, NRestarts=0; login local 200, API anónima 401 y código público contiene el Dashboard nuevo. Chromium comprobó en el acceso público el selector de diseño y su persistencia. Sigue pendiente verificar visualmente el Dashboard real autenticado. Memoria principal actualizada a revisión 221 con historial y auditoría.
 
 Para recuperar espacio se retiraron solo dependencias y caché regenerables del antiguo workspace aislado `geocontrol-hub-color-design`; la release anterior conserva sus propias dependencias. Quedan aproximadamente 1,4 GB libres y se debe gestionar la capacidad antes de futuros despliegues. No se modificaron datos de proyectos ni bases Traccar.
+
+## 222. Análisis y limpieza de archivos regenerables (26/10/2026)
+
+Se pasó de 1,4 GB disponibles y 99% de uso a aproximadamente 8,6 GB disponibles y 89% de uso, recuperando unos 7,2 GB. Tras comprobar que no estaban en uso, se retiraron `node_modules` y `.next/cache` de ocho carpetas de compilación aislada antiguas; se limpiaron cachés descargables de npm, npx y apt y la caché temporal de compilación Node.
+
+Se conservaron código, archivos de usuario, respaldos y versiones de la aplicación. Inventario: 71 releases ocupan aproximadamente 56 GB; respaldos del Hub 129 MB, diario del sistema 365 MB y Chromium de pruebas 668 MB. Debe definirse una política de retención antes de eliminar releases históricos.
+
+Servicio active/running con NRestarts=0, login público 200, API anónima 401 y timer de respaldo activo. Memoria principal actualizada a revisión 222 con historial y auditoría, tras respaldo exclusivo `geocontrol-hub-20261027T004909Z.sql.gz` verificado. No se modificaron bases ni servicios Traccar.
