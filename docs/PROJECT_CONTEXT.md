@@ -1603,3 +1603,12 @@ Tras la interrupción durante una prueba responsive, el servidor volvió a respo
 El disco del sistema muestra 79 GB de capacidad, 17 GB usados y 59 GB disponibles (23%); el valor 74,19/80 GB indicado por el usuario no pudo conciliarse con esta medición. Las cachés apt y npm estaban prácticamente vacías. Se eliminaron 38 MB de compilación de desarrollo y el fixture temporal no versionado de `/opt/geocontrol-hub-responsive`, sin procesos activos en ese entorno. La modificación responsive permanece sin confirmar en la rama local `fix/full-responsive`, basada en `67ecc34`; no está publicada ni terminada. Continuar con pruebas de carga controlada y solicitar aprobación antes de publicar.
 
 La memoria MySQL se actualizó a revisión 224 tras el respaldo exclusivo `geocontrol-hub-20261027T013108Z.sql.gz` verificado. Se conservan la release activa, sus cinco predecesoras y los respaldos. No se modificaron bases ni servicios Traccar.
+
+
+## 225. Mejora responsive preparada y verificada (26/10/2026)
+
+Commit funcional `3a9e52a` en `fix/full-responsive`, subido a GitHub. El workspace y las páginas de proyecto usan el ancho disponible; encabezados y formularios se adaptan a pantallas pequeñas. Se corrigió el desbordamiento de Documentación con columnas que pueden reducirse, conservando el desplazamiento horizontal propio de las tablas.
+
+Chromium verificó 13 vistas con componentes reales y datos simulados en 320, 390, 768, 1024, 1440, 1920 y 2560 px: sin desbordamiento de página y contenido amplio en escritorio. No equivale a una revisión visual autenticada con datos reales, que sigue pendiente. Lint sin errores y con 11 advertencias previas; pruebas 62 PASS, 18 SKIP, 0 FAIL. Build Next y TypeScript PASS después de retirar el fixture temporal y su caché de tipos de desarrollo. El fixture no está versionado ni incluido en la compilación final. Pruebas secuenciales con límites de memoria; preview detenido y producción active/running, NRestarts=0, login HTTP 200.
+
+La rama está subida, pero crear el PR mediante la integración GitHub devolvió 403 Resource not accessible by integration; no se creó PR. Cambios no publicados: requieren aprobación explícita antes de producción. Respaldo exclusivo previo `geocontrol-hub-20261027T015030Z.sql.gz` verificado, sin eliminación de respaldos. Memoria actualizada a revisión 225 con historial y auditoría. Sin cambios en datos de proyectos ni bases o servicios Traccar.
