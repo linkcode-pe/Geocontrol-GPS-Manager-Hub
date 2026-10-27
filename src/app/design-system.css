@@ -825,3 +825,33 @@ html.theme-violet .dark .add-task button,html.theme-violet .dark .phase-actions 
 .shell .project-dashboard-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:1100px){.shell .project-dashboard-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.shell .project-dashboard-metrics{grid-template-columns:1fr}}
+
+/* Fluid workspace and project pages across phones, tablets and wide displays. */
+.shell .content{width:100%;max-width:none;margin:0;padding-inline:clamp(16px,3vw,42px)}
+.shell .content,.shell .detail-panel,.shell .content>*,.project-guide,.project-guide>section{min-width:0}
+.shell .heading{gap:16px;flex-wrap:wrap}
+.shell .heading>div,.project-guide-top>div{min-width:0;overflow-wrap:anywhere}
+.project-guide{width:100%;padding-inline:clamp(16px,3vw,42px)}
+.project-guide-top,.project-guide-toolbar,.project-guide-paper,.project-guide-foot,
+.project-guide-error,.project-guide-success,.project-guide>section{max-width:none}
+.project-guide-paper,.project-guide>section{width:100%}
+.project-guide-toolbar label,.project-guide-buttons{min-width:0}
+.project-guide input,.project-guide textarea,.project-guide select{max-width:100%}
+.project-guide-toolbar label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.project-guide-toolbar select{min-width:0;max-width:100%}
+.project-guide-markdown img{max-width:100%;height:auto}
+@media(max-width:760px){
+ .shell .content{padding-inline:16px}
+ .project-guide{padding-inline:16px}
+ .project-guide-toolbar label{width:100%}
+ .project-guide-toolbar select{max-width:100%;flex:1 1 160px}
+ .project-guide-top a{max-width:100%}
+}
+
+/* Let documentation grid tracks shrink while tables keep their own scrollbar. */
+.shell .docs-layout{grid-template-columns:minmax(0,300px) minmax(0,1fr)}
+.shell .docs-layout>*,.shell .doc-content,.shell .doc-menu{min-width:0}
+.shell .docs-layout .portfolio-context-link{min-width:0;overflow-wrap:anywhere}
+@media(max-width:760px){
+ .shell .docs-layout{grid-template-columns:minmax(0,1fr)}
+}
