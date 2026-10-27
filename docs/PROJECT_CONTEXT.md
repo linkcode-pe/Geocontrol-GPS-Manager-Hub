@@ -1571,3 +1571,11 @@ Se preparó `c9b54c9` en `fix/project-dashboard`: al seleccionar un proyecto, el
 Build Next y TypeScript aislados PASS; lint 0 errores y 11 advertencias previas; pruebas 62 PASS, 18 SKIP y 0 FAIL. Se probaron dos proyectos, uno vacío y el cambio de proyecto; Chromium en una maqueta representativa verificó ancho a 320, 390, 768 y 1440 px. Falta revisión visual autenticada real. No publicado; requiere aprobación expresa.
 
 Memoria principal actualizada a revisión 220 con historial y auditoría, tras respaldo exclusivo `geocontrol-hub-20261027T001719Z.sql.gz` verificado. El disco se llenó; se liberó espacio retirando solo cachés y dependencias regenerables de copias antiguas de desarrollo, sin tocar releases. Quedan alrededor de 1,4 GB libres; gestionar capacidad antes de futuros despliegues. Sin cambios en datos de proyectos ni bases Traccar.
+
+## 221. Publicación del Dashboard por proyecto (26/10/2026)
+
+Con autorización expresa se publicó el commit funcional `c9b54c9`. Release activa `/opt/geocontrol-hub-releases/project-dashboard-c9b54c9`; la anterior `status-colors-8a855b5` y la configuración `/opt/geocontrol/backups/hub/release.conf.pre-project-dashboard-c9b54c9` se conservan para rollback. Respaldo exclusivo previo `geocontrol-hub-20261027T004253Z.sql.gz` verificado.
+
+Servicio active/running, NRestarts=0; login local 200, API anónima 401 y código público contiene el Dashboard nuevo. Chromium comprobó en el acceso público el selector de diseño y su persistencia. Sigue pendiente verificar visualmente el Dashboard real autenticado. Memoria principal actualizada a revisión 221 con historial y auditoría.
+
+Para recuperar espacio se retiraron solo dependencias y caché regenerables del antiguo workspace aislado `geocontrol-hub-color-design`; la release anterior conserva sus propias dependencias. Quedan aproximadamente 1,4 GB libres y se debe gestionar la capacidad antes de futuros despliegues. No se modificaron datos de proyectos ni bases Traccar.
