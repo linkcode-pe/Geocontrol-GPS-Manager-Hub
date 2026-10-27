@@ -1563,3 +1563,11 @@ Build y TypeScript aislados PASS; pruebas 59 PASS, 18 SKIP y 0 FAIL; lint 0 erro
 Con autorización expresa se publicó el commit funcional `8a855b5`. Release activa `/opt/geocontrol-hub-releases/status-colors-8a855b5`; se conservan la release previa `design-selector-2d443e1` y la configuración `/opt/geocontrol/backups/hub/release.conf.pre-status-colors-8a855b5`. Respaldo exclusivo previo `geocontrol-hub-20261027T000102Z.sql.gz` verificado.
 
 Servicio active/running, NRestarts=0; login local 200 y API anónima 401. CSS público incluye colores de estados y código público incluye métricas y etiquetas. Chromium confirmó en acceso público el selector de diseño, persistencia, sincronización entre pestañas y preferencia claro/oscuro. Las vistas internas reales autenticadas siguen pendientes de revisión visual. Memoria principal actualizada a revisión 219 con historial y auditoría. Sin cambios en datos de proyectos ni bases Traccar.
+
+## 220. Dashboard centrado en el proyecto seleccionado (26/10/2026)
+
+Se preparó `c9b54c9` en `fix/project-dashboard`: al seleccionar un proyecto, el Dashboard muestra sus fases, tareas pendientes y avance, alertas, próximas tareas y hoja de ruta. Se retiraron la tarjeta Proyectos, gráficos generales, cartera y Proyecto seleccionado de esa vista. La vista general de todos los proyectos se conserva. Las tareas esperan la carga del proyecto seleccionado y se muestra error si falla.
+
+Build Next y TypeScript aislados PASS; lint 0 errores y 11 advertencias previas; pruebas 62 PASS, 18 SKIP y 0 FAIL. Se probaron dos proyectos, uno vacío y el cambio de proyecto; Chromium en una maqueta representativa verificó ancho a 320, 390, 768 y 1440 px. Falta revisión visual autenticada real. No publicado; requiere aprobación expresa.
+
+Memoria principal actualizada a revisión 220 con historial y auditoría, tras respaldo exclusivo `geocontrol-hub-20261027T001719Z.sql.gz` verificado. El disco se llenó; se liberó espacio retirando solo cachés y dependencias regenerables de copias antiguas de desarrollo, sin tocar releases. Quedan alrededor de 1,4 GB libres; gestionar capacidad antes de futuros despliegues. Sin cambios en datos de proyectos ni bases Traccar.
