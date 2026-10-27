@@ -891,3 +891,18 @@ html.theme-violet .dark .add-task button,html.theme-violet .dark .phase-actions 
 .shell .creation-disclosure>.project-create,.shell .creation-disclosure>.add-task{padding:14px;margin:0}
 .shell .creation-disclosure:focus-within{outline:2px solid var(--ui-accent,#268de0);outline-offset:2px}
 @media(max-width:760px){.shell .creation-disclosure{margin:10px 0 16px}.shell .creation-disclosure>summary{font-size:15px;min-height:48px}.shell .creation-disclosure>.project-create,.shell .creation-disclosure>.add-task{padding:12px}}
+
+/* Unified data-grid readability, including narrow screens and keyboard navigation. */
+.hub-data-table th{font-size:13px;letter-spacing:.025em;line-height:1.4}
+.hub-data-table td{font-size:14px;line-height:1.5}
+.hub-data-table .hub-table-secondary{font-size:13px}
+.hub-data-table tbody tr:focus-within{background:color-mix(in srgb,var(--ui-accent,#1686d7) 7%,var(--ui-surface,#fff))}
+.hub-data-table .hub-table-action{font-size:13px;min-height:40px}
+.hub-data-table select{min-height:40px;font-size:14px}
+@media(max-width:760px){
+ .hub-data-table th{padding:12px 13px;font-size:13px}
+ .hub-data-table td{padding:13px;font-size:14px}
+ .hub-data-table .hub-table-action{min-height:44px;font-size:14px}
+ .hub-data-table select{min-height:44px;font-size:14px}
+ .hub-table-hint{font-size:13px;line-height:1.5}
+}
