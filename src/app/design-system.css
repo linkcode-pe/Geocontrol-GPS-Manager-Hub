@@ -880,3 +880,14 @@ html.theme-violet .dark .add-task button,html.theme-violet .dark .phase-actions 
  .shell .panel-head{margin-bottom:16px}
 }
 @media(max-width:380px){.shell .metric{padding:14px}.shell .metric strong{font-size:25px}}
+
+/* Keep project/task lists visible before optional creation forms. */
+.shell .creation-disclosure{margin:12px 0 20px;border:1px solid var(--ui-border,#d9e3ee);border-radius:12px;background:var(--ui-surface,#fff);overflow:hidden}
+.shell .creation-disclosure>summary{display:flex;align-items:center;gap:9px;list-style:none;cursor:pointer;min-height:46px;padding:11px 16px;color:var(--ui-text,#24344b);font-size:15px;font-weight:700}
+.shell .creation-disclosure>summary::-webkit-details-marker{display:none}
+.shell .creation-disclosure>summary::after{content:'+';margin-left:auto;font-size:22px;line-height:1;color:var(--ui-muted,#64748b)}
+.shell .creation-disclosure[open]>summary::after{content:'−'}
+.shell .creation-disclosure[open]>summary{border-bottom:1px solid var(--ui-border,#d9e3ee);background:var(--ui-surface-muted,#f6f8fb)}
+.shell .creation-disclosure>.project-create,.shell .creation-disclosure>.add-task{padding:14px;margin:0}
+.shell .creation-disclosure:focus-within{outline:2px solid var(--ui-accent,#268de0);outline-offset:2px}
+@media(max-width:760px){.shell .creation-disclosure{margin:10px 0 16px}.shell .creation-disclosure>summary{font-size:15px;min-height:48px}.shell .creation-disclosure>.project-create,.shell .creation-disclosure>.add-task{padding:12px}}
