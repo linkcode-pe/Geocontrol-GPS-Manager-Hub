@@ -1595,3 +1595,11 @@ Por instrucción expresa del usuario se conservaron la release activa `project-d
 Las configuraciones de rollback anteriores a las versiones conservadas permanecen como referencia, pero apuntan a releases eliminados y no deben utilizarse sin reconstruirlos. Se comprobaron BUILD_ID y dependencias en las seis versiones conservadas. Servicio active/running, NRestarts=0; login público 200, API anónima 401 y timer de respaldos activo. Disco: aproximadamente 7,8 GB libres antes y 59 GB después; 22% de uso.
 
 Memoria principal actualizada a revisión 223 con historial y auditoría, tras respaldo exclusivo `geocontrol-hub-20261027T005529Z.sql.gz` verificado. No se eliminaron respaldos MySQL ni se modificaron datos o servicios Traccar. La política acordada es conservar la release activa y cinco anteriores; no hay limpieza automática configurada.
+
+## 224. Recuperación de conexión y revisión de espacio (26/10/2026)
+
+Tras la interrupción durante una prueba responsive, el servidor volvió a responder con reinicio reciente. El servicio está active/running, NRestarts=0; login público 200, API anónima 401 y timer de respaldos activo. La búsqueda efectuada en el journal anterior no mostró eventos OOM; la causa de la interrupción no se determinó.
+
+El disco del sistema muestra 79 GB de capacidad, 17 GB usados y 59 GB disponibles (23%); el valor 74,19/80 GB indicado por el usuario no pudo conciliarse con esta medición. Las cachés apt y npm estaban prácticamente vacías. Se eliminaron 38 MB de compilación de desarrollo y el fixture temporal no versionado de `/opt/geocontrol-hub-responsive`, sin procesos activos en ese entorno. La modificación responsive permanece sin confirmar en la rama local `fix/full-responsive`, basada en `67ecc34`; no está publicada ni terminada. Continuar con pruebas de carga controlada y solicitar aprobación antes de publicar.
+
+La memoria MySQL se actualizó a revisión 224 tras el respaldo exclusivo `geocontrol-hub-20261027T013108Z.sql.gz` verificado. Se conservan la release activa, sus cinco predecesoras y los respaldos. No se modificaron bases ni servicios Traccar.
