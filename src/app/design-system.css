@@ -906,3 +906,27 @@ html.theme-violet .dark .add-task button,html.theme-violet .dark .phase-actions 
  .hub-data-table select{min-height:44px;font-size:14px}
  .hub-table-hint{font-size:13px;line-height:1.5}
 }
+
+/* Visual audit 27/10: contrast fixes across project subpages and themes. */
+.shell.dark .project-guide-toolbar select,
+.shell.dark .project-guide>section input,
+.shell.dark .project-guide>section select,
+.shell.dark .project-guide>section textarea,
+.shell.dark .project-guide-paper textarea{
+ background:#1c2b40;color:#f0f6ff;border-color:#536782;color-scheme:dark;
+}
+.shell.dark .project-guide-toolbar select option,
+.shell.dark .project-guide select option{background:#1c2b40;color:#f0f6ff}
+.shell.dark .creation-disclosure{background:#1c2b40;border-color:#536782}
+.shell.dark .creation-disclosure>summary{background:#1c2b40;color:#f0f6ff}
+.shell.dark .creation-disclosure[open]>summary{background:#263a55;color:#f0f6ff;border-bottom-color:#536782}
+.shell.dark .creation-disclosure>summary::after{color:#d4e5ff}
+.shell.dark .text-link,.shell.dark .panel-head .text-link,.shell.dark .portfolio-context-link a{color:#a8d6ff}
+.shell.dark .text-link:hover,.shell.dark .portfolio-context-link a:hover{color:#d5ebff}
+.shell.dark .text-link:focus-visible,.shell.dark .portfolio-context-link a:focus-visible{outline:2px solid #a8d6ff;outline-offset:3px}
+.shell:not(.dark) .sidebar nav button:not(.active) .nav-icon{color:#b8d9ff}
+.shell.dark .sidebar nav button:not(.active) .nav-icon{color:#b8d9ff}
+/* The document catalog must not be squeezed into a narrow sidebar. */
+.shell .docs-layout{grid-template-columns:minmax(0,1fr)}
+.shell .docs-layout .doc-menu,.shell .docs-layout .doc-content{width:100%;min-width:0}
+.shell .docs-layout .hub-table-documents{min-width:700px}
