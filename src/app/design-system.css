@@ -855,3 +855,28 @@ html.theme-violet .dark .add-task button,html.theme-violet .dark .phase-actions 
 @media(max-width:760px){
  .shell .docs-layout{grid-template-columns:minmax(0,1fr)}
 }
+
+/* Mobile legibility refinement from October 2026 walkthrough. Scoped to the workspace. */
+@media(max-width:760px){
+ .shell .content{padding-block:22px}
+ .shell .heading{margin-bottom:18px}
+ .shell .heading h1{font-size:clamp(23px,6vw,28px);line-height:1.2;letter-spacing:-.55px}
+ .shell .heading p,.shell .panel p,.shell .metric small{font-size:14px;line-height:1.55}
+ .shell .eyebrow,.shell .side-label{font-size:11px;letter-spacing:1px}
+ .shell .panel{padding:clamp(16px,4vw,22px)}
+ .shell .panel h2{font-size:17px;line-height:1.35}
+ .shell .metric{padding:17px;min-height:116px}
+ .shell .metric-top{font-size:13px}
+ .shell .metric strong{font-size:28px;line-height:1.15;margin:12px 0 7px}
+ .shell .sidebar nav button{font-size:15px;min-height:44px}
+ .shell .doc-menu button{min-height:44px}
+ .shell .doc-menu button b{font-size:14px}
+ .shell .doc-menu button small{font-size:12px}
+ .shell input:not([type="checkbox"]):not([type="radio"]),
+ .shell select,.shell textarea{font-size:16px;min-height:44px}
+ .shell button:not(.mobile-backdrop):not(.mobile-toggle):not(.sidebar-close){min-height:40px}
+ .shell .task-row{font-size:14px;line-height:1.45}
+ .shell .task-list>.task-row>span{font-size:14px}
+ .shell .panel-head{margin-bottom:16px}
+}
+@media(max-width:380px){.shell .metric{padding:14px}.shell .metric strong{font-size:25px}}
