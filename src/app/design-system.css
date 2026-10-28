@@ -930,3 +930,22 @@ html.theme-violet .dark .add-task button,html.theme-violet .dark .phase-actions 
 .shell .docs-layout{grid-template-columns:minmax(0,1fr)}
 .shell .docs-layout .doc-menu,.shell .docs-layout .doc-content{width:100%;min-width:0}
 .shell .docs-layout .hub-table-documents{min-width:700px}
+
+/* Follow-up authenticated visual audit: dark buttons and secondary navigation. */
+.shell.dark .project-guide-toolbar button:not(.primary),
+.shell.dark .project-guide>section button:not(.primary){background:#263a55;color:#f0f6ff;border-color:#607792;color-scheme:dark}
+.shell.dark .project-guide-toolbar button:not(.primary):hover:not(:disabled),
+.shell.dark .project-guide>section button:not(.primary):hover:not(:disabled){background:#344d6c;border-color:#a8d6ff}
+.shell.dark .project-guide-toolbar button:focus-visible,
+.shell.dark .project-guide>section button:focus-visible{outline:2px solid #a8d6ff;outline-offset:3px}
+.shell.dark .project-guide-toolbar button:disabled,
+.shell.dark .project-guide>section button:disabled{opacity:.5}
+.shell.dark .project-guide-entry,
+.shell.dark .portfolio-export,
+.shell.dark .project-report-menu summary{color:#b6dcff;border-color:#607792}
+.shell.dark .project-guide-entry:hover,
+.shell.dark .portfolio-export:hover{background:#263a55;color:#e3f3ff}
+.shell.dark .project-guide-entry:focus-visible,
+.shell.dark .portfolio-export:focus-visible,
+.shell.dark .project-report-menu summary:focus-visible{outline:2px solid #a8d6ff;outline-offset:3px}
+.shell.dark .project-guide-kicker{color:#b6dcff}
