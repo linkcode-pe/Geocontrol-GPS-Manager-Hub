@@ -1013,3 +1013,16 @@ html[data-density='compact'] .shell .sidebar nav button{min-height:38px}
 .appearance-setting{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:15px 0;font-weight:650}
 .appearance-setting select{min-height:44px;min-width:155px;border:1px solid var(--ui-border);border-radius:10px;padding:8px 12px;background:var(--ui-surface-alt);color:var(--ui-text);font-size:var(--ui-control)}
 @media(max-width:480px){.appearance-setting{flex-direction:column;align-items:stretch}.appearance-setting select{width:100%}}
+
+/* Project sub-navigation: separate list, creation and overview. */
+.shell .project-subnav{display:flex;align-items:stretch;gap:8px;overflow-x:auto;scrollbar-width:thin;border-bottom:1px solid var(--ui-border);margin:4px 0 22px;padding:0 0 3px;max-width:100%}
+.shell .project-subnav button{flex:0 0 auto;min-height:46px;padding:10px 18px;border:0;border-bottom:3px solid transparent;background:transparent;color:var(--ui-muted);font-size:var(--ui-control);font-weight:650;white-space:nowrap;cursor:pointer}
+.shell .project-subnav button.active{color:var(--ui-accent);border-bottom-color:var(--ui-accent)}
+.shell .project-subnav button:focus-visible{outline:2px solid var(--ui-accent);outline-offset:-3px}
+.shell .project-summary-view h3{font-size:22px;margin:0 0 8px}
+.shell .project-summary-view>p{color:var(--ui-muted)}
+.shell .project-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin:20px 0}
+.shell .project-summary-grid>div{display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:14px;border:1px solid var(--ui-border);background:var(--ui-surface-alt)}
+.shell .project-summary-grid small{color:var(--ui-muted);font-size:var(--ui-small)}
+.shell .project-summary-grid strong{font-size:30px;color:var(--ui-text)}
+@media(max-width:640px){.shell .project-subnav{margin-inline:-8px;padding-inline:8px}.shell .project-subnav button{padding-inline:13px}.shell .project-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
