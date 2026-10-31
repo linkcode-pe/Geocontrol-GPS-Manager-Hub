@@ -1026,3 +1026,12 @@ html[data-density='compact'] .shell .sidebar nav button{min-height:38px}
 .shell .project-summary-grid small{color:var(--ui-muted);font-size:var(--ui-small)}
 .shell .project-summary-grid strong{font-size:30px;color:var(--ui-text)}
 @media(max-width:640px){.shell .project-subnav{margin-inline:-8px;padding-inline:8px}.shell .project-subnav button{padding-inline:13px}.shell .project-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Independent creation view; no nested collapsible form. */
+.shell .project-create-view{width:100%;max-width:760px;padding:clamp(16px,3vw,26px);border:1px solid var(--ui-border);border-radius:14px;background:var(--ui-surface-alt)}
+.shell .project-create-view h3{display:flex;align-items:center;gap:10px;font-size:21px;color:var(--ui-text);margin:0 0 8px}
+.shell .project-create-view>p{color:var(--ui-muted);margin:0 0 18px}
+.shell .project-create-view .project-create{display:flex;flex-direction:column;align-items:stretch;gap:14px}
+.shell .project-create-view .project-create input{width:100%;min-height:48px;font-size:var(--ui-control)}
+.shell .project-create-view .project-create button{min-height:48px;align-self:flex-start;padding:0 20px}
+@media(max-width:560px){.shell .project-create-view .project-create button{width:100%}}
