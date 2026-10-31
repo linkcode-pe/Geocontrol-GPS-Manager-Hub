@@ -17,7 +17,7 @@ export function useWorkspaceTheme(){
   const onTheme=()=>{try{setDark(window.localStorage.getItem(WORKSPACE_THEME_STORAGE_KEY)==='dark')}catch{}};
   window.addEventListener(THEME_EVENT,onTheme);
   window.addEventListener('storage',onStorage);
-  return ()=>window.removeEventListener('storage',onStorage);window.removeEventListener(THEME_EVENT,onTheme);
+  return ()=>{window.removeEventListener('storage',onStorage);window.removeEventListener(THEME_EVENT,onTheme);};
  },[]);
  function setTheme(next:boolean){
   setDark(next);
