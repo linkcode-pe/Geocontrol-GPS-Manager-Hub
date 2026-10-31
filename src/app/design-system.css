@@ -1040,3 +1040,9 @@ html[data-density='compact'] .shell .sidebar nav button{min-height:38px}
 .shell .docs-layout>.portfolio-context-link{grid-column:1/-1}
 .shell .docs-layout .doc-menu{grid-column:1/-1}
 .shell .docs-layout .doc-content{grid-column:1/-1;min-height:0}
+/* Shared tabs also render in standalone project-guide and appearance pages. */
+.project-guide>.project-subnav,.appearance-page>.project-subnav{display:flex;align-items:stretch;gap:8px;overflow-x:auto;max-width:100%;border-bottom:1px solid var(--ui-border,#d7deea);padding-bottom:3px;margin:12px 0 22px;scrollbar-width:thin}
+.project-guide>.project-subnav button,.appearance-page>.project-subnav button{flex:0 0 auto;border:0;border-bottom:3px solid transparent;background:transparent;color:var(--ui-muted,#64748b);padding:11px 17px;min-height:46px;font:inherit;font-weight:650;white-space:nowrap;cursor:pointer}
+.project-guide>.project-subnav button.active,.appearance-page>.project-subnav button.active{color:var(--ui-accent,#2563eb);border-bottom-color:var(--ui-accent,#2563eb)}
+.project-guide>.project-subnav button:focus-visible,.appearance-page>.project-subnav button:focus-visible{outline:2px solid var(--ui-accent,#2563eb);outline-offset:-3px}
+.hub-section-link-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.hub-section-link-grid a{display:block;padding:15px;border:1px solid var(--ui-border,#d7deea);border-radius:10px}
