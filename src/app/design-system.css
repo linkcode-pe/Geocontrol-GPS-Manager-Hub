@@ -1035,3 +1035,8 @@ html[data-density='compact'] .shell .sidebar nav button{min-height:38px}
 .shell .project-create-view .project-create input{width:100%;min-height:48px;font-size:var(--ui-control)}
 .shell .project-create-view .project-create button{min-height:48px;align-self:flex-start;padding:0 20px}
 @media(max-width:560px){.shell .project-create-view .project-create button{width:100%}}
+/* Horizontal subnavigation is a shared pattern for all current and future Hub views. */
+.shell .docs-layout>.project-subnav{grid-column:1/-1;width:100%;margin-bottom:0}
+.shell .docs-layout>.portfolio-context-link{grid-column:1/-1}
+.shell .docs-layout .doc-menu{grid-column:1/-1}
+.shell .docs-layout .doc-content{grid-column:1/-1;min-height:0}
