@@ -1003,3 +1003,13 @@ html.theme-violet .dark .add-task button,html.theme-violet .dark .phase-actions 
 .preview-line{height:10px;border-radius:8px;background:#a5b3c555;margin-top:18px}
 @media(max-width:760px){.shell .topbar{min-height:64px;padding-inline:12px}.shell .topbar .crumb{min-width:0;font-size:0}.shell .topbar .crumb b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}.workspace-tools{gap:5px}.workspace-tools .tool-search{min-width:44px;width:44px;padding:0;justify-content:center}.workspace-tools .tool-search span,.workspace-tools .tool-search kbd{display:none}.workspace-tools .tool-icon{width:42px;flex-basis:42px}.workspace-tools .tool-settings{display:none}.appearance-grid{grid-template-columns:1fr}}
 @media(max-width:380px){.shell .topbar .crumb b{max-width:85px}.workspace-tools .tool-icon{width:39px;flex-basis:39px}.workspace-tools .tool-search{width:39px;min-width:39px}}
+
+/* Browser-local accessibility preferences, available in Apariencia. */
+html[data-font-scale='large']{--ui-body:17px;--ui-small:15px;--ui-control:17px}
+html[data-font-scale='extra']{--ui-body:19px;--ui-small:17px;--ui-control:19px}
+html[data-density='compact'] .shell .panel,html[data-density='compact'] .shell .metric{padding:14px}
+html[data-density='compact'] .shell .task-row,html[data-density='compact'] .shell .project-card{padding-block:10px}
+html[data-density='compact'] .shell .sidebar nav button{min-height:38px}
+.appearance-setting{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:15px 0;font-weight:650}
+.appearance-setting select{min-height:44px;min-width:155px;border:1px solid var(--ui-border);border-radius:10px;padding:8px 12px;background:var(--ui-surface-alt);color:var(--ui-text);font-size:var(--ui-control)}
+@media(max-width:480px){.appearance-setting{flex-direction:column;align-items:stretch}.appearance-setting select{width:100%}}
